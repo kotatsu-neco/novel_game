@@ -147,6 +147,9 @@ def parse_scene(scene_id: str, block: str) -> dict[str, Any]:
             elif key in {"background", "ambience"}:
                 if value != "":
                     scene[key] = value
+            elif key in {"requires", "assumes"}:
+                if value != "":
+                    scene[key] = parse_condition_expr(value)
             else:
                 scene[f"_{key}"] = value
 
@@ -241,8 +244,8 @@ def parse_steps(scene_id: str, lines: list[str]) -> list[dict[str, Any]]:
             continue
 
         if line == "[endingCheck]":
-            steps.append({"type": "endingCheck"})
-            i += 1
+            ending_check_step, i = parse_ending_check(scene_id, lines, i + 1)
+            steps.append(ending_check_step)
             continue
 
         if line == "[pageBreak]":
@@ -253,6 +256,98 @@ def parse_steps(scene_id: str, lines: list[str]) -> list[dict[str, Any]]:
         raise ValueError(f"Scene {scene_id}: unknown source line: {lines[i]!r}")
 
     return steps
+
+
+
+def parse_condition_expr(expr: str) -> dict[str, Any]:
+    expr = expr.strip()
+    if expr in {"default", "else"}:
+        return {"default": True}
+    for operator in ["notEquals", "equals", "gte", "lte", "gt", "lt"]:
+        token = f" {operator} "
+        if token in expr:
+            key, value = expr.split(token, 1)
+            return {"flag": key.strip(), operator: parse_scalar(value.strip())}
+    for symbol, operator in [("!=", "notEquals"), ("==", "equals"), (">=", "gte"), ("<=", "lte"), (">", "gt"), ("<", "lt")]:
+        if symbol in expr:
+            key, value = expr.split(symbol, 1)
+            return {"flag": key.strip(), operator: parse_scalar(value.strip())}
+    if expr.startswith("!"):
+        return {"not": {"flag": expr[1:].strip(), "truthy": True}}
+    return {"flag": expr, "truthy": True}
+
+
+def parse_ending_check(scene_id: str, lines: list[str], start: int) -> tuple[dict[str, Any], int]:
+    step: dict[str, Any] = {"type": "endingCheck", "rules": []}
+    i = start
+
+    while i < len(lines):
+        line = lines[i]
+        stripped = line.strip()
+        if stripped == "":
+            i += 1
+            continue
+        if is_step_start(line):
+            break
+
+        if stripped.startswith("fallback:"):
+            step["fallback"] = stripped.split(":", 1)[1].strip()
+            i += 1
+            continue
+
+        if stripped.startswith("- when:") or stripped.startswith("- if:"):
+            condition_expr = stripped.split(":", 1)[1].strip()
+            rule: dict[str, Any] = {"if": parse_condition_expr(condition_expr)}
+            i += 1
+            while i < len(lines):
+                sub = lines[i]
+                s = sub.strip()
+                if s == "":
+                    i += 1
+                    continue
+                if is_step_start(sub) or s.startswith("- when:") or s.startswith("- if:") or s.startswith("- default:"):
+                    break
+                if s.startswith("next:"):
+                    rule["next"] = s.split(":", 1)[1].strip()
+                    i += 1
+                    continue
+                if s.startswith("ending:"):
+                    rule["ending"] = s.split(":", 1)[1].strip()
+                    i += 1
+                    continue
+                raise ValueError(f"Scene {scene_id}: invalid endingCheck rule line {sub!r}")
+            step["rules"].append(rule)
+            continue
+
+        if stripped.startswith("- default:"):
+            value = parse_scalar(stripped.split(":", 1)[1])
+            rule = {"default": bool(value)}
+            i += 1
+            while i < len(lines):
+                sub = lines[i]
+                s = sub.strip()
+                if s == "":
+                    i += 1
+                    continue
+                if is_step_start(sub) or s.startswith("- when:") or s.startswith("- if:") or s.startswith("- default:"):
+                    break
+                if s.startswith("next:"):
+                    rule["next"] = s.split(":", 1)[1].strip()
+                    i += 1
+                    continue
+                if s.startswith("ending:"):
+                    rule["ending"] = s.split(":", 1)[1].strip()
+                    i += 1
+                    continue
+                raise ValueError(f"Scene {scene_id}: invalid endingCheck default line {sub!r}")
+            step["rules"].append(rule)
+            continue
+
+        raise ValueError(f"Scene {scene_id}: invalid endingCheck block line {line!r}")
+
+    if not step["rules"]:
+        step.pop("rules")
+    return step, i
 
 
 def parse_choice(scene_id: str, lines: list[str], start: int) -> tuple[dict[str, Any], int]:
@@ -369,7 +464,7 @@ def compile_source(source_path: Path, base_path: Path) -> tuple[dict[str, Any], 
         output["startScene"] = content_pack["startScene"]
 
     output.setdefault("meta", {})
-    output["meta"]["version"] = "v1.9"
+    output["meta"]["version"] = "v21"
     if content_pack.get("title"):
         output["meta"]["title"] = content_pack["title"]
     try:
@@ -387,7 +482,7 @@ def update_manifest(base_manifest: dict[str, Any], source_metadata: dict[str, An
     content_pack = source_metadata.get("contentPack", {})
     backgrounds = source_metadata.get("backgrounds", {})
 
-    manifest["version"] = "v1.9"
+    manifest["version"] = "v21"
     for key in ["title", "gameId", "saveKey"]:
         if content_pack.get(key):
             manifest[key] = content_pack[key]

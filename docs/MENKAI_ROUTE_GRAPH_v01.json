@@ -1,0 +1,248 @@
+{
+  "ok": true,
+  "errors": [],
+  "warnings": [],
+  "stats": {
+    "sceneCount": 39,
+    "choiceCount": 15,
+    "textChars": 4781,
+    "estimatedMinutes": 10.6,
+    "endingSceneCount": 4
+  },
+  "startScene": "opening",
+  "reachableScenes": [
+    "broadcast_shift_bound",
+    "broadcast_shift_free",
+    "call_answering",
+    "call_hangup",
+    "call_listen",
+    "check_answering",
+    "check_none",
+    "check_number",
+    "choice_call",
+    "choice_door",
+    "choice_home_check",
+    "choice_pass",
+    "choice_reception",
+    "door_enter_bad",
+    "door_wait_gate",
+    "door_wait_normal",
+    "ending_bad",
+    "ending_normal",
+    "ending_normal_bound",
+    "ending_true",
+    "home_before_departure",
+    "hospital_entrance",
+    "opening",
+    "pass_hand",
+    "pass_neck",
+    "pass_return_try",
+    "reception_ask",
+    "reception_back",
+    "reception_pass",
+    "reception_sign",
+    "return_reception_gate",
+    "return_reception_normal_bound",
+    "return_reception_true",
+    "ride_to_hospital",
+    "room_317_bound",
+    "room_317_free",
+    "true_reception",
+    "ward_corridor_bound",
+    "ward_corridor_free"
+  ],
+  "unreachableScenes": [],
+  "mergePoints": {
+    "choice_door": {
+      "incomingSources": [
+        "room_317_bound",
+        "room_317_free"
+      ],
+      "incomingEdgeCounts": {
+        "room_317_free": 1,
+        "room_317_bound": 1
+      }
+    },
+    "choice_pass": {
+      "incomingSources": [
+        "reception_ask",
+        "reception_back",
+        "reception_sign"
+      ],
+      "incomingEdgeCounts": {
+        "reception_sign": 1,
+        "reception_ask": 1,
+        "reception_back": 1
+      }
+    },
+    "ending_normal_bound": {
+      "incomingSources": [
+        "door_wait_gate",
+        "return_reception_normal_bound"
+      ],
+      "incomingEdgeCounts": {
+        "door_wait_gate": 1,
+        "return_reception_normal_bound": 1
+      }
+    },
+    "home_before_departure": {
+      "incomingSources": [
+        "call_answering",
+        "call_hangup",
+        "call_listen"
+      ],
+      "incomingEdgeCounts": {
+        "call_hangup": 1,
+        "call_listen": 1,
+        "call_answering": 1
+      }
+    },
+    "ride_to_hospital": {
+      "incomingSources": [
+        "check_answering",
+        "check_none",
+        "check_number"
+      ],
+      "incomingEdgeCounts": {
+        "check_answering": 1,
+        "check_number": 1,
+        "check_none": 1
+      }
+    },
+    "ward_corridor_free": {
+      "incomingSources": [
+        "pass_hand",
+        "pass_return_try"
+      ],
+      "incomingEdgeCounts": {
+        "pass_hand": 1,
+        "pass_return_try": 1
+      }
+    }
+  },
+  "cycles": [],
+  "deadRoutes": [],
+  "graph": {
+    "opening": [
+      "choice_call"
+    ],
+    "choice_call": [
+      "call_answering",
+      "call_hangup",
+      "call_listen"
+    ],
+    "call_hangup": [
+      "home_before_departure"
+    ],
+    "call_listen": [
+      "home_before_departure"
+    ],
+    "call_answering": [
+      "home_before_departure"
+    ],
+    "home_before_departure": [
+      "choice_home_check"
+    ],
+    "choice_home_check": [
+      "check_answering",
+      "check_none",
+      "check_number"
+    ],
+    "check_answering": [
+      "ride_to_hospital"
+    ],
+    "check_number": [
+      "ride_to_hospital"
+    ],
+    "check_none": [
+      "ride_to_hospital"
+    ],
+    "ride_to_hospital": [
+      "hospital_entrance"
+    ],
+    "hospital_entrance": [
+      "reception_pass"
+    ],
+    "reception_pass": [
+      "choice_reception"
+    ],
+    "choice_reception": [
+      "reception_ask",
+      "reception_back",
+      "reception_sign"
+    ],
+    "reception_sign": [
+      "choice_pass"
+    ],
+    "reception_ask": [
+      "choice_pass"
+    ],
+    "reception_back": [
+      "choice_pass"
+    ],
+    "choice_pass": [
+      "pass_hand",
+      "pass_neck",
+      "pass_return_try"
+    ],
+    "pass_neck": [
+      "ward_corridor_bound"
+    ],
+    "pass_hand": [
+      "ward_corridor_free"
+    ],
+    "pass_return_try": [
+      "ward_corridor_free"
+    ],
+    "ward_corridor_free": [
+      "broadcast_shift_free"
+    ],
+    "ward_corridor_bound": [
+      "broadcast_shift_bound"
+    ],
+    "broadcast_shift_free": [
+      "room_317_free"
+    ],
+    "broadcast_shift_bound": [
+      "room_317_bound"
+    ],
+    "room_317_free": [
+      "choice_door"
+    ],
+    "room_317_bound": [
+      "choice_door"
+    ],
+    "choice_door": [
+      "door_enter_bad",
+      "door_wait_normal",
+      "return_reception_gate"
+    ],
+    "return_reception_gate": [
+      "return_reception_normal_bound",
+      "return_reception_true"
+    ],
+    "door_enter_bad": [
+      "ending_bad"
+    ],
+    "door_wait_normal": [
+      "door_wait_gate"
+    ],
+    "door_wait_gate": [
+      "ending_normal",
+      "ending_normal_bound"
+    ],
+    "return_reception_normal_bound": [
+      "ending_normal_bound"
+    ],
+    "return_reception_true": [
+      "true_reception"
+    ],
+    "true_reception": [
+      "ending_true"
+    ],
+    "ending_bad": [],
+    "ending_normal": [],
+    "ending_normal_bound": [],
+    "ending_true": []
+  }
+}

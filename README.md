@@ -271,3 +271,34 @@ startScene: title
 - `manifest.audio.ambiences` / `manifest.audio.se` をcompiler同期対象に追加。
 - Runtime Audio Engineがmanifest上の音声ファイルを参照できるようにした。
 - シナリオCによるダミー画像・ダミー音声付き積み替え検証を実施。
+
+## v20 更新
+
+- scoreだけに依存しない `condition-based endingCheck` を追加。
+- Runtimeで `endingCheck.rules` を評価できるようにした。
+- `src/engine/validator.js` を拡張し、`endingCheck.rules` / `requires` / `assumes` / `conditionalText` の構造検査を追加。
+- `tools/check_story_logic.py` を追加し、制作時の状態遷移・endingCheck検査を行えるようにした。
+- `SCENARIO_SOURCE.md` の `[endingCheck]` に簡易ルール記法を追加。
+- 『返し鈴』本文の直接修正は行っていない。
+
+## v21 更新
+
+このキットは、最大30分程度の短編〜中編サウンドノベルを想定する。30分を超える大規模作品・長編分岐ノベルは対象外。
+
+追加内容:
+
+- `conditionalText` のRuntime表示に対応。
+- scene訪問回数を `state.visited[sceneId]` に自動記録。
+- route guardを追加し、明らかな無限ループ候補で停止する。
+- `tools/check_route_graph.py` を追加。
+- 到達不能scene、合流点、loop候補、endingに到達しない経路、推定読了時間を検査可能にした。
+- 30分向けの推奨上限を検査警告として扱う。
+
+推奨規模:
+
+```text
+想定プレイ時間：最大30分
+scene数：80以下を推奨
+choice総数：25以下を推奨
+本文量：概ね13,500字以下を推奨
+```

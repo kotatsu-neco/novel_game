@@ -29,6 +29,9 @@ let currentFullText = "";
 let currentVisibleText = "";
 let currentStepLoggedKey = "";
 let currentBackgroundClass = "";
+let routeStepCounter = 0;
+const MAX_ROUTE_STEPS = 500;
+
 
 
 async function init() {
@@ -42,6 +45,7 @@ async function init() {
     return;
   }
   state = structuredClone(scenario.stateDefaults);
+  routeStepCounter = 0;
   bindUi();
   await goToScene(scenario.startScene);
 }
@@ -91,6 +95,7 @@ function bindUi() {
   document.getElementById("btn-restart").addEventListener("click", async () => {
     stopTypewriter();
     state = structuredClone(scenario.stateDefaults);
+    routeStepCounter = 0;
     backlog = [];
     currentStepLoggedKey = "";
     panelEl.classList.add("hidden");
@@ -108,6 +113,7 @@ function bindUi() {
     }
     stopTypewriter();
     state = data.state;
+    routeStepCounter = 0;
     backlog = normalizeBacklog(data.backlog || []);
     currentStepLoggedKey = data.currentStepLoggedKey || "";
     await goToScene(data.sceneId, data.stepIndex || 0, data.pageIndex || 0);
@@ -138,17 +144,37 @@ function renderError(errors) {
 
 async function goToScene(sceneId, startStep = 0, startPage = 0) {
   stopTypewriter();
+  routeStepCounter += 1;
+  if (routeStepCounter > MAX_ROUTE_STEPS) {
+    renderError([`Route guard stopped possible infinite loop near scene: ${sceneId}`]);
+    return;
+  }
+
   scene = scenario.scenes.find((item) => item.id === sceneId);
   if (!scene) {
     renderError([`Scene not found: ${sceneId}`]);
     return;
   }
+
+  incrementVisited(sceneId);
+
+  if (scene.requires && !evaluateCondition(scene.requires)) {
+    renderError([`Scene requires failed: ${sceneId}`]);
+    return;
+  }
+
   stepIndex = startStep;
   pageIndex = startPage;
   setBackground(scene.background);
   applyAmbience();
   renderCurrentStep();
 }
+
+function incrementVisited(sceneId) {
+  if (!state.visited || typeof state.visited !== "object") state.visited = {};
+  state.visited[sceneId] = Number(state.visited[sceneId] || 0) + 1;
+}
+
 
 function setBackground(background) {
   const backgroundId = background || "black_rain";
@@ -320,7 +346,7 @@ function isPunctuationOnly(text) {
 }
 
 function prepareCurrentStep(step) {
-  if (["text", "document", "voice", "title"].includes(step.type)) {
+  if (["text", "document", "voice", "title", "conditionalText"].includes(step.type)) {
     pageSegments = preparePagesForStep(step);
     if (pageIndex >= pageSegments.length) pageIndex = 0;
   } else {
@@ -339,6 +365,32 @@ function renderCurrentStep() {
 
   prepareCurrentStep(step);
   if (step.se && soundEnabled && pageIndex === 0) audio.playSe(step.se);
+
+  if (step.type === "conditionalText") {
+    const selected = selectConditionalTextCase(step);
+    if (!selected) {
+      stepIndex += 1;
+      pageIndex = 0;
+      renderCurrentStep();
+      return;
+    }
+    const virtualStep = {
+      type: selected.type || "text",
+      text: selected.text,
+      pages: selected.pages,
+      se: selected.se || step.se
+    };
+    if (virtualStep.se && soundEnabled && pageIndex === 0) audio.playSe(virtualStep.se);
+    speakerEl.textContent = "";
+    textEl.className = "text";
+    if (virtualStep.type === "document") textEl.classList.add("document-text");
+    if (virtualStep.type === "voice") textEl.classList.add("voice-text");
+    pageSegments = preparePagesForStep(virtualStep);
+    currentFullText = pageSegments[pageIndex] || "";
+    startTypewriter(currentFullText, virtualStep.type);
+    logStepOnce({ ...virtualStep, type: "conditionalText" });
+    return;
+  }
 
   if (step.type === "text" || step.type === "document" || step.type === "voice" || step.type === "title") {
     speakerEl.textContent = "";
@@ -372,7 +424,7 @@ function renderCurrentStep() {
       btn.className = "choice-button";
       btn.textContent = choice.label;
       btn.addEventListener("click", async () => {
-        if (choice.set) Object.assign(state, choice.set);
+        if (choice.set) setStateValues(choice.set);
         if (typeof choice.score === "number") state.score += choice.score;
         if (choice.forceEnding) state.ending = choice.forceEnding;
         pushBacklog({ kind: "choice", text: choice.label, sceneId: scene.id, stepIndex });
@@ -396,7 +448,7 @@ function renderCurrentStep() {
   }
 
   if (step.type === "endingCheck") {
-    const next = decideEnding();
+    const next = decideEnding(step);
     goToScene(next);
     return;
   }
@@ -423,6 +475,19 @@ function renderCurrentStep() {
     });
     choicesEl.appendChild(btn);
   }
+}
+
+function selectConditionalTextCase(step) {
+  for (const item of step.cases || []) {
+    if (item.default === true || evaluateCondition(item.if || item.when || item.condition)) {
+      if (item.set) setStateValues(item.set);
+      return item;
+    }
+  }
+  if (step.fallbackText || step.fallbackPages) {
+    return { text: step.fallbackText, pages: step.fallbackPages };
+  }
+  return null;
 }
 
 function logStepOnce(step) {
@@ -516,12 +581,68 @@ function revealCurrentPage() {
   textEl.textContent = currentFullText;
 }
 
-function decideEnding() {
+function setStateValues(data) {
+  for (const [key, value] of Object.entries(data || {})) {
+    const parts = String(key).split(".");
+    let current = state;
+    for (const part of parts.slice(0, -1)) {
+      if (!current[part] || typeof current[part] !== "object") current[part] = {};
+      current = current[part];
+    }
+    current[parts[parts.length - 1]] = value;
+  }
+}
+
+function decideEnding(step = {}) {
+  if (Array.isArray(step.rules) && step.rules.length > 0) {
+    for (const rule of step.rules) {
+      if (rule.default === true || evaluateCondition(rule.if || rule.when || rule.condition)) {
+        if (rule.set) setStateValues(rule.set);
+        if (rule.ending) state.ending = rule.ending;
+        if (rule.next) return rule.next;
+      }
+    }
+    if (step.fallback) return step.fallback;
+  }
+
+  // Legacy fallback for older content packs.
   if (state.voice_action === "voice_answer" || state.ending === "ending_bad") return "ending_bad";
   if (state.score >= 2) return "ending_true";
   if (state.score >= 0) return "ending_normal";
   return "ending_bad";
 }
+
+function evaluateCondition(condition) {
+  if (!condition) return false;
+  if (condition.all) return condition.all.every((item) => evaluateCondition(item));
+  if (condition.any) return condition.any.some((item) => evaluateCondition(item));
+  if (condition.not) return !evaluateCondition(condition.not);
+
+  const key = condition.flag || condition.key || condition.state;
+  if (!key) return false;
+
+  const actual = getStateValue(key);
+
+  if ("equals" in condition) return actual === condition.equals;
+  if ("notEquals" in condition) return actual !== condition.notEquals;
+  if ("exists" in condition) return condition.exists ? actual !== undefined : actual === undefined;
+  if ("in" in condition) return Array.isArray(condition.in) && condition.in.includes(actual);
+  if ("notIn" in condition) return Array.isArray(condition.notIn) && !condition.notIn.includes(actual);
+  if ("gte" in condition) return Number(actual) >= Number(condition.gte);
+  if ("gt" in condition) return Number(actual) > Number(condition.gt);
+  if ("lte" in condition) return Number(actual) <= Number(condition.lte);
+  if ("lt" in condition) return Number(actual) < Number(condition.lt);
+  if ("truthy" in condition) return Boolean(actual) === Boolean(condition.truthy);
+  return false;
+}
+
+function getStateValue(path) {
+  return String(path).split(".").reduce((current, part) => {
+    if (current == null) return undefined;
+    return current[part];
+  }, state);
+}
+
 
 function nextStep() {
   if (!scene) return;
@@ -533,7 +654,7 @@ function nextStep() {
     return;
   }
 
-  if (["text", "document", "voice", "title"].includes(step.type)) {
+  if (["text", "document", "voice", "title", "conditionalText"].includes(step.type)) {
     if (pageIndex < pageSegments.length - 1) {
       pageIndex += 1;
       renderCurrentStep();

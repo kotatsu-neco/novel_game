@@ -245,3 +245,33 @@ v1.8では、作品名・保存キー・開始シーン・背景定義を `SCENA
 人間は作品差し替え時に、まずsource metadataを確認する。
 
 このmetadataは制作上の見通しを良くするためのものであり、Runtime Engineが直接読むものではない。
+
+## v20 Authoring UX Note
+
+v20では、分岐後の事実関係を読者に破綻なく見せるため、選択肢の結果をstateとして管理し、endingCheckで条件判定する。
+
+制作者向けには、次を区別する。
+
+```text
+雰囲気の分岐
+事実状態の分岐
+エンディング条件
+```
+
+特に、アイテムの所在・禁忌違反・名前を呼んだか・声に答えたかは、scoreではなくstateとして扱う。
+
+## v21 Authoring Experience
+
+v21は「最大30分で読める作品」を前提にする。  
+作者が迷わないよう、分岐・合流・繰り返しの制御は以下に絞る。
+
+```text
+分岐：choice
+状態：choice.set
+合流後の本文：conditionalText
+結末判定：endingCheck.rules
+再訪問：state.visited
+検査：check_route_graph.py
+```
+
+長編制作向けの複雑な関数・サブルーチン・大規模変数管理は、現段階では扱わない。

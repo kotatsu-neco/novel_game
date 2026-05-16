@@ -437,3 +437,43 @@
 - 実ブラウザでの画像表示
 - 実ブラウザでの音声再生
 - iPhone Safariでの音声再生挙動
+
+## v20 実施内容
+
+- condition-based endingCheckをRuntimeへ追加。
+- legacy score fallbackは互換維持のため残した。
+- validatorを拡張し、endingCheck.rules / condition block / requires / assumes / conditionalText を検査対象にした。
+- compilerに `[endingCheck]` の簡易ルール記法を追加した。
+- `tools/check_story_logic.py` を追加した。
+- 『返し鈴』本文の直接修正は行っていない。
+
+## v20 確認済み
+
+- Python構文チェックOK。
+- JS構文チェックOK。
+- compiler check-only OK。
+- runtime validator import構文OK。
+- story logic checker実行OK。
+- 既存Content Packはlegacy fallbackで互換維持。
+
+## v20 未確認
+
+- 実ブラウザ表示。
+- iPhone Safari実機確認。
+- condition-based endingを使った新規本番シナリオの実機確認。
+
+## v21 実施内容
+
+- 最大30分程度の作品を想定範囲として明文化。
+- conditionalTextのRuntime対応を追加。
+- scene訪問回数 `state.visited[sceneId]` の自動加算を追加。
+- route guardを追加し、異常な無限ループ候補を停止できるようにした。
+- `tools/check_route_graph.py` を追加。
+- 到達不能scene、endingに到達しない経路、合流点、loop候補、推定読了時間を検査可能にした。
+- 『返し鈴』本文の直接修正は行っていない。
+
+## v21 未確認
+
+- 実ブラウザ表示。
+- iPhone Safari実機確認。
+- conditionalTextを使った本番シナリオの実機確認。

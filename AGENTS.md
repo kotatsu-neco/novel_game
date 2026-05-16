@@ -185,3 +185,25 @@ Do not delete `styles/base.css` until a full visual regression check has been co
 - シナリオ内の `background`, `ambience`, `se` がmanifest定義に存在するか検査する。
 - 画像・音声ファイルを追加した場合、実ファイル存在・拡張子・パスを確認する。
 - Runtime JSに作品固有の画像ID・音声IDを直書きしない。
+
+## v20 Story Logic Rules
+
+- Do not rely on score alone when a story fact must be guaranteed.
+- Use `choice.set` for important facts such as item location, taboo violation, name spoken, returned object, or answered voice.
+- Use `endingCheck.rules` for TRUE / NORMAL / BAD conditions.
+- Keep legacy score fallback only for simple demos.
+- If a scene assumes a specific fact, add `requires` or `assumes` in JSON or document it in the source.
+- Run `python tools/check_story_logic.py` after scenario changes.
+- Do not rewrite the prose only to hide a state inconsistency; fix the state/condition rule.
+
+## v21 Authoring Rules for <=30 Minute Works
+
+- Target playtime is up to 30 minutes.
+- Do not design long multi-route games in this kit.
+- Keep scene count below 80 unless explicitly justified.
+- Keep total choice count below 25 unless explicitly justified.
+- Use `conditionalText` at route merge points when prose depends on prior state.
+- Use `state.visited[sceneId]` for repeat visits.
+- Run `python tools/check_route_graph.py` after scenario changes.
+- Treat merge points and loop candidates as review targets, not automatic failures.
+- Do not hide a route merge contradiction by vague prose if state-based text is needed.

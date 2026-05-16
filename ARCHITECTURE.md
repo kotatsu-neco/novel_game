@@ -339,3 +339,68 @@ assets/audio/
 
 compilerは `SCENARIO_SOURCE.md` の `# backgrounds` と `# audio` から `manifest.json` を同期する。
 Runtime Audio Engineは `manifest.audio` を参照する。
+
+## v20 State Consistency Architecture
+
+```text
+choice.set
+  ↓
+runtime state
+  ↓
+endingCheck.rules
+  ↓
+ending scene
+```
+
+v20では、scoreに加えてstate条件をendingCheckで評価できる。
+
+追加要素:
+
+```text
+src/main.js
+  evaluateCondition()
+  getStateValue()
+  condition-based decideEnding()
+
+src/engine/validator.js
+  condition block validation
+  endingCheck.rules validation
+  requires / assumes validation
+
+tools/check_story_logic.py
+  authoring-time story consistency checker
+```
+
+Runtimeは引き続きAuthoring Markdownを直接読まない。
+
+## v21 Route Architecture
+
+v21の基本構造:
+
+```text
+choice.set
+  ↓
+state
+  ↓
+conditionalText / endingCheck.rules
+  ↓
+route graph checker
+```
+
+追加コンポーネント:
+
+```text
+src/main.js
+  - conditionalText rendering
+  - state.visited auto increment
+  - route guard
+
+tools/check_route_graph.py
+  - graph construction
+  - unreachable scene detection
+  - merge point detection
+  - loop candidate detection
+  - estimated reading time
+```
+
+v21は最大30分程度の作品を対象にする。大規模ノベルエンジン化はしない。

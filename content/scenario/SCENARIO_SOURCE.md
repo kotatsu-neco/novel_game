@@ -1,37 +1,22 @@
 # content-pack
-title: 返し鈴
-gameId: kaeshisuzu
-saveKey: kaeshisuzu_save_v01
-startScene: title
+title: 面会札
+gameId: menkai_fuda
+saveKey: menkai_fuda_save_v01
+startScene: opening
 
 # backgrounds
-- id: black_rain
-  kind: cssClass
-  className: bg-black_rain
 - id: black_plain
   kind: cssClass
   className: bg-black_plain
-- id: old_house_evening
-  kind: image
-  src: assets/bg/old_house_evening.png
-- id: butsuma_night
-  kind: image
-  src: assets/bg/butsuma_night.png
-- id: mountain_path
-  kind: image
-  src: assets/bg/mountain_path.png
-- id: shrine_night
-  kind: image
-  src: assets/bg/shrine_night.png
-- id: shrine_dawn
-  kind: image
-  src: assets/bg/shrine_dawn.png
-- id: old_house_morning
-  kind: image
-  src: assets/bg/old_house_morning.png
-- id: butsuma_morning
-  kind: image
-  src: assets/bg/butsuma_morning.png
+- id: black_rain
+  kind: cssClass
+  className: bg-black_rain
+- id: hospital_night
+  kind: cssClass
+  className: bg-black_plain
+- id: home_night
+  kind: cssClass
+  className: bg-black_plain
 
 # audio
 ambiences:
@@ -43,8 +28,10 @@ se:
 
 ## この文書の役割
 
-この文書は、人間とAIが共同で扱うシナリオ原稿正本である。
-Runtime EngineはこのMarkdownを直接読まない。実行時に読むのは `content/scenario/main.json` のみ。
+これはサウンドノベル『面会札』のシナリオ原稿初版である。  
+`STORY_BIBLE.md` を正本として、最大30分程度で読める構成に収める。
+
+Runtime EngineはこのMarkdownを直接読まない。ゲーム化するときは compiler で `main.json` に変換する。
 
 ## status ルール
 
@@ -56,670 +43,943 @@ Runtime EngineはこのMarkdownを直接読まない。実行時に読むのは 
 
 ---
 
-# scene: title
-status: human_review
+# scene: opening
+status: draft
+background: home_night
+ambience: silent
+
+[text]
+時計は、二十二時を少し過ぎていた。
+
+湯を沸かす音が止まり、部屋の中には冷蔵庫の低い唸りだけが残っている。テーブルの上の固定電話が鳴ったのは、マグカップに手を伸ばしたときだった。
+
+一度目は出なかった。
+
+二度目は、間違い電話だと思った。
+
+三度目で、私は受話器を取った。
+
+[voice]
+「夜間のお迎えについてご連絡しています」
+
+[text]
+声は女にも男にも聞こえなかった。若いとも年寄りとも分からない。ただ、病院の案内放送のように平らだった。
+
+[voice]
+「お手数ですが、夜間受付までお越しください」
+
+[next: choice_call]
+
+---
+
+# scene: choice_call
+status: draft
+background: home_night
+ambience: silent
+
+[choice]
+prompt: 電話をどう扱うか。
+
+- label: すぐ切る
+  next: call_hangup
+  score: -1
+  set:
+    call_response: hangup
+
+- label: 最後まで聞く
+  next: call_listen
+  score: +1
+  set:
+    call_response: listen
+
+- label: 留守電に切り替える
+  next: call_answering
+  score: +0
+  set:
+    call_response: answering
+
+---
+
+# scene: call_hangup
+status: draft
+background: home_night
+ambience: silent
+
+[text]
+私は受話器を置いた。
+
+すぐにまた鳴った。
+
+同じ間隔。同じ呼び出し音。まるで、置かれたことだけを待っていたようだった。
+
+[next: home_before_departure]
+
+---
+
+# scene: call_listen
+status: draft
+background: home_night
+ambience: silent
+
+[text]
+私は受話器を耳に当てたまま、最後まで聞いた。
+
+[voice]
+「呼び出し元は、夜間受付にてご確認ください。お迎えの方は、札をお受け取りください」
+
+[text]
+迎え。
+
+その言葉だけが、他の事務的な声から少し浮いていた。
+
+通話は、向こうから切れた。
+
+[next: home_before_departure]
+
+---
+
+# scene: call_answering
+status: draft
+background: home_night
+ambience: silent
+
+[text]
+私は応答を切り、留守電に切り替えた。
+
+しばらく無音が続いたあと、機械の録音音声に重なるように、さっきの声が入った。
+
+[voice]
+「夜間のお迎えについてご連絡しています」
+
+[text]
+録音はそこで途切れた。だが固定電話は、すぐにまた鳴り始めた。
+
+[next: home_before_departure]
+
+---
+
+# scene: home_before_departure
+status: draft
+background: home_night
+ambience: silent
+
+[text]
+知っている病院の名前だった。
+
+市立病院。自転車なら、夜道でも十分ほどで着く。私は受話器を持ち上げ、こちらから折り返そうとした。
+
+話し中だった。
+
+もう一度かけても、同じだった。
+
+呼び出し音が鳴らないまま、耳の奥で細い雑音だけが続いた。
+
+[next: choice_home_check]
+
+---
+
+# scene: choice_home_check
+status: draft
+background: home_night
+ambience: silent
+
+[choice]
+prompt: 家を出る前に何を確認するか。
+
+- label: 留守電を確認する
+  next: check_answering
+  score: +1
+  set:
+    home_checked: answering
+
+- label: 電話番号を確認する
+  next: check_number
+  score: +1
+  set:
+    home_checked: number
+
+- label: 確認せず病院へ向かう
+  next: check_none
+  score: -1
+  set:
+    home_checked: none
+
+---
+
+# scene: check_answering
+status: draft
+background: home_night
+ambience: silent
+
+[text]
+留守電には、一件だけ残っていた。
+
+[voice]
+「夜間受付までお越しください。呼び出し元は、東病棟三階、三一七です」
+
+[text]
+録音はそれだけだった。
+
+患者の名前も、こちらの名前もない。
+
+それなのに電話は、また鳴った。
+
+[next: ride_to_hospital]
+
+---
+
+# scene: check_number
+status: draft
+background: home_night
+ambience: silent
+
+[text]
+着信履歴には、市立病院の代表番号が表示されていた。
+
+登録していない番号なのに、画面には病院名が出ている。私はスマホで病院の番号を検索した。数字は一致していた。
+
+それなら、なおさら放っておけなかった。
+
+誤連絡なら、止めてもらわなければならない。
+
+[next: ride_to_hospital]
+
+---
+
+# scene: check_none
+status: draft
+background: home_night
+ambience: silent
+
+[text]
+これ以上、部屋で電話を聞いていたくなかった。
+
+私は鍵と財布だけを取った。湯は冷めかけていたが、火は消えている。玄関を出ると、夜の空気が思ったより湿っていた。
+
+背中の奥で、まだ電話の音が鳴っている気がした。
+
+[next: ride_to_hospital]
+
+---
+
+# scene: ride_to_hospital
+status: draft
 background: black_rain
-ambience: rain_light
-
-[text]
-雨の音だけがしている。
-
-遠くで、鈴が鳴った。
-
-ちりん。
-
-[title]
-返し鈴
-
-[next: mother_intro]
-
----
-
-# scene: mother_intro
-status: human_review
-background: black_plain
 ambience: silent
 
 [text]
-雨になりそうだから、早めに行ってきなさい。
+自転車のライトが、濡れた道路を細く照らした。
 
-母はそう言って、玄関まで見送りに来た。
+雨は降っていない。ただ、路面だけが黒く光っている。車通りは少なく、ペダルを踏む音がやけに近く聞こえた。
 
-靴を履く私の背中へ、鍵の鳴る音がした。
+市立病院の建物は、いつも通りそこにあった。
+
+救急入口の明かり。夜間受付の表示。自動ドアの前に置かれた消毒液。見慣れた病院の、見慣れた夜の顔だった。
+
+だから私は、そのまま中へ入った。
+
+[next: hospital_entrance]
+
+---
+
+# scene: hospital_entrance
+status: draft
+background: hospital_night
+ambience: silent
+
+[text]
+中も、普通だった。
+
+受付の奥には淡い照明がつき、廊下の床は薄く光っている。遠くで誰かの靴音がした。白い服の人影が、角を曲がって見えなくなる。
+
+窓口に、警備員らしき人が立っていた。
+
+紺色の制服。制帽。胸元の名札は、光の加減で読めない。
 
 [voice]
-「遙、気を付けて行ってらっしゃい」
+「夜間の方ですね」
+
+[text]
+私は、迎えに来たわけではないと言った。
+
+警備員らしき人は、表情を変えなかった。
 
 [voice]
-「うん。暗くなる前には戻る」
+「呼び出し元は東病棟三階、三一七です。こちらでご確認ください」
 
-[text]
-祖母の家の鍵は、掌の中で思っていたより冷たかった。
-
-[next: house_intro]
+[next: reception_pass]
 
 ---
 
-# scene: house_intro
-status: human_review
-background: old_house_evening
-ambience: rain_light
+# scene: reception_pass
+status: draft
+background: hospital_night
+ambience: silent
 
 [text]
-祖母の家には、まだ祖母の匂いが残っていた。
+差し出されたのは、普通の面会札だった。
 
-畳に染みた線香の匂い。古い箪笥。湯呑みに残った薄い茶渋。片付けるものは思っていたより少なく、祖母が最後までこの家をひとりで整えていたことが、部屋のあちこちから伝わってきた。
+白いプラスチックの板に、紺色の文字。首から掛けるための細い紐がついている。表には、見慣れた病院名と「夜間面会」の文字があった。
 
-雨が降り出したのは、仏間の押し入れを開けた頃だった。
-
-[next: butsuma_box]
-
----
-
-# scene: butsuma_box
-status: human_final
-background: butsuma_night
-ambience: rain_medium
-
-[text]
-押し入れの奥に、古い木箱があった。
-
-箱は褪せた紐で結ばれている。蓋には墨で文字があり、懐中電灯を当てると、かすれた線がゆっくり浮かび上がった。
+その下に、小さく印字されている。
 
 [document]
-『返鈴箱　片桐家』
-
-[text]
-紐に触れると、指先に冷たさが残った。
-
-部屋の中は、さっきより暗い。
-
-[text]
-箱の中には、黒ずんだ小さな鈴が入っていた。
-
-白い布。古い紐付きの巾着。古い写真。紙が二枚。
-
-鈴は動いていない。ただ、見ていると、こちらが息を止めてしまう。
-
-[next: documents]
-
----
-
-# scene: documents
-status: human_final
-background: butsuma_night
-ambience: rain_medium
-
-[text]
-一枚目の紙は、古い和紙だった。
-
-墨はところどころ薄れているが、文字は読める。
-
-[document]
-『返鈴覚書
-雨夜 家に返り来たる鈴は 素手にて取るべからず
-鈴を鳴らすべからず
-名を口にすべからず
-呼ぶ声ありとも 答ふべからず
-
-暁までに 社の絵馬掛の下に納むべし
-
-返すこと能はざる時は 白布に包み 返鈴箱に納め置くべし
-ただし 箱を開きし者は 次なる雨夜 また呼ばるるものと心得よ』
-
-[text]
-もう一枚は、祖母の走り書きだった。
-
-鉛筆の線が震えている。
-
-[document]
-『この箱を開けた方へ。
-この箱はできるだけそのままにしてください。中の鈴には触れないで。
-もし雨の夜に開けたなら鈴を鳴らさず白布で包んでください。
-
-声がしても返事をしないでください。
-名前を読まないでください。
-朝まで箱を閉じていられるならそれが一番です。
-
-それでも鈴が鳴り続けるなら覚書の通りにしてください。
-私は返せませんでした。』
-
-[text se=bell_far]
-遙は箱の蓋を閉じた。
-
-紐を結び直そうとした、そのときだった。
-
-箱の内側で、鈴が鳴った。
-
-ちりん。
-
-[text se=wet_footstep]
-廊下の方から、水を含んだ足音がした。
-
-一歩、また一歩。
-
-足音は仏間の前で止まった。障子の向こうで、子どもの声がする。
+『東病棟 三階 317』
 
 [voice]
-「それ、ぼくの」
+「こちらをお掛けください」
 
-[next: choice_bell]
+[text]
+私は面会ではないと、もう一度言った。
+
+[voice]
+「呼び出し元の確認は、病棟でお願いします」
+
+[next: choice_reception]
 
 ---
 
-# scene: choice_bell
-status: human_final
-background: butsuma_night
-ambience: rain_medium
+# scene: choice_reception
+status: draft
+background: hospital_night
+ambience: silent
 
 [choice]
-prompt: 鈴をどう扱うか。
+prompt: 夜間受付でどうするか。
 
-- label: 白布に包む
-  next: bell_wrap_result
-  score: +1
-  set:
-    bell_handling: bell_wrap
-
-- label: そのまま持つ
-  next: bell_pocket_result
-  score: +0
-  set:
-    bell_handling: bell_pocket
-
-- label: 鈴を鳴らして確かめる
-  next: bell_ring_result
+- label: 受付簿に記入する
+  next: reception_sign
   score: -1
   set:
-    bell_handling: bell_ring
+    reception_action: sign
 
----
-
-# scene: bell_wrap_result
-status: human_review
-background: butsuma_night
-ambience: rain_medium
-
-[text]
-遙は白布を広げた。
-
-鈴には触れない。布越しに包み、箱の中にあった古い巾着へ入れる。紐を絞ると、鈴の形だけが布の奥で小さく浮いた。
-
-音はしない。
-
-遙は巾着を上着の内側へしまった。廊下の足音も、それ以上は近づかなかった。
-
-[next: road_to_shrine]
-
----
-
-# scene: bell_pocket_result
-status: human_review
-background: butsuma_night
-ambience: rain_medium
-
-[text se=bell_far]
-遙は鈴をつまみ上げた。
-
-思っていたより軽い。上着のポケットへ入れた瞬間、中で小さく鳴った。
-
-廊下の奥で、濡れた足が畳を踏む音がした。
-
-[next: road_to_shrine]
-
----
-
-# scene: bell_ring_result
-status: human_review
-background: butsuma_night
-ambience: silent
-
-[text se=bell_close]
-遙は鈴を持ち上げた。
-
-本当に鳴るのか。そう思っただけだった。
-
-ちりん。
-
-音は小さかった。それなのに、家じゅうの雨音が一瞬で消えた。
-
-障子の向こうで、何かが息を吸った。
-
-[next: road_to_shrine]
-
----
-
-# scene: road_to_shrine
-status: human_review
-background: mountain_path
-ambience: rain_heavy
-
-[text]
-玄関の鍵は、なかなか開かなかった。
-
-外へ出ると、雨が傘を強く叩いた。右手に傘。左手に懐中電灯。白布に包んだ鈴は、巾着ごと上着の内側にある。覚書と祖母の走り書きは、台所で見つけた保存袋に入れた。
-
-スマホは圏外になっていた。
-
-家の奥では、まだ箱が鳴っている。
-
-[text]
-古い写真が、保存袋の中で曇っていた。
-
-軒下で懐中電灯を当てる。写真には、子どもが二人写っていた。社の前に並んで立っている。ひとりは、若いころの祖母に似ていた。
-
-裏には細い字があった。
-
-[document]
-『志乃と惣太　社の前にて』
-
-[voice]
-「そう……」
-
-[text se=bell_far]
-惣太、と声に出しかけて、遙は口を閉じた。
-
-上着の内側で、鈴が少しだけ震えた。
-
-[next: shrine_ema]
-
----
-
-# scene: shrine_ema
-status: human_review
-background: shrine_night
-ambience: rain_heavy
-
-[text]
-社は、思っていたより近かった。
-
-雨の中で、鳥居だけが白く浮いている。石段には濡れた落ち葉が張りつき、懐中電灯の光を向けるたび、黒い水たまりが小さく揺れた。
-
-拝殿の軒下へ入ると、雨の音が少し遠くなった。遙は傘を畳み、柱のそばへ立てかける。
-
-[text]
-絵馬掛には、古い絵馬がいくつも重なっていた。
-
-字の消えたもの。割れたもの。紐だけが残ったもの。ひとつずつ光を当てていくうちに、写真の裏にあったものと同じ名が見えた。
-
-[document]
-『佐久間 惣太』
-
-[text]
-その横に、新しい紙の札が結ばれていた。
-
-他の絵馬より、ずっと白い。遙は懐中電灯を近づけた。
-
-[document]
-『名を声に出さないでください
-鈴は
-呼んだ人についていきます』
-
-[text]
-その言葉だけが、箱の中の走り書きと同じ息をしていた。
-
-[next: choice_ema]
-
----
-
-# scene: choice_ema
-status: human_final
-background: shrine_night
-ambience: rain_heavy
-
-[choice]
-prompt: 絵馬の前でどうするか。
-
-- label: 名前を読まず、鈴を置く
-  next: ema_place_bell_result
-  score: +1
-  set:
-    ema_action: ema_place_bell
-
-- label: 書かれた名前を小声で読む
-  next: ema_read_name_result
-  score: -1
-  set:
-    ema_action: ema_read_name
-
-- label: 絵馬を外して裏を見る
-  next: ema_remove_result
+- label: 要件だけを聞き直す
+  next: reception_ask
   score: +0
   set:
-    ema_action: ema_remove
+    reception_action: ask
+
+- label: 面会札の裏を見る
+  next: reception_back
+  score: +1
+  set:
+    reception_action: check_back
 
 ---
 
-# scene: ema_place_bell_result
-status: human_review
-background: shrine_night
-ambience: rain_heavy
+# scene: reception_sign
+status: draft
+background: hospital_night
+ambience: silent
 
 [text]
-遙は、名の書かれた絵馬を見ないようにした。
+受付簿には、日付と時刻、面会先を書く欄があった。
 
-上着の内側から巾着を取り出し、白布をほどく。鈴を絵馬掛の下へ置いた。
+私は面会先の欄に「317」とだけ書いた。ボールペンの先が、紙に引っかかる。
 
-音はしなかった。
+それだけで済ませたつもりだった。
 
-社の奥で、子どもが泣く声がした。けれど、その声は近づいてこない。
-
-[next: return_path]
-
----
-
-# scene: ema_read_name_result
-status: human_review
-background: shrine_night
-ambience: rain_heavy
-
-[text]
-遙は絵馬の文字に光を当てた。
-
-[document]
-『佐久間 惣太』
-
-[text se=bell_close]
-唇が、名前の形に動いた。
-
-声にした瞬間、白布の中で鈴が跳ねた。耳元で、子どもの声がする。
+警備員らしき人は、面会札をこちらへ押し出した。
 
 [voice]
-「呼んだ」
+「お迎えの方は、札をお掛けください」
 
-[next: return_path]
-
----
-
-# scene: ema_remove_result
-status: human_review
-background: shrine_night
-ambience: rain_heavy
-
-[text]
-遙は絵馬に手をかけた。
-
-紐は、思っていたより簡単にほどけた。絵馬の裏には、墨の薄れた文字がある。
-
-[document]
-『返らぬ名を呼ぶな
-返らぬ音を持つな』
-
-[text]
-読み終えたとき、鳥居の外の道が、さっきより暗くなっていた。
-
-[next: return_path]
+[next: choice_pass]
 
 ---
 
-# scene: return_path
-status: human_review
-background: shrine_night
-ambience: rain_fade
+# scene: reception_ask
+status: draft
+background: hospital_night
+ambience: silent
 
 [text]
-帰ろう。
+「どなたの呼び出しですか」と聞いた。
 
-そう思った瞬間、雨の音が遠くなった。
-
-背後で、子どもの声がする。
+警備員らしき人は、少しだけ首を傾けた。
 
 [voice]
-「帰るの」
+「呼び出し元は、東病棟三階、三一七です」
 
 [text]
-遙は歩き出した。
+患者の名前は返ってこなかった。
 
-次の声は、祖母の声に似ていた。
-
-[voice]
-「遙、待ちなさい」
-
-[text]
-足が止まりかける。
-
-懐中電灯の光が、鳥居の根元で揺れた。
-
-背中のすぐ後ろで、今度は自分の声がした。
+もう一度聞こうとすると、遠くの院内放送が先に鳴った。
 
 [voice]
-「片桐遙」
+「夜間面会の方は、受付をお済ませください」
 
-[next: choice_voice]
+[next: choice_pass]
 
 ---
 
-# scene: choice_voice
-status: human_final
-background: shrine_night
+# scene: reception_back
+status: draft
+background: hospital_night
+ambience: silent
+
+[text]
+面会札を受け取る前に、私は裏を見た。
+
+赤い丸印が、ひとつ押されていた。病院の検印にしては古く、朱肉がまだ乾いていないように見える。
+
+指で触れようとして、やめた。
+
+警備員らしき人は、札ではなく私の手元だけを見ていた。
+
+[voice]
+「お掛けください」
+
+[next: choice_pass]
+
+---
+
+# scene: choice_pass
+status: draft
+background: hospital_night
 ambience: silent
 
 [choice]
-prompt: 呼び声にどう反応するか。
+prompt: 面会札をどう扱うか。
 
-- label: 振り返らない
-  next: voice_no_turn_result
+- label: 首から掛ける
+  next: pass_neck
+  score: -2
+  set:
+    visitor_pass_action: neck
+
+- label: 手に持つだけにする
+  next: pass_hand
   score: +1
   set:
-    voice_action: voice_no_turn
+    visitor_pass_action: hand
 
-- label: 鳥居まで走る
-  next: voice_run_result
+- label: いったん返そうとする
+  next: pass_return_try
+  score: +1
+  set:
+    visitor_pass_action: return_try
+
+---
+
+# scene: pass_neck
+status: draft
+background: hospital_night
+ambience: silent
+
+[text]
+私は面会札を首から掛けた。
+
+紐は軽いはずなのに、首の後ろに湿った感触が残った。札が胸元で揺れ、プラスチックの角が服に当たる。
+
+院内放送が流れた。
+
+[voice]
+「お迎えの方は、札をお掛けのうえ、東病棟へお進みください」
+
+[text]
+その言い方に引っかかったが、私はもう歩き出していた。
+
+[next: ward_corridor_bound]
+
+---
+
+# scene: pass_hand
+status: draft
+background: hospital_night
+ambience: silent
+
+[text]
+私は面会札を首から掛けず、手に持った。
+
+警備員らしき人は、何も言わなかった。ただ、目線だけが札の紐を追ったように見えた。
+
+エレベーターの方から、遠くの人影がひとつ、こちらを見てすぐに背を向けた。
+
+[next: ward_corridor_free]
+
+---
+
+# scene: pass_return_try
+status: draft
+background: hospital_night
+ambience: silent
+
+[text]
+「これは必要ありません」と言って、私は面会札を返そうとした。
+
+警備員らしき人は受け取らなかった。
+
+[voice]
+「確認が終わりましたら、お返しください」
+
+[text]
+お返しください。
+
+返却してください、ではなかった。
+
+私はその言葉を聞き違いだと思うことにして、札を手に持ったまま東病棟へ向かった。
+
+[next: ward_corridor_free]
+
+---
+
+# scene: ward_corridor_free
+status: draft
+background: hospital_night
+ambience: silent
+
+[text]
+東病棟三階の廊下は、普通の病院の匂いがした。
+
+消毒液。乾いたリネン。壁際の手すり。夜間用に落とされた照明。どれも知っている病院のものだった。
+
+それでも、歩くほどに面会札が重くなる。
+
+裏を見ると、赤い丸印が二つになっていた。
+
+押された瞬間を、私は見ていない。
+
+[next: broadcast_shift_free]
+
+---
+
+# scene: ward_corridor_bound
+status: draft
+background: hospital_night
+ambience: silent
+
+[text]
+東病棟三階へ上がると、面会札が胸元で揺れた。
+
+廊下は普通だった。壁際の手すりも、消火栓も、ナースステーションの薄い灯りも、見慣れた病院のままだった。
+
+けれど、人影が遠くを通るたび、誰もが私の胸元を見ているように思えた。
+
+院内放送が鳴った。
+
+[voice]
+「お迎えの方は、札を外さず、お進みください」
+
+[text]
+私は足を止めなかった。
+
+止める理由が、うまく見つからなかった。
+
+[next: broadcast_shift_bound]
+
+---
+
+# scene: broadcast_shift_free
+status: draft
+background: hospital_night
+ambience: silent
+
+[text]
+スピーカーから、柔らかい音がした。
+
+[voice]
+「夜間面会の方は、指定の病室をご確認ください」
+
+[text]
+少し間があった。
+
+[voice]
+「お帰しの手続きは、札を違えぬようお願いいたします」
+
+[text]
+お帰し。
+
+病院で聞く言葉ではない。少なくとも、私はそう思った。
+
+317号室の表示は、廊下の突き当たりにあった。
+
+[next: room_317_free]
+
+---
+
+# scene: broadcast_shift_bound
+status: draft
+background: hospital_night
+ambience: silent
+
+[text]
+スピーカーから、柔らかい音がした。
+
+[voice]
+「夜間面会の方は、指定の病室をご確認ください」
+
+[text]
+少し間があった。
+
+[voice]
+「お迎えの方は、札を違えぬよう、お連れください」
+
+[text]
+札が胸元に貼りついたように重くなった。
+
+外そうとしたが、指先が紐に触れる前に、317号室の扉が見えた。
+
+[next: room_317_bound]
+
+---
+
+# scene: room_317_free
+status: draft
+background: hospital_night
+ambience: silent
+
+[text]
+317号室の扉は、閉まっていた。
+
+特別な札も、御札も、古い傷もない。普通の病室の扉だった。小さな窓にはカーテンがかかり、中は見えない。
+
+手の中の面会札を裏返す。
+
+赤い丸印は三つになっていた。三つ目だけが、まだ濡れているように見える。
+
+中から、声がした。
+
+[voice]
+「お待ちしていました」
+
+[text]
+性別も年齢も分からない声だった。
+
+[next: choice_door]
+
+---
+
+# scene: room_317_bound
+status: draft
+background: hospital_night
+ambience: silent
+
+[text]
+317号室の扉は、閉まっていた。
+
+普通の病室の扉だった。だが、胸元の面会札が扉の方へ引かれるように揺れる。プラスチックの裏が服に擦れ、冷たいものが染みた。
+
+中から、声がした。
+
+[voice]
+「お待ちしていました」
+
+[text]
+性別も年齢も分からない声だった。
+
+私が答える前に、院内放送が低く鳴った。
+
+[voice]
+「お迎えの方は、そのままお入りください」
+
+[next: choice_door]
+
+---
+
+# scene: choice_door
+status: draft
+background: hospital_night
+ambience: silent
+
+[choice]
+prompt: 317号室の前でどうするか。
+
+- label: 病室へ入る
+  next: door_enter_bad
+  score: -2
+  set:
+    door_response: enter
+
+- label: 声を聞いて待つ
+  next: door_wait_normal
   score: +0
   set:
-    voice_action: voice_run
+    door_response: wait
 
-- label: 返事をする
-  next: voice_answer_result
-  forceEnding: ending_bad
+- label: 面会札を持って受付へ戻る
+  next: return_reception_gate
+  score: +2
   set:
-    voice_action: voice_answer
+    door_response: return_reception
 
 ---
 
-# scene: voice_no_turn_result
-status: human_review
-background: shrine_night
+# scene: return_reception_gate
+status: draft
+background: hospital_night
 ambience: silent
 
-[text se=bell_far]
-声が背中に触れた。
+[endingCheck]
+- when: visitor_pass_action == neck
+  next: return_reception_normal_bound
 
-答えてはいけない。
-
-覚書の墨が、まぶたの裏でにじむ。
-
-名を呼ばない。
-
-音は返す。
-
-道は閉じる。
-
-鈴が一度だけ震えた。
-
-遙は振り返らず、鳥居の外へ足を出した。
-
-[next: ending_check]
+- default: true
+  next: return_reception_true
 
 ---
 
-# scene: voice_run_result
-status: human_review
-background: shrine_night
-ambience: rain_heavy
-
-[text]
-考えるより先に、足が動いた。
-
-遙は鳥居まで走る。傘が肩にぶつかり、懐中電灯の光が地面を大きく揺らした。
-
-背後で名前が聞こえた。
-
-私の名前だった。
-
-鳥居を抜けた瞬間、雨音が戻った。
-
-助かった。
-
-そう思ったのに、背中の奥に、何かを置いてきたような冷たさが残った。
-
-[next: ending_check]
-
----
-
-# scene: voice_answer_result
-status: human_review
-background: shrine_night
+# scene: door_enter_bad
+status: draft
+background: hospital_night
 ambience: silent
 
 [text]
-遙は振り返った。
+私は扉を開けた。
 
-誰もいない。
+中は暗かった。
 
-足元に鈴が落ちている。
+病室なら、ベッドの輪郭くらいは見えるはずだった。カーテンの白さも、点滴台の影も、ナースコールの小さな灯りも。
 
-社に置いたはずの鈴だった。内側に、小さな文字が刻まれている。
+何も見えない。
 
-[document]
-『片桐遙』
+一歩入ると、背後で扉が閉まった。
+
+[voice]
+「お帰りなさい」
+
+[text]
+声は、すぐ耳元で聞こえた。
 
 [next: ending_bad]
 
 ---
 
-# scene: ending_check
-status: human_review
-background: black_rain
-ambience: 
+# scene: door_wait_normal
+status: draft
+background: hospital_night
+ambience: silent
+
+[text]
+私は扉の前で待った。
+
+中の声は、それきり黙った。廊下の奥で、カートの車輪が鳴ったような気がしたが、振り向いても何もなかった。
+
+やがて院内放送が入った。
+
+[voice]
+「夜間面会は終了しました。お帰りの方は、受付までお戻りください」
+
+[text]
+普通の案内に戻っていた。
+
+私はその言葉に従った。
+
+[next: door_wait_gate]
+
+---
+
+# scene: door_wait_gate
+status: draft
+background: hospital_night
+ambience: silent
 
 [endingCheck]
+- when: visitor_pass_action == neck
+  next: ending_normal_bound
+
+- default: true
+  next: ending_normal
+
+---
+
+# scene: return_reception_normal_bound
+status: draft
+background: hospital_night
+ambience: silent
+
+[text]
+私は面会札を外そうとした。
+
+紐は絡まっていない。結び目もない。ただ、首の後ろで指が滑り、なかなか外れなかった。
+
+何とか外したとき、プラスチックの裏が掌に触れた。
+
+赤い印が、ひとつ増えていた。
+
+受付へ戻ると、警備員らしき人は立っていた。私は札を返した。
+
+その人は受け取ったが、私を見なかった。
+
+[voice]
+「お帰りください」
+
+[text]
+私は病院を出た。
+
+自転車の鍵を差し込むまで、電話の音がどこかで鳴っている気がした。
+
+[next: ending_normal_bound]
+
+---
+
+# scene: return_reception_true
+status: draft
+background: hospital_night
+ambience: silent
+
+[text]
+私は扉から離れた。
+
+声は追ってこなかった。ただ、手の中の面会札だけが、わずかに湿っている。
+
+来た道を戻る。廊下の表示は同じだった。ナースステーションの明かりも、手すりも、消火栓も、何ひとつ変わっていない。
+
+それなのに、院内放送だけが低く響いた。
+
+[voice]
+「お連れになるものを、違えぬよう、お返しください」
+
+[text]
+私は面会札を握った。
+
+連れて帰るものなどない。
+
+そう思った瞬間、札の裏の朱印が、乾いた。
+
+[next: true_reception]
+
+---
+
+# scene: true_reception
+status: draft
+background: hospital_night
+ambience: silent
+
+[text]
+夜間受付に戻ると、警備員らしき人は同じ場所に立っていた。
+
+私は面会札を差し出した。
+
+[voice]
+「確認は、お済みですか」
+
+[text]
+私は、誤連絡だとだけ言った。
+
+それ以上は言えなかった。
+
+警備員らしき人は、札を受け取った。裏も表も見ず、受付の下へしまう。
+
+[voice]
+「お預かりします」
+
+[text]
+その言葉は、病院の手続きとしては少しだけ違っていた。
+
+けれど、私は何も聞かなかった。
+
+[next: ending_true]
 
 ---
 
 # scene: ending_bad
-status: human_review
-background: butsuma_morning
+status: draft
+background: black_plain
 ambience: silent
 
 [text]
-名前が思い出せない。
+電話が鳴っている。
 
-免許証を見ても、スマホを見ても、そこにある文字が読めない。
+どこかの部屋で。
 
-朝になっていた。
-
-祖母の家の仏間に、返鈴箱がある。蓋は開いている。白布の上に、鈴がひとつ置かれていた。
-
-[text se=bell_close]
-ちりん。
-
-[text]
-庭の方から、声がした。
+受話器を取る音がした。
 
 [voice]
-「それ、わたしの」
+「夜間のお迎えについてご連絡しています」
 
 [text]
-その声は、遙自身の声だった。
+その声を聞いているのは、もう私ではなかった。
+
+なのに、電話の向こうで息をしているものが、こちらを見ている気がした。
 
 [ending]
 ending: bad
 title: BAD END
-subtitle: 名を返す
+subtitle: 次の迎え
 
 ---
 
 # scene: ending_normal
-status: human_review
-background: old_house_morning
-ambience: rain_after
+status: draft
+background: home_night
+ambience: silent
 
 [text]
-朝になっていた。
+家に戻ると、固定電話は鳴っていなかった。
 
-雨は止んでいる。祖母の家は、昨日と同じ顔をしていた。
+留守電のランプは消えている。着信履歴には、市立病院の代表番号だけが残っていた。
 
-仏間へ戻ると、返鈴箱は空だった。白布だけが底に残っている。
+私はマグカップの湯を捨てた。流しに落ちる音が、妙に大きい。
 
-遙はしばらくそこに座っていた。
+それで終わったのだと思いたかった。
 
-[text]
-スマホの画面が、急に明るくなる。
+翌朝、手のひらに薄い赤い跡が残っていた。
 
-写真が一枚、保存されていた。
-
-撮った覚えはない。
-
-社の前に、子どもの影が立っている。
-
-その横に、もうひとつ、小さな影があった。
-
-[text se=bell_far]
-遠くで、鈴が鳴った。
-
-ちりん。
+丸い印のようにも、ただ握りしめた痕のようにも見えた。
 
 [ending]
 ending: normal
 title: NORMAL END
-subtitle: 夜明けの鈴
+subtitle: 消えた着信
+
+---
+
+# scene: ending_normal_bound
+status: draft
+background: home_night
+ambience: silent
+
+[text]
+家に戻ると、固定電話は鳴っていなかった。
+
+留守電のランプは消えている。着信履歴には、市立病院の代表番号だけが残っていた。
+
+私はマグカップの湯を捨てた。流しに落ちる音が、妙に大きい。
+
+それで終わったのだと思いたかった。
+
+翌朝、首の後ろに赤い線が残っていた。
+
+面会札の紐が当たったような、細い跡だった。
+
+[ending]
+ending: normal
+title: NORMAL END
+subtitle: 消えた着信
 
 ---
 
 # scene: ending_true
-status: human_review
-background: shrine_dawn
-ambience: dawn_silence
+status: draft
+background: home_night
+ambience: silent
 
 [text]
-鳥居の外へ出た瞬間、雨が止んだ。
+家に戻っても、電話は鳴らなかった。
 
-背後で、子どもの泣く声がした。
+次の日も、その次の日も。
 
-それは、こちらへ来る声ではなかった。社の奥で、何かがほどけるように、木が小さく鳴った。
+市立病院へ確認の電話を入れると、夜間受付の人は淡々と答えた。
 
-遙は、ゆっくり振り返った。
+昨夜、東病棟三階の面会記録はありません。
 
-[text]
-絵馬掛の下に、鈴はない。
+三一七号室は使用中ですが、夜間の呼び出しもありません。
 
-白布だけが、濡れずに残っている。
+私は礼を言って、電話を切った。
 
-絵馬の文字が、朝の薄い光の中で、少しずつ薄れていく。
+受話器を置くと、部屋の中が静かになった。
 
-[document]
-『佐久間 惣太』
+静かすぎるくらいに。
 
 [text]
-最後の一画が、雨に溶けた。
+あの面会札を持って帰らなくてよかった。
 
-[text]
-祖母の家に戻ると、返鈴箱は閉じていた。
+それだけは分かる。
 
-紐は、誰かが結び直したように、きれいに掛かっている。
-
-箱の中に、鈴はなかった。
-
-白い紐だけが、底に残っていた。
-
-[text]
-祖母の走り書きの裏に、まだ文字があった。
-
-朝の光に透かすまで、見えなかった。
-
-[document]
-『鈴を鳴らさなかった人だけが
-あの子を帰してやれるのです』
-
-[text]
-遙は、その紙を箱の底へ戻した。
-
-もう、鈴の音はしなかった。
+何を返したのかは、分からない。
 
 [ending]
 ending: true
 title: TRUE END
-subtitle: 返し鈴
-
----
+subtitle: 返された札

@@ -1,6 +1,6 @@
 {
-  "title": "返し鈴",
-  "version": "v1.9",
+  "title": "面会札",
+  "version": "v21",
   "entryScenario": "content/scenario/main.json",
   "engine": "html-js-minimal",
   "assetPolicy": "Scene backgrounds are included as local PNG files. Audio remains Web Audio placeholder tones in v0.2.",
@@ -125,8 +125,8 @@
     "compileReport": "content/scenario/COMPILE_REPORT.md",
     "sourceMetadataEnabled": true
   },
-  "gameId": "kaeshisuzu",
-  "saveKey": "kaeshisuzu_save_v01",
+  "gameId": "menkai_fuda",
+  "saveKey": "menkai_fuda_save_v01",
   "contentPack": {
     "formatVersion": "1.0",
     "runtimeScenario": "content/scenario/main.json",
@@ -140,41 +140,21 @@
     "sourceMetadata": "content/scenario/SCENARIO_SOURCE.md"
   },
   "backgrounds": {
-    "black_rain": {
-      "kind": "cssClass",
-      "className": "bg-black_rain"
-    },
     "black_plain": {
       "kind": "cssClass",
       "className": "bg-black_plain"
     },
-    "old_house_evening": {
-      "kind": "image",
-      "src": "assets/bg/old_house_evening.png"
+    "black_rain": {
+      "kind": "cssClass",
+      "className": "bg-black_rain"
     },
-    "butsuma_night": {
-      "kind": "image",
-      "src": "assets/bg/butsuma_night.png"
+    "hospital_night": {
+      "kind": "cssClass",
+      "className": "bg-black_plain"
     },
-    "mountain_path": {
-      "kind": "image",
-      "src": "assets/bg/mountain_path.png"
-    },
-    "shrine_night": {
-      "kind": "image",
-      "src": "assets/bg/shrine_night.png"
-    },
-    "shrine_dawn": {
-      "kind": "image",
-      "src": "assets/bg/shrine_dawn.png"
-    },
-    "old_house_morning": {
-      "kind": "image",
-      "src": "assets/bg/old_house_morning.png"
-    },
-    "butsuma_morning": {
-      "kind": "image",
-      "src": "assets/bg/butsuma_morning.png"
+    "home_night": {
+      "kind": "cssClass",
+      "className": "bg-black_plain"
     }
   },
   "audio": {

@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "返し鈴",
-    "version": "v1.9",
+    "title": "面会札",
+    "version": "v21",
     "language": "ja",
     "estimatedMinutes": 5,
     "description": "現代の一晩に焦点を当てた和風ホラー短編サウンドノベル。",
@@ -13,33 +13,48 @@
     },
     "compiledFrom": "content/scenario/SCENARIO_SOURCE.md",
     "sourceStatusByScene": {
-      "title": "human_review",
-      "mother_intro": "human_review",
-      "house_intro": "human_review",
-      "butsuma_box": "human_final",
-      "documents": "human_final",
-      "choice_bell": "human_final",
-      "bell_wrap_result": "human_review",
-      "bell_pocket_result": "human_review",
-      "bell_ring_result": "human_review",
-      "road_to_shrine": "human_review",
-      "shrine_ema": "human_review",
-      "choice_ema": "human_final",
-      "ema_place_bell_result": "human_review",
-      "ema_read_name_result": "human_review",
-      "ema_remove_result": "human_review",
-      "return_path": "human_review",
-      "choice_voice": "human_final",
-      "voice_no_turn_result": "human_review",
-      "voice_run_result": "human_review",
-      "voice_answer_result": "human_review",
-      "ending_check": "human_review",
-      "ending_bad": "human_review",
-      "ending_normal": "human_review",
-      "ending_true": "human_review"
+      "opening": "draft",
+      "choice_call": "draft",
+      "call_hangup": "draft",
+      "call_listen": "draft",
+      "call_answering": "draft",
+      "home_before_departure": "draft",
+      "choice_home_check": "draft",
+      "check_answering": "draft",
+      "check_number": "draft",
+      "check_none": "draft",
+      "ride_to_hospital": "draft",
+      "hospital_entrance": "draft",
+      "reception_pass": "draft",
+      "choice_reception": "draft",
+      "reception_sign": "draft",
+      "reception_ask": "draft",
+      "reception_back": "draft",
+      "choice_pass": "draft",
+      "pass_neck": "draft",
+      "pass_hand": "draft",
+      "pass_return_try": "draft",
+      "ward_corridor_free": "draft",
+      "ward_corridor_bound": "draft",
+      "broadcast_shift_free": "draft",
+      "broadcast_shift_bound": "draft",
+      "room_317_free": "draft",
+      "room_317_bound": "draft",
+      "choice_door": "draft",
+      "return_reception_gate": "draft",
+      "door_enter_bad": "draft",
+      "door_wait_normal": "draft",
+      "door_wait_gate": "draft",
+      "return_reception_normal_bound": "draft",
+      "return_reception_true": "draft",
+      "true_reception": "draft",
+      "ending_bad": "draft",
+      "ending_normal": "draft",
+      "ending_normal_bound": "draft",
+      "ending_true": "draft"
     }
   },
-  "startScene": "title",
+  "startScene": "opening",
   "stateDefaults": {
     "score": 0,
     "bell_handling": null,
@@ -49,551 +64,887 @@
   },
   "scenes": [
     {
-      "id": "title",
+      "id": "opening",
       "steps": [
         {
           "type": "text",
-          "text": "雨の音だけがしている。\n\n遠くで、鈴が鳴った。\n\nちりん。"
+          "text": "時計は、二十二時を少し過ぎていた。\n\n湯を沸かす音が止まり、部屋の中には冷蔵庫の低い唸りだけが残っている。テーブルの上の固定電話が鳴ったのは、マグカップに手を伸ばしたときだった。\n\n一度目は出なかった。\n\n二度目は、間違い電話だと思った。\n\n三度目で、私は受話器を取った。"
         },
         {
-          "type": "title",
-          "text": "返し鈴"
+          "type": "voice",
+          "text": "「夜間のお迎えについてご連絡しています」"
+        },
+        {
+          "type": "text",
+          "text": "声は女にも男にも聞こえなかった。若いとも年寄りとも分からない。ただ、病院の案内放送のように平らだった。"
+        },
+        {
+          "type": "voice",
+          "text": "「お手数ですが、夜間受付までお越しください」"
         },
         {
           "type": "jump",
-          "next": "mother_intro"
+          "next": "choice_call"
+        }
+      ],
+      "background": "home_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "choice_call",
+      "steps": [
+        {
+          "type": "choice",
+          "prompt": "電話をどう扱うか。",
+          "choices": [
+            {
+              "label": "すぐ切る",
+              "next": "call_hangup",
+              "score": -1,
+              "set": {
+                "call_response": "hangup"
+              }
+            },
+            {
+              "label": "最後まで聞く",
+              "next": "call_listen",
+              "score": 1,
+              "set": {
+                "call_response": "listen"
+              }
+            },
+            {
+              "label": "留守電に切り替える",
+              "next": "call_answering",
+              "score": 0,
+              "set": {
+                "call_response": "answering"
+              }
+            }
+          ]
+        }
+      ],
+      "background": "home_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "call_hangup",
+      "steps": [
+        {
+          "type": "text",
+          "text": "私は受話器を置いた。\n\nすぐにまた鳴った。\n\n同じ間隔。同じ呼び出し音。まるで、置かれたことだけを待っていたようだった。"
+        },
+        {
+          "type": "jump",
+          "next": "home_before_departure"
+        }
+      ],
+      "background": "home_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "call_listen",
+      "steps": [
+        {
+          "type": "text",
+          "text": "私は受話器を耳に当てたまま、最後まで聞いた。"
+        },
+        {
+          "type": "voice",
+          "text": "「呼び出し元は、夜間受付にてご確認ください。お迎えの方は、札をお受け取りください」"
+        },
+        {
+          "type": "text",
+          "text": "迎え。\n\nその言葉だけが、他の事務的な声から少し浮いていた。\n\n通話は、向こうから切れた。"
+        },
+        {
+          "type": "jump",
+          "next": "home_before_departure"
+        }
+      ],
+      "background": "home_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "call_answering",
+      "steps": [
+        {
+          "type": "text",
+          "text": "私は応答を切り、留守電に切り替えた。\n\nしばらく無音が続いたあと、機械の録音音声に重なるように、さっきの声が入った。"
+        },
+        {
+          "type": "voice",
+          "text": "「夜間のお迎えについてご連絡しています」"
+        },
+        {
+          "type": "text",
+          "text": "録音はそこで途切れた。だが固定電話は、すぐにまた鳴り始めた。"
+        },
+        {
+          "type": "jump",
+          "next": "home_before_departure"
+        }
+      ],
+      "background": "home_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "home_before_departure",
+      "steps": [
+        {
+          "type": "text",
+          "text": "知っている病院の名前だった。\n\n市立病院。自転車なら、夜道でも十分ほどで着く。私は受話器を持ち上げ、こちらから折り返そうとした。\n\n話し中だった。\n\nもう一度かけても、同じだった。\n\n呼び出し音が鳴らないまま、耳の奥で細い雑音だけが続いた。"
+        },
+        {
+          "type": "jump",
+          "next": "choice_home_check"
+        }
+      ],
+      "background": "home_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "choice_home_check",
+      "steps": [
+        {
+          "type": "choice",
+          "prompt": "家を出る前に何を確認するか。",
+          "choices": [
+            {
+              "label": "留守電を確認する",
+              "next": "check_answering",
+              "score": 1,
+              "set": {
+                "home_checked": "answering"
+              }
+            },
+            {
+              "label": "電話番号を確認する",
+              "next": "check_number",
+              "score": 1,
+              "set": {
+                "home_checked": "number"
+              }
+            },
+            {
+              "label": "確認せず病院へ向かう",
+              "next": "check_none",
+              "score": -1,
+              "set": {
+                "home_checked": "none"
+              }
+            }
+          ]
+        }
+      ],
+      "background": "home_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "check_answering",
+      "steps": [
+        {
+          "type": "text",
+          "text": "留守電には、一件だけ残っていた。"
+        },
+        {
+          "type": "voice",
+          "text": "「夜間受付までお越しください。呼び出し元は、東病棟三階、三一七です」"
+        },
+        {
+          "type": "text",
+          "text": "録音はそれだけだった。\n\n患者の名前も、こちらの名前もない。\n\nそれなのに電話は、また鳴った。"
+        },
+        {
+          "type": "jump",
+          "next": "ride_to_hospital"
+        }
+      ],
+      "background": "home_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "check_number",
+      "steps": [
+        {
+          "type": "text",
+          "text": "着信履歴には、市立病院の代表番号が表示されていた。\n\n登録していない番号なのに、画面には病院名が出ている。私はスマホで病院の番号を検索した。数字は一致していた。\n\nそれなら、なおさら放っておけなかった。\n\n誤連絡なら、止めてもらわなければならない。"
+        },
+        {
+          "type": "jump",
+          "next": "ride_to_hospital"
+        }
+      ],
+      "background": "home_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "check_none",
+      "steps": [
+        {
+          "type": "text",
+          "text": "これ以上、部屋で電話を聞いていたくなかった。\n\n私は鍵と財布だけを取った。湯は冷めかけていたが、火は消えている。玄関を出ると、夜の空気が思ったより湿っていた。\n\n背中の奥で、まだ電話の音が鳴っている気がした。"
+        },
+        {
+          "type": "jump",
+          "next": "ride_to_hospital"
+        }
+      ],
+      "background": "home_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "ride_to_hospital",
+      "steps": [
+        {
+          "type": "text",
+          "text": "自転車のライトが、濡れた道路を細く照らした。\n\n雨は降っていない。ただ、路面だけが黒く光っている。車通りは少なく、ペダルを踏む音がやけに近く聞こえた。\n\n市立病院の建物は、いつも通りそこにあった。\n\n救急入口の明かり。夜間受付の表示。自動ドアの前に置かれた消毒液。見慣れた病院の、見慣れた夜の顔だった。\n\nだから私は、そのまま中へ入った。"
+        },
+        {
+          "type": "jump",
+          "next": "hospital_entrance"
         }
       ],
       "background": "black_rain",
-      "ambience": "rain_light"
-    },
-    {
-      "id": "mother_intro",
-      "steps": [
-        {
-          "type": "text",
-          "text": "雨になりそうだから、早めに行ってきなさい。\n\n母はそう言って、玄関まで見送りに来た。\n\n靴を履く私の背中へ、鍵の鳴る音がした。"
-        },
-        {
-          "type": "voice",
-          "text": "「遙、気を付けて行ってらっしゃい」"
-        },
-        {
-          "type": "voice",
-          "text": "「うん。暗くなる前には戻る」"
-        },
-        {
-          "type": "text",
-          "text": "祖母の家の鍵は、掌の中で思っていたより冷たかった。"
-        },
-        {
-          "type": "jump",
-          "next": "house_intro"
-        }
-      ],
-      "background": "black_plain",
       "ambience": "silent"
     },
     {
-      "id": "house_intro",
+      "id": "hospital_entrance",
       "steps": [
         {
           "type": "text",
-          "text": "祖母の家には、まだ祖母の匂いが残っていた。\n\n畳に染みた線香の匂い。古い箪笥。湯呑みに残った薄い茶渋。片付けるものは思っていたより少なく、祖母が最後までこの家をひとりで整えていたことが、部屋のあちこちから伝わってきた。\n\n雨が降り出したのは、仏間の押し入れを開けた頃だった。"
-        },
-        {
-          "type": "jump",
-          "next": "butsuma_box"
-        }
-      ],
-      "background": "old_house_evening",
-      "ambience": "rain_light"
-    },
-    {
-      "id": "butsuma_box",
-      "steps": [
-        {
-          "type": "text",
-          "text": "押し入れの奥に、古い木箱があった。\n\n箱は褪せた紐で結ばれている。蓋には墨で文字があり、懐中電灯を当てると、かすれた線がゆっくり浮かび上がった。"
-        },
-        {
-          "type": "document",
-          "text": "『返鈴箱　片桐家』"
-        },
-        {
-          "type": "text",
-          "text": "紐に触れると、指先に冷たさが残った。\n\n部屋の中は、さっきより暗い。"
-        },
-        {
-          "type": "text",
-          "text": "箱の中には、黒ずんだ小さな鈴が入っていた。\n\n白い布。古い紐付きの巾着。古い写真。紙が二枚。\n\n鈴は動いていない。ただ、見ていると、こちらが息を止めてしまう。"
-        },
-        {
-          "type": "jump",
-          "next": "documents"
-        }
-      ],
-      "background": "butsuma_night",
-      "ambience": "rain_medium"
-    },
-    {
-      "id": "documents",
-      "steps": [
-        {
-          "type": "text",
-          "text": "一枚目の紙は、古い和紙だった。\n\n墨はところどころ薄れているが、文字は読める。"
-        },
-        {
-          "type": "document",
-          "text": "『返鈴覚書\n雨夜 家に返り来たる鈴は 素手にて取るべからず\n鈴を鳴らすべからず\n名を口にすべからず\n呼ぶ声ありとも 答ふべからず\n\n暁までに 社の絵馬掛の下に納むべし\n\n返すこと能はざる時は 白布に包み 返鈴箱に納め置くべし\nただし 箱を開きし者は 次なる雨夜 また呼ばるるものと心得よ』"
-        },
-        {
-          "type": "text",
-          "text": "もう一枚は、祖母の走り書きだった。\n\n鉛筆の線が震えている。"
-        },
-        {
-          "type": "document",
-          "text": "『この箱を開けた方へ。\nこの箱はできるだけそのままにしてください。中の鈴には触れないで。\nもし雨の夜に開けたなら鈴を鳴らさず白布で包んでください。\n\n声がしても返事をしないでください。\n名前を読まないでください。\n朝まで箱を閉じていられるならそれが一番です。\n\nそれでも鈴が鳴り続けるなら覚書の通りにしてください。\n私は返せませんでした。』"
-        },
-        {
-          "type": "text",
-          "text": "遙は箱の蓋を閉じた。\n\n紐を結び直そうとした、そのときだった。\n\n箱の内側で、鈴が鳴った。\n\nちりん。",
-          "se": "bell_far"
-        },
-        {
-          "type": "text",
-          "text": "廊下の方から、水を含んだ足音がした。\n\n一歩、また一歩。\n\n足音は仏間の前で止まった。障子の向こうで、子どもの声がする。",
-          "se": "wet_footstep"
+          "text": "中も、普通だった。\n\n受付の奥には淡い照明がつき、廊下の床は薄く光っている。遠くで誰かの靴音がした。白い服の人影が、角を曲がって見えなくなる。\n\n窓口に、警備員らしき人が立っていた。\n\n紺色の制服。制帽。胸元の名札は、光の加減で読めない。"
         },
         {
           "type": "voice",
-          "text": "「それ、ぼくの」"
+          "text": "「夜間の方ですね」"
+        },
+        {
+          "type": "text",
+          "text": "私は、迎えに来たわけではないと言った。\n\n警備員らしき人は、表情を変えなかった。"
+        },
+        {
+          "type": "voice",
+          "text": "「呼び出し元は東病棟三階、三一七です。こちらでご確認ください」"
         },
         {
           "type": "jump",
-          "next": "choice_bell"
+          "next": "reception_pass"
         }
       ],
-      "background": "butsuma_night",
-      "ambience": "rain_medium"
+      "background": "hospital_night",
+      "ambience": "silent"
     },
     {
-      "id": "choice_bell",
+      "id": "reception_pass",
+      "steps": [
+        {
+          "type": "text",
+          "text": "差し出されたのは、普通の面会札だった。\n\n白いプラスチックの板に、紺色の文字。首から掛けるための細い紐がついている。表には、見慣れた病院名と「夜間面会」の文字があった。\n\nその下に、小さく印字されている。"
+        },
+        {
+          "type": "document",
+          "text": "『東病棟 三階 317』"
+        },
+        {
+          "type": "voice",
+          "text": "「こちらをお掛けください」"
+        },
+        {
+          "type": "text",
+          "text": "私は面会ではないと、もう一度言った。"
+        },
+        {
+          "type": "voice",
+          "text": "「呼び出し元の確認は、病棟でお願いします」"
+        },
+        {
+          "type": "jump",
+          "next": "choice_reception"
+        }
+      ],
+      "background": "hospital_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "choice_reception",
       "steps": [
         {
           "type": "choice",
-          "prompt": "鈴をどう扱うか。",
+          "prompt": "夜間受付でどうするか。",
           "choices": [
             {
-              "label": "白布に包む",
-              "next": "bell_wrap_result",
-              "score": 1,
-              "set": {
-                "bell_handling": "bell_wrap"
-              }
-            },
-            {
-              "label": "そのまま持つ",
-              "next": "bell_pocket_result",
-              "score": 0,
-              "set": {
-                "bell_handling": "bell_pocket"
-              }
-            },
-            {
-              "label": "鈴を鳴らして確かめる",
-              "next": "bell_ring_result",
+              "label": "受付簿に記入する",
+              "next": "reception_sign",
               "score": -1,
               "set": {
-                "bell_handling": "bell_ring"
+                "reception_action": "sign"
+              }
+            },
+            {
+              "label": "要件だけを聞き直す",
+              "next": "reception_ask",
+              "score": 0,
+              "set": {
+                "reception_action": "ask"
+              }
+            },
+            {
+              "label": "面会札の裏を見る",
+              "next": "reception_back",
+              "score": 1,
+              "set": {
+                "reception_action": "check_back"
               }
             }
           ]
         }
       ],
-      "background": "butsuma_night",
-      "ambience": "rain_medium"
-    },
-    {
-      "id": "bell_wrap_result",
-      "steps": [
-        {
-          "type": "text",
-          "text": "遙は白布を広げた。\n\n鈴には触れない。布越しに包み、箱の中にあった古い巾着へ入れる。紐を絞ると、鈴の形だけが布の奥で小さく浮いた。\n\n音はしない。\n\n遙は巾着を上着の内側へしまった。廊下の足音も、それ以上は近づかなかった。"
-        },
-        {
-          "type": "jump",
-          "next": "road_to_shrine"
-        }
-      ],
-      "background": "butsuma_night",
-      "ambience": "rain_medium"
-    },
-    {
-      "id": "bell_pocket_result",
-      "steps": [
-        {
-          "type": "text",
-          "text": "遙は鈴をつまみ上げた。\n\n思っていたより軽い。上着のポケットへ入れた瞬間、中で小さく鳴った。\n\n廊下の奥で、濡れた足が畳を踏む音がした。",
-          "se": "bell_far"
-        },
-        {
-          "type": "jump",
-          "next": "road_to_shrine"
-        }
-      ],
-      "background": "butsuma_night",
-      "ambience": "rain_medium"
-    },
-    {
-      "id": "bell_ring_result",
-      "steps": [
-        {
-          "type": "text",
-          "text": "遙は鈴を持ち上げた。\n\n本当に鳴るのか。そう思っただけだった。\n\nちりん。\n\n音は小さかった。それなのに、家じゅうの雨音が一瞬で消えた。\n\n障子の向こうで、何かが息を吸った。",
-          "se": "bell_close"
-        },
-        {
-          "type": "jump",
-          "next": "road_to_shrine"
-        }
-      ],
-      "background": "butsuma_night",
+      "background": "hospital_night",
       "ambience": "silent"
     },
     {
-      "id": "road_to_shrine",
+      "id": "reception_sign",
       "steps": [
         {
           "type": "text",
-          "text": "玄関の鍵は、なかなか開かなかった。\n\n外へ出ると、雨が傘を強く叩いた。右手に傘。左手に懐中電灯。白布に包んだ鈴は、巾着ごと上着の内側にある。覚書と祖母の走り書きは、台所で見つけた保存袋に入れた。\n\nスマホは圏外になっていた。\n\n家の奥では、まだ箱が鳴っている。"
-        },
-        {
-          "type": "text",
-          "text": "古い写真が、保存袋の中で曇っていた。\n\n軒下で懐中電灯を当てる。写真には、子どもが二人写っていた。社の前に並んで立っている。ひとりは、若いころの祖母に似ていた。\n\n裏には細い字があった。"
-        },
-        {
-          "type": "document",
-          "text": "『志乃と惣太　社の前にて』"
+          "text": "受付簿には、日付と時刻、面会先を書く欄があった。\n\n私は面会先の欄に「317」とだけ書いた。ボールペンの先が、紙に引っかかる。\n\nそれだけで済ませたつもりだった。\n\n警備員らしき人は、面会札をこちらへ押し出した。"
         },
         {
           "type": "voice",
-          "text": "「そう……」"
-        },
-        {
-          "type": "text",
-          "text": "惣太、と声に出しかけて、遙は口を閉じた。\n\n上着の内側で、鈴が少しだけ震えた。",
-          "se": "bell_far"
+          "text": "「お迎えの方は、札をお掛けください」"
         },
         {
           "type": "jump",
-          "next": "shrine_ema"
+          "next": "choice_pass"
         }
       ],
-      "background": "mountain_path",
-      "ambience": "rain_heavy"
+      "background": "hospital_night",
+      "ambience": "silent"
     },
     {
-      "id": "shrine_ema",
+      "id": "reception_ask",
       "steps": [
         {
           "type": "text",
-          "text": "社は、思っていたより近かった。\n\n雨の中で、鳥居だけが白く浮いている。石段には濡れた落ち葉が張りつき、懐中電灯の光を向けるたび、黒い水たまりが小さく揺れた。\n\n拝殿の軒下へ入ると、雨の音が少し遠くなった。遙は傘を畳み、柱のそばへ立てかける。"
+          "text": "「どなたの呼び出しですか」と聞いた。\n\n警備員らしき人は、少しだけ首を傾けた。"
+        },
+        {
+          "type": "voice",
+          "text": "「呼び出し元は、東病棟三階、三一七です」"
         },
         {
           "type": "text",
-          "text": "絵馬掛には、古い絵馬がいくつも重なっていた。\n\n字の消えたもの。割れたもの。紐だけが残ったもの。ひとつずつ光を当てていくうちに、写真の裏にあったものと同じ名が見えた。"
+          "text": "患者の名前は返ってこなかった。\n\nもう一度聞こうとすると、遠くの院内放送が先に鳴った。"
         },
         {
-          "type": "document",
-          "text": "『佐久間 惣太』"
-        },
-        {
-          "type": "text",
-          "text": "その横に、新しい紙の札が結ばれていた。\n\n他の絵馬より、ずっと白い。遙は懐中電灯を近づけた。"
-        },
-        {
-          "type": "document",
-          "text": "『名を声に出さないでください\n鈴は\n呼んだ人についていきます』"
-        },
-        {
-          "type": "text",
-          "text": "その言葉だけが、箱の中の走り書きと同じ息をしていた。"
+          "type": "voice",
+          "text": "「夜間面会の方は、受付をお済ませください」"
         },
         {
           "type": "jump",
-          "next": "choice_ema"
+          "next": "choice_pass"
         }
       ],
-      "background": "shrine_night",
-      "ambience": "rain_heavy"
+      "background": "hospital_night",
+      "ambience": "silent"
     },
     {
-      "id": "choice_ema",
+      "id": "reception_back",
+      "steps": [
+        {
+          "type": "text",
+          "text": "面会札を受け取る前に、私は裏を見た。\n\n赤い丸印が、ひとつ押されていた。病院の検印にしては古く、朱肉がまだ乾いていないように見える。\n\n指で触れようとして、やめた。\n\n警備員らしき人は、札ではなく私の手元だけを見ていた。"
+        },
+        {
+          "type": "voice",
+          "text": "「お掛けください」"
+        },
+        {
+          "type": "jump",
+          "next": "choice_pass"
+        }
+      ],
+      "background": "hospital_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "choice_pass",
       "steps": [
         {
           "type": "choice",
-          "prompt": "絵馬の前でどうするか。",
+          "prompt": "面会札をどう扱うか。",
           "choices": [
             {
-              "label": "名前を読まず、鈴を置く",
-              "next": "ema_place_bell_result",
+              "label": "首から掛ける",
+              "next": "pass_neck",
+              "score": -2,
+              "set": {
+                "visitor_pass_action": "neck"
+              }
+            },
+            {
+              "label": "手に持つだけにする",
+              "next": "pass_hand",
               "score": 1,
               "set": {
-                "ema_action": "ema_place_bell"
+                "visitor_pass_action": "hand"
               }
             },
             {
-              "label": "書かれた名前を小声で読む",
-              "next": "ema_read_name_result",
-              "score": -1,
+              "label": "いったん返そうとする",
+              "next": "pass_return_try",
+              "score": 1,
               "set": {
-                "ema_action": "ema_read_name"
-              }
-            },
-            {
-              "label": "絵馬を外して裏を見る",
-              "next": "ema_remove_result",
-              "score": 0,
-              "set": {
-                "ema_action": "ema_remove"
+                "visitor_pass_action": "return_try"
               }
             }
           ]
         }
       ],
-      "background": "shrine_night",
-      "ambience": "rain_heavy"
+      "background": "hospital_night",
+      "ambience": "silent"
     },
     {
-      "id": "ema_place_bell_result",
+      "id": "pass_neck",
       "steps": [
         {
           "type": "text",
-          "text": "遙は、名の書かれた絵馬を見ないようにした。\n\n上着の内側から巾着を取り出し、白布をほどく。鈴を絵馬掛の下へ置いた。\n\n音はしなかった。\n\n社の奥で、子どもが泣く声がした。けれど、その声は近づいてこない。"
+          "text": "私は面会札を首から掛けた。\n\n紐は軽いはずなのに、首の後ろに湿った感触が残った。札が胸元で揺れ、プラスチックの角が服に当たる。\n\n院内放送が流れた。"
+        },
+        {
+          "type": "voice",
+          "text": "「お迎えの方は、札をお掛けのうえ、東病棟へお進みください」"
+        },
+        {
+          "type": "text",
+          "text": "その言い方に引っかかったが、私はもう歩き出していた。"
         },
         {
           "type": "jump",
-          "next": "return_path"
+          "next": "ward_corridor_bound"
         }
       ],
-      "background": "shrine_night",
-      "ambience": "rain_heavy"
+      "background": "hospital_night",
+      "ambience": "silent"
     },
     {
-      "id": "ema_read_name_result",
+      "id": "pass_hand",
       "steps": [
         {
           "type": "text",
-          "text": "遙は絵馬の文字に光を当てた。"
-        },
-        {
-          "type": "document",
-          "text": "『佐久間 惣太』"
-        },
-        {
-          "type": "text",
-          "text": "唇が、名前の形に動いた。\n\n声にした瞬間、白布の中で鈴が跳ねた。耳元で、子どもの声がする。",
-          "se": "bell_close"
-        },
-        {
-          "type": "voice",
-          "text": "「呼んだ」"
+          "text": "私は面会札を首から掛けず、手に持った。\n\n警備員らしき人は、何も言わなかった。ただ、目線だけが札の紐を追ったように見えた。\n\nエレベーターの方から、遠くの人影がひとつ、こちらを見てすぐに背を向けた。"
         },
         {
           "type": "jump",
-          "next": "return_path"
+          "next": "ward_corridor_free"
         }
       ],
-      "background": "shrine_night",
-      "ambience": "rain_heavy"
+      "background": "hospital_night",
+      "ambience": "silent"
     },
     {
-      "id": "ema_remove_result",
+      "id": "pass_return_try",
       "steps": [
         {
           "type": "text",
-          "text": "遙は絵馬に手をかけた。\n\n紐は、思っていたより簡単にほどけた。絵馬の裏には、墨の薄れた文字がある。"
+          "text": "「これは必要ありません」と言って、私は面会札を返そうとした。\n\n警備員らしき人は受け取らなかった。"
         },
         {
-          "type": "document",
-          "text": "『返らぬ名を呼ぶな\n返らぬ音を持つな』"
+          "type": "voice",
+          "text": "「確認が終わりましたら、お返しください」"
         },
         {
           "type": "text",
-          "text": "読み終えたとき、鳥居の外の道が、さっきより暗くなっていた。"
+          "text": "お返しください。\n\n返却してください、ではなかった。\n\n私はその言葉を聞き違いだと思うことにして、札を手に持ったまま東病棟へ向かった。"
         },
         {
           "type": "jump",
-          "next": "return_path"
+          "next": "ward_corridor_free"
         }
       ],
-      "background": "shrine_night",
-      "ambience": "rain_heavy"
+      "background": "hospital_night",
+      "ambience": "silent"
     },
     {
-      "id": "return_path",
+      "id": "ward_corridor_free",
       "steps": [
         {
           "type": "text",
-          "text": "帰ろう。\n\nそう思った瞬間、雨の音が遠くなった。\n\n背後で、子どもの声がする。"
-        },
-        {
-          "type": "voice",
-          "text": "「帰るの」"
-        },
-        {
-          "type": "text",
-          "text": "遙は歩き出した。\n\n次の声は、祖母の声に似ていた。"
-        },
-        {
-          "type": "voice",
-          "text": "「遙、待ちなさい」"
-        },
-        {
-          "type": "text",
-          "text": "足が止まりかける。\n\n懐中電灯の光が、鳥居の根元で揺れた。\n\n背中のすぐ後ろで、今度は自分の声がした。"
-        },
-        {
-          "type": "voice",
-          "text": "「片桐遙」"
+          "text": "東病棟三階の廊下は、普通の病院の匂いがした。\n\n消毒液。乾いたリネン。壁際の手すり。夜間用に落とされた照明。どれも知っている病院のものだった。\n\nそれでも、歩くほどに面会札が重くなる。\n\n裏を見ると、赤い丸印が二つになっていた。\n\n押された瞬間を、私は見ていない。"
         },
         {
           "type": "jump",
-          "next": "choice_voice"
+          "next": "broadcast_shift_free"
         }
       ],
-      "background": "shrine_night",
-      "ambience": "rain_fade"
+      "background": "hospital_night",
+      "ambience": "silent"
     },
     {
-      "id": "choice_voice",
+      "id": "ward_corridor_bound",
+      "steps": [
+        {
+          "type": "text",
+          "text": "東病棟三階へ上がると、面会札が胸元で揺れた。\n\n廊下は普通だった。壁際の手すりも、消火栓も、ナースステーションの薄い灯りも、見慣れた病院のままだった。\n\nけれど、人影が遠くを通るたび、誰もが私の胸元を見ているように思えた。\n\n院内放送が鳴った。"
+        },
+        {
+          "type": "voice",
+          "text": "「お迎えの方は、札を外さず、お進みください」"
+        },
+        {
+          "type": "text",
+          "text": "私は足を止めなかった。\n\n止める理由が、うまく見つからなかった。"
+        },
+        {
+          "type": "jump",
+          "next": "broadcast_shift_bound"
+        }
+      ],
+      "background": "hospital_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "broadcast_shift_free",
+      "steps": [
+        {
+          "type": "text",
+          "text": "スピーカーから、柔らかい音がした。"
+        },
+        {
+          "type": "voice",
+          "text": "「夜間面会の方は、指定の病室をご確認ください」"
+        },
+        {
+          "type": "text",
+          "text": "少し間があった。"
+        },
+        {
+          "type": "voice",
+          "text": "「お帰しの手続きは、札を違えぬようお願いいたします」"
+        },
+        {
+          "type": "text",
+          "text": "お帰し。\n\n病院で聞く言葉ではない。少なくとも、私はそう思った。\n\n317号室の表示は、廊下の突き当たりにあった。"
+        },
+        {
+          "type": "jump",
+          "next": "room_317_free"
+        }
+      ],
+      "background": "hospital_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "broadcast_shift_bound",
+      "steps": [
+        {
+          "type": "text",
+          "text": "スピーカーから、柔らかい音がした。"
+        },
+        {
+          "type": "voice",
+          "text": "「夜間面会の方は、指定の病室をご確認ください」"
+        },
+        {
+          "type": "text",
+          "text": "少し間があった。"
+        },
+        {
+          "type": "voice",
+          "text": "「お迎えの方は、札を違えぬよう、お連れください」"
+        },
+        {
+          "type": "text",
+          "text": "札が胸元に貼りついたように重くなった。\n\n外そうとしたが、指先が紐に触れる前に、317号室の扉が見えた。"
+        },
+        {
+          "type": "jump",
+          "next": "room_317_bound"
+        }
+      ],
+      "background": "hospital_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "room_317_free",
+      "steps": [
+        {
+          "type": "text",
+          "text": "317号室の扉は、閉まっていた。\n\n特別な札も、御札も、古い傷もない。普通の病室の扉だった。小さな窓にはカーテンがかかり、中は見えない。\n\n手の中の面会札を裏返す。\n\n赤い丸印は三つになっていた。三つ目だけが、まだ濡れているように見える。\n\n中から、声がした。"
+        },
+        {
+          "type": "voice",
+          "text": "「お待ちしていました」"
+        },
+        {
+          "type": "text",
+          "text": "性別も年齢も分からない声だった。"
+        },
+        {
+          "type": "jump",
+          "next": "choice_door"
+        }
+      ],
+      "background": "hospital_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "room_317_bound",
+      "steps": [
+        {
+          "type": "text",
+          "text": "317号室の扉は、閉まっていた。\n\n普通の病室の扉だった。だが、胸元の面会札が扉の方へ引かれるように揺れる。プラスチックの裏が服に擦れ、冷たいものが染みた。\n\n中から、声がした。"
+        },
+        {
+          "type": "voice",
+          "text": "「お待ちしていました」"
+        },
+        {
+          "type": "text",
+          "text": "性別も年齢も分からない声だった。\n\n私が答える前に、院内放送が低く鳴った。"
+        },
+        {
+          "type": "voice",
+          "text": "「お迎えの方は、そのままお入りください」"
+        },
+        {
+          "type": "jump",
+          "next": "choice_door"
+        }
+      ],
+      "background": "hospital_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "choice_door",
       "steps": [
         {
           "type": "choice",
-          "prompt": "呼び声にどう反応するか。",
+          "prompt": "317号室の前でどうするか。",
           "choices": [
             {
-              "label": "振り返らない",
-              "next": "voice_no_turn_result",
-              "score": 1,
+              "label": "病室へ入る",
+              "next": "door_enter_bad",
+              "score": -2,
               "set": {
-                "voice_action": "voice_no_turn"
+                "door_response": "enter"
               }
             },
             {
-              "label": "鳥居まで走る",
-              "next": "voice_run_result",
+              "label": "声を聞いて待つ",
+              "next": "door_wait_normal",
               "score": 0,
               "set": {
-                "voice_action": "voice_run"
+                "door_response": "wait"
               }
             },
             {
-              "label": "返事をする",
-              "next": "voice_answer_result",
-              "forceEnding": "ending_bad",
+              "label": "面会札を持って受付へ戻る",
+              "next": "return_reception_gate",
+              "score": 2,
               "set": {
-                "voice_action": "voice_answer"
+                "door_response": "return_reception"
               }
             }
           ]
         }
       ],
-      "background": "shrine_night",
+      "background": "hospital_night",
       "ambience": "silent"
     },
     {
-      "id": "voice_no_turn_result",
+      "id": "return_reception_gate",
       "steps": [
         {
-          "type": "text",
-          "text": "声が背中に触れた。\n\n答えてはいけない。\n\n覚書の墨が、まぶたの裏でにじむ。\n\n名を呼ばない。\n\n音は返す。\n\n道は閉じる。\n\n鈴が一度だけ震えた。\n\n遙は振り返らず、鳥居の外へ足を出した。",
-          "se": "bell_far"
-        },
-        {
-          "type": "jump",
-          "next": "ending_check"
+          "type": "endingCheck",
+          "rules": [
+            {
+              "if": {
+                "flag": "visitor_pass_action",
+                "equals": "neck"
+              },
+              "next": "return_reception_normal_bound"
+            },
+            {
+              "default": true,
+              "next": "return_reception_true"
+            }
+          ]
         }
       ],
-      "background": "shrine_night",
+      "background": "hospital_night",
       "ambience": "silent"
     },
     {
-      "id": "voice_run_result",
+      "id": "door_enter_bad",
       "steps": [
         {
           "type": "text",
-          "text": "考えるより先に、足が動いた。\n\n遙は鳥居まで走る。傘が肩にぶつかり、懐中電灯の光が地面を大きく揺らした。\n\n背後で名前が聞こえた。\n\n私の名前だった。\n\n鳥居を抜けた瞬間、雨音が戻った。\n\n助かった。\n\nそう思ったのに、背中の奥に、何かを置いてきたような冷たさが残った。"
+          "text": "私は扉を開けた。\n\n中は暗かった。\n\n病室なら、ベッドの輪郭くらいは見えるはずだった。カーテンの白さも、点滴台の影も、ナースコールの小さな灯りも。\n\n何も見えない。\n\n一歩入ると、背後で扉が閉まった。"
         },
         {
-          "type": "jump",
-          "next": "ending_check"
-        }
-      ],
-      "background": "shrine_night",
-      "ambience": "rain_heavy"
-    },
-    {
-      "id": "voice_answer_result",
-      "steps": [
+          "type": "voice",
+          "text": "「お帰りなさい」"
+        },
         {
           "type": "text",
-          "text": "遙は振り返った。\n\n誰もいない。\n\n足元に鈴が落ちている。\n\n社に置いたはずの鈴だった。内側に、小さな文字が刻まれている。"
-        },
-        {
-          "type": "document",
-          "text": "『片桐遙』"
+          "text": "声は、すぐ耳元で聞こえた。"
         },
         {
           "type": "jump",
           "next": "ending_bad"
         }
       ],
-      "background": "shrine_night",
+      "background": "hospital_night",
       "ambience": "silent"
     },
     {
-      "id": "ending_check",
+      "id": "door_wait_normal",
       "steps": [
         {
-          "type": "endingCheck"
+          "type": "text",
+          "text": "私は扉の前で待った。\n\n中の声は、それきり黙った。廊下の奥で、カートの車輪が鳴ったような気がしたが、振り向いても何もなかった。\n\nやがて院内放送が入った。"
+        },
+        {
+          "type": "voice",
+          "text": "「夜間面会は終了しました。お帰りの方は、受付までお戻りください」"
+        },
+        {
+          "type": "text",
+          "text": "普通の案内に戻っていた。\n\n私はその言葉に従った。"
+        },
+        {
+          "type": "jump",
+          "next": "door_wait_gate"
         }
       ],
-      "background": "black_rain"
+      "background": "hospital_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "door_wait_gate",
+      "steps": [
+        {
+          "type": "endingCheck",
+          "rules": [
+            {
+              "if": {
+                "flag": "visitor_pass_action",
+                "equals": "neck"
+              },
+              "next": "ending_normal_bound"
+            },
+            {
+              "default": true,
+              "next": "ending_normal"
+            }
+          ]
+        }
+      ],
+      "background": "hospital_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "return_reception_normal_bound",
+      "steps": [
+        {
+          "type": "text",
+          "text": "私は面会札を外そうとした。\n\n紐は絡まっていない。結び目もない。ただ、首の後ろで指が滑り、なかなか外れなかった。\n\n何とか外したとき、プラスチックの裏が掌に触れた。\n\n赤い印が、ひとつ増えていた。\n\n受付へ戻ると、警備員らしき人は立っていた。私は札を返した。\n\nその人は受け取ったが、私を見なかった。"
+        },
+        {
+          "type": "voice",
+          "text": "「お帰りください」"
+        },
+        {
+          "type": "text",
+          "text": "私は病院を出た。\n\n自転車の鍵を差し込むまで、電話の音がどこかで鳴っている気がした。"
+        },
+        {
+          "type": "jump",
+          "next": "ending_normal_bound"
+        }
+      ],
+      "background": "hospital_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "return_reception_true",
+      "steps": [
+        {
+          "type": "text",
+          "text": "私は扉から離れた。\n\n声は追ってこなかった。ただ、手の中の面会札だけが、わずかに湿っている。\n\n来た道を戻る。廊下の表示は同じだった。ナースステーションの明かりも、手すりも、消火栓も、何ひとつ変わっていない。\n\nそれなのに、院内放送だけが低く響いた。"
+        },
+        {
+          "type": "voice",
+          "text": "「お連れになるものを、違えぬよう、お返しください」"
+        },
+        {
+          "type": "text",
+          "text": "私は面会札を握った。\n\n連れて帰るものなどない。\n\nそう思った瞬間、札の裏の朱印が、乾いた。"
+        },
+        {
+          "type": "jump",
+          "next": "true_reception"
+        }
+      ],
+      "background": "hospital_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "true_reception",
+      "steps": [
+        {
+          "type": "text",
+          "text": "夜間受付に戻ると、警備員らしき人は同じ場所に立っていた。\n\n私は面会札を差し出した。"
+        },
+        {
+          "type": "voice",
+          "text": "「確認は、お済みですか」"
+        },
+        {
+          "type": "text",
+          "text": "私は、誤連絡だとだけ言った。\n\nそれ以上は言えなかった。\n\n警備員らしき人は、札を受け取った。裏も表も見ず、受付の下へしまう。"
+        },
+        {
+          "type": "voice",
+          "text": "「お預かりします」"
+        },
+        {
+          "type": "text",
+          "text": "その言葉は、病院の手続きとしては少しだけ違っていた。\n\nけれど、私は何も聞かなかった。"
+        },
+        {
+          "type": "jump",
+          "next": "ending_true"
+        }
+      ],
+      "background": "hospital_night",
+      "ambience": "silent"
     },
     {
       "id": "ending_bad",
       "steps": [
         {
           "type": "text",
-          "text": "名前が思い出せない。\n\n免許証を見ても、スマホを見ても、そこにある文字が読めない。\n\n朝になっていた。\n\n祖母の家の仏間に、返鈴箱がある。蓋は開いている。白布の上に、鈴がひとつ置かれていた。"
-        },
-        {
-          "type": "text",
-          "text": "ちりん。",
-          "se": "bell_close"
-        },
-        {
-          "type": "text",
-          "text": "庭の方から、声がした。"
+          "text": "電話が鳴っている。\n\nどこかの部屋で。\n\n受話器を取る音がした。"
         },
         {
           "type": "voice",
-          "text": "「それ、わたしの」"
+          "text": "「夜間のお迎えについてご連絡しています」"
         },
         {
           "type": "text",
-          "text": "その声は、遙自身の声だった。"
+          "text": "その声を聞いているのは、もう私ではなかった。\n\nなのに、電話の向こうで息をしているものが、こちらを見ている気がした。"
         },
         {
           "type": "ending",
           "ending": "bad",
           "title": "BAD END",
-          "subtitle": "名を返す"
+          "subtitle": "次の迎え"
         }
       ],
-      "background": "butsuma_morning",
+      "background": "black_plain",
       "ambience": "silent"
     },
     {
@@ -601,71 +952,55 @@
       "steps": [
         {
           "type": "text",
-          "text": "朝になっていた。\n\n雨は止んでいる。祖母の家は、昨日と同じ顔をしていた。\n\n仏間へ戻ると、返鈴箱は空だった。白布だけが底に残っている。\n\n遙はしばらくそこに座っていた。"
-        },
-        {
-          "type": "text",
-          "text": "スマホの画面が、急に明るくなる。\n\n写真が一枚、保存されていた。\n\n撮った覚えはない。\n\n社の前に、子どもの影が立っている。\n\nその横に、もうひとつ、小さな影があった。"
-        },
-        {
-          "type": "text",
-          "text": "遠くで、鈴が鳴った。\n\nちりん。",
-          "se": "bell_far"
+          "text": "家に戻ると、固定電話は鳴っていなかった。\n\n留守電のランプは消えている。着信履歴には、市立病院の代表番号だけが残っていた。\n\n私はマグカップの湯を捨てた。流しに落ちる音が、妙に大きい。\n\nそれで終わったのだと思いたかった。\n\n翌朝、手のひらに薄い赤い跡が残っていた。\n\n丸い印のようにも、ただ握りしめた痕のようにも見えた。"
         },
         {
           "type": "ending",
           "ending": "normal",
           "title": "NORMAL END",
-          "subtitle": "夜明けの鈴"
+          "subtitle": "消えた着信"
         }
       ],
-      "background": "old_house_morning",
-      "ambience": "rain_after"
+      "background": "home_night",
+      "ambience": "silent"
+    },
+    {
+      "id": "ending_normal_bound",
+      "steps": [
+        {
+          "type": "text",
+          "text": "家に戻ると、固定電話は鳴っていなかった。\n\n留守電のランプは消えている。着信履歴には、市立病院の代表番号だけが残っていた。\n\n私はマグカップの湯を捨てた。流しに落ちる音が、妙に大きい。\n\nそれで終わったのだと思いたかった。\n\n翌朝、首の後ろに赤い線が残っていた。\n\n面会札の紐が当たったような、細い跡だった。"
+        },
+        {
+          "type": "ending",
+          "ending": "normal",
+          "title": "NORMAL END",
+          "subtitle": "消えた着信"
+        }
+      ],
+      "background": "home_night",
+      "ambience": "silent"
     },
     {
       "id": "ending_true",
       "steps": [
         {
           "type": "text",
-          "text": "鳥居の外へ出た瞬間、雨が止んだ。\n\n背後で、子どもの泣く声がした。\n\nそれは、こちらへ来る声ではなかった。社の奥で、何かがほどけるように、木が小さく鳴った。\n\n遙は、ゆっくり振り返った。"
+          "text": "家に戻っても、電話は鳴らなかった。\n\n次の日も、その次の日も。\n\n市立病院へ確認の電話を入れると、夜間受付の人は淡々と答えた。\n\n昨夜、東病棟三階の面会記録はありません。\n\n三一七号室は使用中ですが、夜間の呼び出しもありません。\n\n私は礼を言って、電話を切った。\n\n受話器を置くと、部屋の中が静かになった。\n\n静かすぎるくらいに。"
         },
         {
           "type": "text",
-          "text": "絵馬掛の下に、鈴はない。\n\n白布だけが、濡れずに残っている。\n\n絵馬の文字が、朝の薄い光の中で、少しずつ薄れていく。"
-        },
-        {
-          "type": "document",
-          "text": "『佐久間 惣太』"
-        },
-        {
-          "type": "text",
-          "text": "最後の一画が、雨に溶けた。"
-        },
-        {
-          "type": "text",
-          "text": "祖母の家に戻ると、返鈴箱は閉じていた。\n\n紐は、誰かが結び直したように、きれいに掛かっている。\n\n箱の中に、鈴はなかった。\n\n白い紐だけが、底に残っていた。"
-        },
-        {
-          "type": "text",
-          "text": "祖母の走り書きの裏に、まだ文字があった。\n\n朝の光に透かすまで、見えなかった。"
-        },
-        {
-          "type": "document",
-          "text": "『鈴を鳴らさなかった人だけが\nあの子を帰してやれるのです』"
-        },
-        {
-          "type": "text",
-          "text": "遙は、その紙を箱の底へ戻した。\n\nもう、鈴の音はしなかった。"
+          "text": "あの面会札を持って帰らなくてよかった。\n\nそれだけは分かる。\n\n何を返したのかは、分からない。"
         },
         {
           "type": "ending",
           "ending": "true",
           "title": "TRUE END",
-          "subtitle": "返し鈴"
+          "subtitle": "返された札"
         }
       ],
-      "background": "shrine_dawn",
-      "ambience": "dawn_silence"
+      "background": "home_night",
+      "ambience": "silent"
     }
   ]
 }

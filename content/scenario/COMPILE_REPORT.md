@@ -19,16 +19,16 @@ content/manifest.json
 
 ## 4. 生成結果
 
-- title: 返し鈴
-- gameId: kaeshisuzu
-- saveKey: kaeshisuzu_save_v01
-- startScene: title
-- scene数: 24
-- background数: 9
+- title: 面会札
+- gameId: menkai_fuda
+- saveKey: menkai_fuda_save_v01
+- startScene: opening
+- scene数: 39
+- background数: 4
 - ambience audio数: 0
 - se audio数: 0
 - validation errors: 0
-- existing main.json semantic match except meta: True
+- existing main.json semantic match except meta: False
 
 ## 5. エラー
 
