@@ -95,21 +95,19 @@ button { font: inherit; color: inherit; }
   flex-direction: column;
   justify-content: flex-start;
   overflow: hidden;
-  padding: max(136px, calc(env(safe-area-inset-top) + 100px)) 12px max(12px, env(safe-area-inset-bottom));
+  padding: max(132px, calc(env(safe-area-inset-top) + 96px)) 12px max(12px, env(safe-area-inset-bottom));
 }
 
 .text-window {
   position: relative;
-  flex: 0 0 auto;
-  height: calc(100dvh - max(136px, calc(env(safe-area-inset-top) + 100px)) - 220px - max(12px, env(safe-area-inset-bottom)));
-  min-height: calc(100dvh - max(136px, calc(env(safe-area-inset-top) + 100px)) - 220px - max(12px, env(safe-area-inset-bottom)));
-  max-height: calc(100dvh - max(136px, calc(env(safe-area-inset-top) + 100px)) - 220px - max(12px, env(safe-area-inset-bottom)));
+  flex: 1 1 auto;
+  min-height: 0;
   overflow: hidden;
   border: none;
   background: linear-gradient(180deg, rgba(8, 8, 10, 0.52) 0%, rgba(8, 8, 10, 0.56) 34%, rgba(8, 8, 10, 0.68) 70%, rgba(8, 8, 10, 0.82) 100%);
   border-radius: 0;
   box-shadow: none;
-  padding: 22px 22px 34px;
+  padding: 20px 22px 34px;
   line-height: 1.82;
   letter-spacing: 0.02em;
   outline: none;
@@ -143,8 +141,8 @@ button { font: inherit; color: inherit; }
 @keyframes blink { 0%, 50% { opacity: 0.25; } 100% { opacity: 1; } }
 
 .choices {
-  flex: 0 0 208px;
-  min-height: 208px;
+  flex: 0 0 auto;
+  min-height: 0;
   margin-top: 8px;
   display: grid;
   gap: 8px;
@@ -352,4 +350,22 @@ body {
 }
 .text-window, .choices {
   touch-action: manipulation;
+}
+
+
+/* v0.8 readability and tap area */
+.stage.has-choices .text-window {
+  flex: 0 0 auto;
+  height: calc(100dvh - max(132px, calc(env(safe-area-inset-top) + 96px)) - 220px - max(12px, env(safe-area-inset-bottom)));
+  min-height: calc(100dvh - max(132px, calc(env(safe-area-inset-top) + 96px)) - 220px - max(12px, env(safe-area-inset-bottom)));
+  max-height: calc(100dvh - max(132px, calc(env(safe-area-inset-top) + 96px)) - 220px - max(12px, env(safe-area-inset-bottom)));
+}
+
+.document-text {
+  line-height: 1.68;
+}
+
+.document-text br + br {
+  display: block;
+  content: "";
 }

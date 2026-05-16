@@ -48,8 +48,17 @@ async function init() {
   await goToScene(scenario.startScene);
 }
 
+
+function handleAdvanceAreaClick(event) {
+  const target = event.target;
+  if (target.closest("button")) return;
+  if (target.closest("#panel")) return;
+  if (target.closest("#choices") && choicesEl.classList.contains("hidden") === false) return;
+  nextStep();
+}
+
 function bindUi() {
-  textWindow.addEventListener("click", nextStep);
+  stageEl.addEventListener("click", handleAdvanceAreaClick);
   textWindow.addEventListener("keydown", (event) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
@@ -122,7 +131,7 @@ function applyAmbience() {
 
 function paginateText(text, type) {
   if (!text || type === "title") return [text || ""];
-  const maxUnits = type === "document" ? 92 : type === "voice" ? 72 : 118;
+  const maxUnits = type === "document" ? 180 : type === "voice" ? 88 : 150;
   const paras = String(text).split("\n\n");
   const pages = [];
   let current = "";
@@ -221,6 +230,7 @@ function prepareCurrentStep(step) {
 function renderCurrentStep() {
   choicesEl.innerHTML = "";
   choicesEl.classList.add("hidden");
+  stageEl.classList.remove("has-choices");
   const step = scene.steps[stepIndex];
   if (!step) return;
 
@@ -243,6 +253,7 @@ function renderCurrentStep() {
     textEl.className = "text";
     textEl.textContent = step.prompt || "選択してください。";
     choicesEl.classList.remove("hidden");
+    stageEl.classList.add("has-choices");
     step.choices.forEach((choice) => {
       const btn = document.createElement("button");
       btn.type = "button";
@@ -276,6 +287,7 @@ function renderCurrentStep() {
     speakerEl.textContent = "";
     textEl.innerHTML = `<div class="ending-title">${escapeHtml(step.title)}</div><div class="ending-subtitle">${escapeHtml(step.subtitle)}</div>`;
     choicesEl.classList.remove("hidden");
+    stageEl.classList.add("has-choices");
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "choice-button";

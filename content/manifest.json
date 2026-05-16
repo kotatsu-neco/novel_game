@@ -1,6 +1,6 @@
 {
   "title": "返し鈴",
-  "version": "v0.7",
+  "version": "v0.9",
   "entryScenario": "content/scenario/main.json",
   "engine": "html-js-minimal",
   "assetPolicy": "Scene backgrounds are included as local PNG files. Audio remains Web Audio placeholder tones in v0.2.",
@@ -10,5 +10,12 @@
     "styles/base.css",
     "content/scenario/main.json",
     "assets/bg/"
-  ]
+  ],
+  "engineUiPolicy": {
+    "screenScroll": "disabled",
+    "textWindowScroll": "disabled",
+    "advanceTapArea": "whole_stage_except_buttons_choices_panel",
+    "pagination": "automatic_by_step_type",
+    "cssSplitFuturePlan": "styles/base.css will be split into engine.css and theme.css in a later version"
+  }
 }
