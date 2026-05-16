@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>返し鈴</title>
+  <link rel="stylesheet" href="styles/base.css" />
+</head>
+<body>
+  <div id="app" class="app">
+    <div id="stage" class="stage bg-black_rain" aria-live="polite">
+      <div class="grain" aria-hidden="true"></div>
+      <header class="topbar">
+        <button id="btn-menu" class="small-button" type="button">メニュー</button>
+        <button id="btn-save" class="small-button" type="button">保存</button>
+        <button id="btn-load" class="small-button" type="button">読込</button>
+        <button id="btn-sound" class="small-button" type="button">音</button>
+      </header>
+      <main class="novel-area">
+        <section id="text-window" class="text-window" role="button" tabindex="0" aria-label="本文。タップで進みます。">
+          <div id="speaker" class="speaker"></div>
+          <div id="text" class="text"></div>
+          <div id="continue-mark" class="continue-mark">▼</div>
+        </section>
+        <section id="choices" class="choices hidden" aria-label="選択肢"></section>
+      </main>
+      <aside id="panel" class="panel hidden" aria-label="メニュー">
+        <div class="panel-card">
+          <h2>メニュー</h2>
+          <button id="btn-backlog" type="button">バックログ</button>
+          <button id="btn-restart" type="button">最初から</button>
+          <button id="btn-close-panel" type="button">閉じる</button>
+          <div id="backlog" class="backlog hidden"></div>
+        </div>
+      </aside>
+      <div id="toast" class="toast hidden"></div>
+    </div>
+  </div>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

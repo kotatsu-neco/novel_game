@@ -1,0 +1,273 @@
+/* 返し鈴 v0.1 - CSS-only placeholder visuals. No external assets. */
+:root {
+  --bg: #09090b;
+  --paper: rgba(24, 22, 22, 0.82);
+  --paper-strong: rgba(13, 12, 12, 0.92);
+  --text: #f3efe7;
+  --muted: #c8bfb2;
+  --line: rgba(255, 255, 255, 0.16);
+  --accent: #d8c49a;
+  --danger: #b38d8d;
+  --button: rgba(255,255,255,0.08);
+  --button-hover: rgba(255,255,255,0.16);
+  --shadow: 0 18px 48px rgba(0,0,0,0.45);
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "YuGothic", "Noto Sans JP", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); }
+button { font: inherit; color: inherit; }
+
+.app {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  background: #050507;
+}
+
+.stage {
+  position: relative;
+  width: min(100vw, 520px);
+  height: 100dvh;
+  min-height: 640px;
+  overflow: hidden;
+  background: radial-gradient(circle at center 28%, rgba(80,80,86,0.34), transparent 36%), linear-gradient(180deg, #0b0d11, #050507 74%);
+}
+
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.55;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, transparent 0 52%, rgba(255,255,255,0.05) 52.5%, transparent 54%) 0 0 / 62px 120px,
+    radial-gradient(circle at 50% 10%, rgba(255,255,255,0.09), transparent 18%),
+    linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.74) 100%);
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image:
+    radial-gradient(circle at 12% 23%, rgba(255,255,255,0.18) 0 1px, transparent 1px),
+    radial-gradient(circle at 67% 43%, rgba(255,255,255,0.10) 0 1px, transparent 1px);
+  background-size: 33px 37px, 47px 53px;
+}
+
+.bg-old_house_evening { background: linear-gradient(180deg, #3a2f2a, #0b0808 72%); }
+.bg-butsuma_night { background: radial-gradient(circle at 52% 26%, rgba(110,91,68,0.28), transparent 30%), linear-gradient(180deg, #17110d, #030303 80%); }
+.bg-mountain_path { background: radial-gradient(circle at 50% 18%, rgba(60,69,66,0.32), transparent 24%), linear-gradient(180deg, #101816, #030504 78%); }
+.bg-shrine_night { background: radial-gradient(circle at 50% 20%, rgba(132,132,120,0.25), transparent 20%), linear-gradient(180deg, #101312, #030303 76%); }
+.bg-shrine_dawn { background: linear-gradient(180deg, #3c4140, #141515 70%); }
+.bg-old_house_morning, .bg-butsuma_morning { background: linear-gradient(180deg, #3f3d36, #13110f 80%); }
+.bg-black_rain { background: linear-gradient(180deg, #07080c, #020204); }
+
+.topbar {
+  position: absolute;
+  z-index: 5;
+  top: max(10px, env(safe-area-inset-top));
+  left: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.small-button {
+  border: 1px solid var(--line);
+  background: rgba(0,0,0,0.34);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 13px;
+  min-height: 36px;
+}
+
+.novel-area {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 72px 16px max(18px, env(safe-area-inset-bottom));
+}
+
+.text-window {
+  min-height: 31vh;
+  max-height: 44vh;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 18px 18px 24px;
+  line-height: 1.78;
+  letter-spacing: 0.02em;
+  outline: none;
+  backdrop-filter: blur(8px);
+}
+
+.text-window:focus-visible { border-color: var(--accent); }
+
+.speaker {
+  min-height: 1.2em;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.text {
+  white-space: pre-wrap;
+  font-size: 17px;
+}
+
+.document-text {
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+  letter-spacing: 0.04em;
+}
+
+.voice-text {
+  font-size: 18px;
+}
+
+.continue-mark {
+  text-align: right;
+  color: var(--accent);
+  animation: blink 1.2s infinite;
+}
+
+@keyframes blink { 0%, 50% { opacity: 0.25; } 100% { opacity: 1; } }
+
+.choices {
+  margin-top: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.choice-button, .panel button {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: var(--button);
+  border-radius: 16px;
+  padding: 14px 16px;
+  text-align: left;
+  min-height: 52px;
+}
+
+.choice-button:hover, .panel button:hover, .small-button:hover {
+  background: var(--button-hover);
+}
+
+.panel {
+  position: absolute;
+  z-index: 20;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.panel-card {
+  width: min(100%, 430px);
+  max-height: 84dvh;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  background: var(--paper-strong);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+.panel-card h2 { margin-top: 0; }
+.panel-card button { margin: 7px 0; text-align: center; }
+
+.backlog {
+  margin-top: 14px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  color: var(--muted);
+  white-space: pre-wrap;
+  line-height: 1.65;
+  font-size: 14px;
+}
+
+.toast {
+  position: absolute;
+  z-index: 30;
+  left: 50%;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  border: 1px solid var(--line);
+  background: rgba(0,0,0,0.78);
+  padding: 10px 14px;
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.hidden { display: none !important; }
+
+.ending-title {
+  text-align: center;
+  font-size: 24px;
+  letter-spacing: 0.08em;
+  margin-top: 24px;
+  color: var(--accent);
+}
+
+.ending-subtitle {
+  text-align: center;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+@media (min-width: 760px) {
+  .stage {
+    height: min(100dvh, 920px);
+    min-height: 720px;
+    border-left: 1px solid #111;
+    border-right: 1px solid #111;
+  }
+}
+
+
+/* v0.2 scene background images */
+.stage.bg-old_house_evening {
+  background:
+    linear-gradient(180deg, rgba(18,12,10,0.48), rgba(5,4,4,0.66)),
+    url('../assets/bg/old_house_evening.png') center center / cover no-repeat;
+}
+.stage.bg-butsuma_night {
+  background:
+    linear-gradient(180deg, rgba(10,8,7,0.44), rgba(3,3,3,0.70)),
+    url('../assets/bg/butsuma_night.png') center center / cover no-repeat;
+}
+.stage.bg-mountain_path {
+  background:
+    linear-gradient(180deg, rgba(8,12,12,0.42), rgba(2,3,3,0.68)),
+    url('../assets/bg/mountain_path.png') center center / cover no-repeat;
+}
+.stage.bg-shrine_night {
+  background:
+    linear-gradient(180deg, rgba(8,8,8,0.38), rgba(2,2,2,0.62)),
+    url('../assets/bg/shrine_night.png') center center / cover no-repeat;
+}
+.stage.bg-shrine_dawn {
+  background:
+    linear-gradient(180deg, rgba(36,36,34,0.24), rgba(12,12,12,0.46)),
+    url('../assets/bg/shrine_dawn.png') center center / cover no-repeat;
+}
+.stage.bg-old_house_morning {
+  background:
+    linear-gradient(180deg, rgba(40,36,30,0.22), rgba(12,10,10,0.44)),
+    url('../assets/bg/old_house_morning.png') center center / cover no-repeat;
+}
+.stage.bg-butsuma_morning {
+  background:
+    linear-gradient(180deg, rgba(42,40,34,0.22), rgba(13,11,10,0.46)),
+    url('../assets/bg/butsuma_morning.png') center center / cover no-repeat;
+}

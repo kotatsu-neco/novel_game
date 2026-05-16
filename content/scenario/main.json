@@ -1,0 +1,617 @@
+{
+  "meta": {
+    "title": "返し鈴",
+    "version": "v0.1",
+    "language": "ja",
+    "estimatedMinutes": 5,
+    "description": "現代の一晩に焦点を当てた和風ホラー短編サウンドノベル。",
+    "scoreRules": {
+      "trueChoice": 1,
+      "neutralChoice": 0,
+      "badChoice": -1,
+      "voiceAnswer": "force_bad"
+    }
+  },
+  "startScene": "title",
+  "stateDefaults": {
+    "score": 0,
+    "bell_handling": null,
+    "ema_action": null,
+    "voice_action": null,
+    "ending": null
+  },
+  "scenes": [
+    {
+      "id": "title",
+      "background": "black_rain",
+      "ambience": "rain_light",
+      "steps": [
+        {
+          "type": "text",
+          "text": "雨の音だけがしている。\n\n遠くで、鈴が鳴った。\n\nちりん。"
+        },
+        {
+          "type": "title",
+          "text": "返し鈴"
+        },
+        {
+          "type": "jump",
+          "next": "house_intro"
+        }
+      ]
+    },
+    {
+      "id": "house_intro",
+      "background": "old_house_evening",
+      "ambience": "rain_light",
+      "steps": [
+        {
+          "type": "text",
+          "text": "祖母の家には、まだ祖母の匂いが残っていた。\n\n畳に染みた線香の匂い。古い箪笥。湯呑みに残った薄い茶渋。片付けるものは思っていたより少なく、祖母が最後までこの家をひとりで整えていたことが、部屋のあちこちから伝わってきた。\n\n雨が降り出したのは、仏間の押し入れを開けた頃だった。"
+        },
+        {
+          "type": "jump",
+          "next": "butsuma_box"
+        }
+      ]
+    },
+    {
+      "id": "butsuma_box",
+      "background": "butsuma_night",
+      "ambience": "rain_medium",
+      "steps": [
+        {
+          "type": "text",
+          "text": "押し入れの奥に、古い木箱があった。\n\n箱は褪せた紐で結ばれている。蓋には墨で文字があり、懐中電灯を当てると、かすれた線がゆっくり浮かび上がった。"
+        },
+        {
+          "type": "document",
+          "text": "『返鈴箱\n片桐家』"
+        },
+        {
+          "type": "text",
+          "text": "紐に触れると、指先に冷たさが残った。\n\n部屋の中は、さっきより暗い。"
+        },
+        {
+          "type": "text",
+          "text": "箱の中には、黒ずんだ小さな鈴が入っていた。\n\n白い布。古い紐付きの巾着。古い写真。紙が二枚。\n\n鈴は動いていない。ただ、見ていると、こちらが息を止めてしまう。"
+        },
+        {
+          "type": "jump",
+          "next": "documents"
+        }
+      ]
+    },
+    {
+      "id": "documents",
+      "background": "butsuma_night",
+      "ambience": "rain_medium",
+      "steps": [
+        {
+          "type": "text",
+          "text": "一枚目の紙は、古い和紙だった。\n\n墨はところどころ薄れているが、文字は読める。"
+        },
+        {
+          "type": "document",
+          "text": "『返鈴覚書\n\n雨夜 家に返り来たる鈴は 素手にて取るべからず\n鈴を鳴らすべからず\n名を口にすべからず\n呼ぶ声ありとも 答ふべからず\n\n暁までに 社の絵馬掛の下に納むべし\n\n返すこと能はざる時は 白布に包み 返鈴箱に納め置くべし\nただし 箱を開きし者は 次なる雨夜 また呼ばるるものと心得よ』"
+        },
+        {
+          "type": "text",
+          "text": "もう一枚は、祖母の走り書きだった。\n\n鉛筆の線が震えている。"
+        },
+        {
+          "type": "document",
+          "text": "『この箱を開けた方へ。\n\nこの箱はできるだけそのままにしてください。中の鈴には触れないで。\n\nもし雨の夜に開けたなら鈴を鳴らさず白布で包んでください。\n\n声がしても返事をしないでください。\n\n名前を読まないでください。\n\n朝まで箱を閉じていられるならそれが一番です。\n\nそれでも鈴が鳴り続けるなら覚書の通りにしてください。\n\n私は返せませんでした。』"
+        },
+        {
+          "type": "text",
+          "text": "遙は箱の蓋を閉じた。\n\n紐を結び直そうとした、そのときだった。\n\n箱の内側で、鈴が鳴った。\n\nちりん。",
+          "se": "bell_far"
+        },
+        {
+          "type": "text",
+          "text": "廊下の方から、水を含んだ足音がした。\n\n一歩、また一歩。\n\n足音は仏間の前で止まった。障子の向こうで、子どもの声がする。",
+          "se": "wet_footstep"
+        },
+        {
+          "type": "voice",
+          "text": "「それ、わたしの」"
+        },
+        {
+          "type": "jump",
+          "next": "choice_bell"
+        }
+      ]
+    },
+    {
+      "id": "choice_bell",
+      "background": "butsuma_night",
+      "ambience": "rain_medium",
+      "steps": [
+        {
+          "type": "choice",
+          "prompt": "鈴をどう扱うか。",
+          "choices": [
+            {
+              "label": "白布に包む",
+              "set": {
+                "bell_handling": "bell_wrap"
+              },
+              "score": 1,
+              "next": "bell_wrap_result"
+            },
+            {
+              "label": "そのまま持つ",
+              "set": {
+                "bell_handling": "bell_pocket"
+              },
+              "score": 0,
+              "next": "bell_pocket_result"
+            },
+            {
+              "label": "鈴を鳴らして確かめる",
+              "set": {
+                "bell_handling": "bell_ring"
+              },
+              "score": -1,
+              "next": "bell_ring_result"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bell_wrap_result",
+      "background": "butsuma_night",
+      "ambience": "rain_medium",
+      "steps": [
+        {
+          "type": "text",
+          "text": "遙は白布を広げた。\n\n鈴には触れない。布越しに包み、箱の中にあった古い巾着へ入れる。紐を絞ると、鈴の形だけが布の奥で小さく浮いた。\n\n音はしない。\n\n遙は巾着を上着の内側へしまった。廊下の足音も、それ以上は近づかなかった。"
+        },
+        {
+          "type": "jump",
+          "next": "road_to_shrine"
+        }
+      ]
+    },
+    {
+      "id": "bell_pocket_result",
+      "background": "butsuma_night",
+      "ambience": "rain_medium",
+      "steps": [
+        {
+          "type": "text",
+          "text": "遙は鈴をつまみ上げた。\n\n思っていたより軽い。上着のポケットへ入れた瞬間、中で小さく鳴った。\n\n廊下の奥で、濡れた足が畳を踏む音がした。",
+          "se": "bell_far"
+        },
+        {
+          "type": "jump",
+          "next": "road_to_shrine"
+        }
+      ]
+    },
+    {
+      "id": "bell_ring_result",
+      "background": "butsuma_night",
+      "ambience": "silent",
+      "steps": [
+        {
+          "type": "text",
+          "text": "遙は鈴を持ち上げた。\n\n本当に鳴るのか。そう思っただけだった。\n\nちりん。\n\n音は小さかった。それなのに、家じゅうの雨音が一瞬で消えた。\n\n障子の向こうで、何かが息を吸った。",
+          "se": "bell_close"
+        },
+        {
+          "type": "jump",
+          "next": "road_to_shrine"
+        }
+      ]
+    },
+    {
+      "id": "road_to_shrine",
+      "background": "mountain_path",
+      "ambience": "rain_heavy",
+      "steps": [
+        {
+          "type": "text",
+          "text": "玄関の鍵は、なかなか開かなかった。\n\n外へ出ると、雨が傘を強く叩いた。右手に傘。左手に懐中電灯。白布に包んだ鈴は、巾着ごと上着の内側にある。覚書と祖母の走り書きは、台所で見つけた保存袋に入れた。\n\nスマホは圏外になっていた。\n\n家の奥では、まだ箱が鳴っている。"
+        },
+        {
+          "type": "text",
+          "text": "古い写真が、保存袋の中で曇っていた。\n\n軒下で懐中電灯を当てる。写真には、子どもが二人写っていた。社の前に並んで立っている。ひとりは、若いころの祖母に似ていた。\n\n裏には細い字があった。"
+        },
+        {
+          "type": "document",
+          "text": "『志乃と惣太\n社の前にて』"
+        },
+        {
+          "type": "voice",
+          "text": "「そう……」"
+        },
+        {
+          "type": "text",
+          "text": "惣太、と声に出しかけて、遙は口を閉じた。\n\n上着の内側で、鈴が少しだけ震えた。",
+          "se": "bell_far"
+        },
+        {
+          "type": "jump",
+          "next": "shrine_ema"
+        }
+      ]
+    },
+    {
+      "id": "shrine_ema",
+      "background": "shrine_night",
+      "ambience": "rain_heavy",
+      "steps": [
+        {
+          "type": "text",
+          "text": "社は、思っていたより近かった。\n\n雨の中で、鳥居だけが白く浮いている。石段には濡れた落ち葉が張りつき、懐中電灯の光を向けるたび、黒い水たまりが小さく揺れた。\n\n拝殿の軒下へ入ると、雨の音が少し遠くなった。遙は傘を畳み、柱のそばへ立てかける。"
+        },
+        {
+          "type": "text",
+          "text": "絵馬掛には、古い絵馬がいくつも重なっていた。\n\n字の消えたもの。割れたもの。紐だけが残ったもの。ひとつずつ光を当てていくうちに、写真の裏にあったものと同じ名が見えた。"
+        },
+        {
+          "type": "document",
+          "text": "『佐久間 惣太』"
+        },
+        {
+          "type": "text",
+          "text": "その横に、新しい紙の札が結ばれていた。\n\n他の絵馬より、ずっと白い。遙は懐中電灯を近づけた。"
+        },
+        {
+          "type": "document",
+          "text": "『名を声に出さないでください\n鈴は\n呼んだ人についていきます』"
+        },
+        {
+          "type": "text",
+          "text": "その言葉だけが、箱の中の走り書きと同じ息をしていた。"
+        },
+        {
+          "type": "jump",
+          "next": "choice_ema"
+        }
+      ]
+    },
+    {
+      "id": "choice_ema",
+      "background": "shrine_night",
+      "ambience": "rain_heavy",
+      "steps": [
+        {
+          "type": "choice",
+          "prompt": "絵馬の前でどうするか。",
+          "choices": [
+            {
+              "label": "名前を読まず、鈴を置く",
+              "set": {
+                "ema_action": "ema_place_bell"
+              },
+              "score": 1,
+              "next": "ema_place_bell_result"
+            },
+            {
+              "label": "書かれた名前を小声で読む",
+              "set": {
+                "ema_action": "ema_read_name"
+              },
+              "score": -1,
+              "next": "ema_read_name_result"
+            },
+            {
+              "label": "絵馬を外して裏を見る",
+              "set": {
+                "ema_action": "ema_remove"
+              },
+              "score": 0,
+              "next": "ema_remove_result"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ema_place_bell_result",
+      "background": "shrine_night",
+      "ambience": "rain_heavy",
+      "steps": [
+        {
+          "type": "text",
+          "text": "遙は、名の書かれた絵馬を見ないようにした。\n\n上着の内側から巾着を取り出し、白布をほどく。鈴を絵馬掛の下へ置いた。\n\n音はしなかった。\n\n社の奥で、子どもが泣く声がした。けれど、その声は近づいてこない。"
+        },
+        {
+          "type": "jump",
+          "next": "return_path"
+        }
+      ]
+    },
+    {
+      "id": "ema_read_name_result",
+      "background": "shrine_night",
+      "ambience": "rain_heavy",
+      "steps": [
+        {
+          "type": "text",
+          "text": "遙は絵馬の文字に光を当てた。"
+        },
+        {
+          "type": "document",
+          "text": "『佐久間 惣太』"
+        },
+        {
+          "type": "text",
+          "text": "唇が、名前の形に動いた。\n\n声にした瞬間、白布の中で鈴が跳ねた。耳元で、子どもの声がする。",
+          "se": "bell_close"
+        },
+        {
+          "type": "voice",
+          "text": "「呼んだ」"
+        },
+        {
+          "type": "jump",
+          "next": "return_path"
+        }
+      ]
+    },
+    {
+      "id": "ema_remove_result",
+      "background": "shrine_night",
+      "ambience": "rain_heavy",
+      "steps": [
+        {
+          "type": "text",
+          "text": "遙は絵馬に手をかけた。\n\n紐は、思っていたより簡単にほどけた。絵馬の裏には、墨の薄れた文字がある。"
+        },
+        {
+          "type": "document",
+          "text": "『返らぬ名を呼ぶな\n返らぬ音を持つな』"
+        },
+        {
+          "type": "text",
+          "text": "読み終えたとき、鳥居の外の道が、さっきより暗くなっていた。"
+        },
+        {
+          "type": "jump",
+          "next": "return_path"
+        }
+      ]
+    },
+    {
+      "id": "return_path",
+      "background": "shrine_night",
+      "ambience": "rain_fade",
+      "steps": [
+        {
+          "type": "text",
+          "text": "帰ろう。\n\nそう思った瞬間、雨の音が遠くなった。\n\n背後で、子どもの声がする。"
+        },
+        {
+          "type": "voice",
+          "text": "「帰るの」"
+        },
+        {
+          "type": "text",
+          "text": "遙は歩き出した。\n\n次の声は、祖母の声に似ていた。"
+        },
+        {
+          "type": "voice",
+          "text": "「遙、待ちなさい」"
+        },
+        {
+          "type": "text",
+          "text": "足が止まりかける。\n\n懐中電灯の光が、鳥居の根元で揺れた。\n\n背中のすぐ後ろで、今度は自分の声がした。"
+        },
+        {
+          "type": "voice",
+          "text": "「片桐遙」"
+        },
+        {
+          "type": "jump",
+          "next": "choice_voice"
+        }
+      ]
+    },
+    {
+      "id": "choice_voice",
+      "background": "shrine_night",
+      "ambience": "silent",
+      "steps": [
+        {
+          "type": "choice",
+          "prompt": "呼び声にどう反応するか。",
+          "choices": [
+            {
+              "label": "振り返らない",
+              "set": {
+                "voice_action": "voice_no_turn"
+              },
+              "score": 1,
+              "next": "voice_no_turn_result"
+            },
+            {
+              "label": "鳥居まで走る",
+              "set": {
+                "voice_action": "voice_run"
+              },
+              "score": 0,
+              "next": "voice_run_result"
+            },
+            {
+              "label": "返事をする",
+              "set": {
+                "voice_action": "voice_answer"
+              },
+              "forceEnding": "ending_bad",
+              "next": "voice_answer_result"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "voice_no_turn_result",
+      "background": "shrine_night",
+      "ambience": "silent",
+      "steps": [
+        {
+          "type": "text",
+          "text": "声が背中に触れた。\n\n答えてはいけない。\n\n覚書の墨が、まぶたの裏でにじむ。\n\n名を呼ばない。\n\n音は返す。\n\n道は閉じる。\n\n鈴が一度だけ震えた。\n\n遙は振り返らず、鳥居の外へ足を出した。",
+          "se": "bell_far"
+        },
+        {
+          "type": "jump",
+          "next": "ending_check"
+        }
+      ]
+    },
+    {
+      "id": "voice_run_result",
+      "background": "shrine_night",
+      "ambience": "rain_heavy",
+      "steps": [
+        {
+          "type": "text",
+          "text": "考えるより先に、足が動いた。\n\n遙は鳥居まで走る。傘が肩にぶつかり、懐中電灯の光が地面を大きく揺らした。\n\n背後で名前が聞こえた。\n\n私の名前だった。\n\n鳥居を抜けた瞬間、雨音が戻った。\n\n助かった。\n\nそう思ったのに、背中の奥に、何かを置いてきたような冷たさが残った。"
+        },
+        {
+          "type": "jump",
+          "next": "ending_check"
+        }
+      ]
+    },
+    {
+      "id": "voice_answer_result",
+      "background": "shrine_night",
+      "ambience": "silent",
+      "steps": [
+        {
+          "type": "text",
+          "text": "遙は振り返った。\n\n誰もいない。\n\n足元に鈴が落ちている。\n\n社に置いたはずの鈴だった。内側に、小さな文字が刻まれている。"
+        },
+        {
+          "type": "document",
+          "text": "『片桐遙』"
+        },
+        {
+          "type": "jump",
+          "next": "ending_bad"
+        }
+      ]
+    },
+    {
+      "id": "ending_check",
+      "background": "black_rain",
+      "steps": [
+        {
+          "type": "endingCheck"
+        }
+      ]
+    },
+    {
+      "id": "ending_bad",
+      "background": "butsuma_morning",
+      "ambience": "silent",
+      "steps": [
+        {
+          "type": "text",
+          "text": "名前が思い出せない。\n\n免許証を見ても、スマホを見ても、そこにある文字が読めない。\n\n朝になっていた。\n\n祖母の家の仏間に、返鈴箱がある。蓋は開いている。白布の上に、鈴がひとつ置かれていた。"
+        },
+        {
+          "type": "text",
+          "text": "ちりん。",
+          "se": "bell_close"
+        },
+        {
+          "type": "text",
+          "text": "庭の方から、声がした。"
+        },
+        {
+          "type": "voice",
+          "text": "「それ、わたしの」"
+        },
+        {
+          "type": "text",
+          "text": "その声は、遙自身の声だった。"
+        },
+        {
+          "type": "ending",
+          "ending": "bad",
+          "title": "BAD END",
+          "subtitle": "名を返す"
+        }
+      ]
+    },
+    {
+      "id": "ending_normal",
+      "background": "old_house_morning",
+      "ambience": "rain_after",
+      "steps": [
+        {
+          "type": "text",
+          "text": "朝になっていた。\n\n雨は止んでいる。祖母の家は、昨日と同じ顔をしていた。\n\n仏間へ戻ると、返鈴箱は空だった。白布だけが底に残っている。\n\n遙はしばらくそこに座っていた。"
+        },
+        {
+          "type": "text",
+          "text": "スマホの画面が、急に明るくなる。\n\n写真が一枚、保存されていた。\n\n撮った覚えはない。\n\n社の前に、子どもの影が立っている。\n\nその横に、もうひとつ、小さな影があった。"
+        },
+        {
+          "type": "text",
+          "text": "遠くで、鈴が鳴った。\n\nちりん。",
+          "se": "bell_far"
+        },
+        {
+          "type": "ending",
+          "ending": "normal",
+          "title": "NORMAL END",
+          "subtitle": "夜明けの鈴"
+        }
+      ]
+    },
+    {
+      "id": "ending_true",
+      "background": "shrine_dawn",
+      "ambience": "dawn_silence",
+      "steps": [
+        {
+          "type": "text",
+          "text": "鳥居の外へ出た瞬間、雨が止んだ。\n\n背後で、子どもの泣く声がした。\n\nそれは、こちらへ来る声ではなかった。社の奥で、何かがほどけるように、木が小さく鳴った。\n\n遙は、ゆっくり振り返った。"
+        },
+        {
+          "type": "text",
+          "text": "絵馬掛の下に、鈴はない。\n\n白布だけが、濡れずに残っている。\n\n絵馬の文字が、朝の薄い光の中で、少しずつ薄れていく。"
+        },
+        {
+          "type": "document",
+          "text": "『佐久間 惣太』"
+        },
+        {
+          "type": "text",
+          "text": "最後の一画が、雨に溶けた。"
+        },
+        {
+          "type": "text",
+          "text": "祖母の家に戻ると、返鈴箱は閉じていた。\n\n紐は、誰かが結び直したように、きれいに掛かっている。\n\n箱の中に、鈴はなかった。\n\n白い紐だけが、底に残っていた。"
+        },
+        {
+          "type": "text",
+          "text": "祖母の走り書きの裏に、まだ文字があった。\n\n朝の光に透かすまで、見えなかった。"
+        },
+        {
+          "type": "document",
+          "text": "『鈴を鳴らさなかった人だけが\nあの子を帰してやれるのです』"
+        },
+        {
+          "type": "text",
+          "text": "遙は、その紙を箱の底へ戻した。\n\nもう、鈴の音はしなかった。"
+        },
+        {
+          "type": "ending",
+          "ending": "true",
+          "title": "TRUE END",
+          "subtitle": "返し鈴"
+        }
+      ]
+    }
+  ]
+}
