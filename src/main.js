@@ -10,6 +10,17 @@ const stageEl = document.getElementById("stage");
 const panelEl = document.getElementById("panel");
 const toastEl = document.getElementById("toast");
 const backlogEl = document.getElementById("backlog");
+const settingsEl = document.getElementById("settings");
+const speedSelects = {
+  text: document.getElementById("setting-speed-text"),
+  voice: document.getElementById("setting-speed-voice"),
+  document: document.getElementById("setting-speed-document")
+};
+const fontSelects = {
+  text: document.getElementById("setting-font-text"),
+  voice: document.getElementById("setting-font-voice"),
+  document: document.getElementById("setting-font-document")
+};
 
 const audio = createAudioEngine();
 let saveLoad = null;
@@ -30,6 +41,9 @@ let currentVisibleText = "";
 let currentStepLoggedKey = "";
 let currentBackgroundClass = "";
 let routeStepCounter = 0;
+let choiceTimer = null;
+let choiceDeadline = 0;
+let userDisplaySettings = null;
 const MAX_ROUTE_STEPS = 500;
 
 
@@ -46,6 +60,8 @@ async function init() {
   }
   state = structuredClone(scenario.stateDefaults);
   routeStepCounter = 0;
+  userDisplaySettings = loadDisplaySettings();
+  applyDisplaySettingsToDom();
   bindUi();
   await goToScene(scenario.startScene);
 }
@@ -125,6 +141,11 @@ function bindUi() {
     applyAmbience();
     showToast(soundEnabled ? "音をオンにしました" : "音をオフにしました");
   });
+  document.getElementById("btn-settings").addEventListener("click", () => {
+    panelEl.classList.remove("hidden");
+    settingsEl?.scrollIntoView({ block: "nearest" });
+  });
+  bindDisplaySettingControls();
 }
 
 function handleAdvanceAreaClick(event) {
@@ -136,6 +157,7 @@ function handleAdvanceAreaClick(event) {
 }
 
 function renderError(errors) {
+  stopChoiceTimer();
   stopTypewriter();
   textEl.textContent = "シナリオ検証エラー\n\n" + errors.join("\n");
   speakerEl.textContent = "";
@@ -143,6 +165,7 @@ function renderError(errors) {
 }
 
 async function goToScene(sceneId, startStep = 0, startPage = 0) {
+  stopChoiceTimer();
   stopTypewriter();
   routeStepCounter += 1;
   if (routeStepCounter > MAX_ROUTE_STEPS) {
@@ -410,28 +433,7 @@ function renderCurrentStep() {
   }
 
   if (step.type === "choice") {
-    speakerEl.textContent = "";
-    textEl.className = "text";
-    textEl.textContent = step.prompt || "選択してください。";
-    currentFullText = textEl.textContent;
-    currentVisibleText = currentFullText;
-    isTyping = false;
-    choicesEl.classList.remove("hidden");
-    stageEl.classList.add("has-choices");
-    step.choices.forEach((choice) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "choice-button";
-      btn.textContent = choice.label;
-      btn.addEventListener("click", async () => {
-        if (choice.set) setStateValues(choice.set);
-        if (typeof choice.score === "number") state.score += choice.score;
-        if (choice.forceEnding) state.ending = choice.forceEnding;
-        pushBacklog({ kind: "choice", text: choice.label, sceneId: scene.id, stepIndex });
-        await goToScene(choice.next);
-      });
-      choicesEl.appendChild(btn);
-    });
+    renderChoiceStep(step);
     return;
   }
 
@@ -475,6 +477,165 @@ function renderCurrentStep() {
     });
     choicesEl.appendChild(btn);
   }
+}
+
+
+function renderChoiceStep(step) {
+  stopChoiceTimer();
+  speakerEl.textContent = "";
+  textEl.className = "text";
+  textEl.textContent = step.prompt || "選択してください。";
+  currentFullText = textEl.textContent;
+  currentVisibleText = currentFullText;
+  isTyping = false;
+  choicesEl.classList.remove("hidden");
+  stageEl.classList.add("has-choices");
+
+  const choiceButtons = [];
+  step.choices.forEach((choice) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "choice-button";
+    btn.textContent = choice.label;
+    btn.addEventListener("click", async () => {
+      stopChoiceTimer();
+      await chooseOption(choice);
+    });
+    choicesEl.appendChild(btn);
+    choiceButtons.push(btn);
+  });
+
+  if (Number(step.timeLimitMs) > 0) {
+    startChoiceTimer(step, choiceButtons);
+  }
+}
+
+async function chooseOption(choice, labelOverride = "") {
+  if (!choice || !choice.next) return;
+  if (choice.set) setStateValues(choice.set);
+  if (typeof choice.score === "number") state.score += choice.score;
+  if (choice.forceEnding) state.ending = choice.forceEnding;
+  pushBacklog({ kind: "choice", text: labelOverride || choice.label || "選択", sceneId: scene.id, stepIndex });
+  await goToScene(choice.next);
+}
+
+function startChoiceTimer(step, buttons) {
+  const limit = Number(step.timeLimitMs);
+  if (!limit || limit <= 0) return;
+  if (!step.timeoutNext && !step.timeoutChoiceLabel) return;
+
+  const timerEl = document.createElement("div");
+  timerEl.className = "choice-timer";
+  timerEl.setAttribute("aria-live", "polite");
+  choicesEl.prepend(timerEl);
+
+  choiceDeadline = Date.now() + limit;
+  const tick = async () => {
+    const remaining = Math.max(0, choiceDeadline - Date.now());
+    timerEl.textContent = `残り ${Math.ceil(remaining / 1000)} 秒`;
+    if (remaining <= 0) {
+      stopChoiceTimer(false);
+      buttons.forEach((button) => { button.disabled = true; });
+      const timeoutChoice = (step.choices || []).find((choice) => choice.label === step.timeoutChoiceLabel);
+      if (timeoutChoice) {
+        await chooseOption(timeoutChoice, step.timeoutBacklogLabel || "時間切れ");
+        return;
+      }
+      if (step.timeoutNext) {
+        pushBacklog({ kind: "choice", text: step.timeoutBacklogLabel || "時間切れ", sceneId: scene.id, stepIndex });
+        await goToScene(step.timeoutNext);
+      }
+      return;
+    }
+    choiceTimer = window.setTimeout(tick, 250);
+  };
+  tick();
+}
+
+function stopChoiceTimer(clearElement = true) {
+  if (choiceTimer) {
+    window.clearTimeout(choiceTimer);
+    choiceTimer = null;
+  }
+  choiceDeadline = 0;
+  if (clearElement) {
+    choicesEl.querySelectorAll(".choice-timer").forEach((node) => node.remove());
+  }
+}
+
+function defaultDisplaySettings() {
+  const policy = manifest?.engineUiPolicy || {};
+  const defaultSpeedPreset = policy?.typewriter?.defaultPreset || {};
+  const defaultFontPreset = policy?.fontSize?.defaultPreset || {};
+  return {
+    speed: {
+      text: defaultSpeedPreset.text || "normal",
+      voice: defaultSpeedPreset.voice || "normal",
+      document: defaultSpeedPreset.document || "normal"
+    },
+    font: {
+      text: defaultFontPreset.text || "normal",
+      voice: defaultFontPreset.voice || "normal",
+      document: defaultFontPreset.document || "normal"
+    }
+  };
+}
+
+function displaySettingsStorageKey() {
+  return `${manifest?.saveKey || manifest?.gameId || "sound_novel"}_display_settings_v01`;
+}
+
+function loadDisplaySettings() {
+  const defaults = defaultDisplaySettings();
+  try {
+    const raw = window.localStorage.getItem(displaySettingsStorageKey());
+    if (!raw) return defaults;
+    const parsed = JSON.parse(raw);
+    return {
+      speed: { ...defaults.speed, ...(parsed.speed || {}) },
+      font: { ...defaults.font, ...(parsed.font || {}) }
+    };
+  } catch {
+    return defaults;
+  }
+}
+
+function saveDisplaySettings() {
+  try {
+    window.localStorage.setItem(displaySettingsStorageKey(), JSON.stringify(userDisplaySettings || defaultDisplaySettings()));
+  } catch {
+    // Ignore storage failures.
+  }
+}
+
+function bindDisplaySettingControls() {
+  userDisplaySettings = userDisplaySettings || loadDisplaySettings();
+  for (const [type, select] of Object.entries(speedSelects)) {
+    if (!select) continue;
+    select.value = userDisplaySettings.speed[type] || "normal";
+    select.addEventListener("change", () => {
+      userDisplaySettings.speed[type] = select.value;
+      saveDisplaySettings();
+      showToast("文字送り速度を変更しました");
+    });
+  }
+  for (const [type, select] of Object.entries(fontSelects)) {
+    if (!select) continue;
+    select.value = userDisplaySettings.font[type] || "normal";
+    select.addEventListener("change", () => {
+      userDisplaySettings.font[type] = select.value;
+      saveDisplaySettings();
+      applyDisplaySettingsToDom();
+      showToast("文字サイズを変更しました");
+    });
+  }
+}
+
+function applyDisplaySettingsToDom() {
+  const settings = userDisplaySettings || defaultDisplaySettings();
+  document.documentElement.dataset.fontText = settings.font.text || "normal";
+  document.documentElement.dataset.fontVoice = settings.font.voice || "normal";
+  document.documentElement.dataset.fontDocument = settings.font.document || "normal";
 }
 
 function selectConditionalTextCase(step) {
@@ -525,11 +686,14 @@ function formatBacklog(items) {
 }
 
 function typewriterSpeed(type) {
-  const speeds = manifest?.engineUiPolicy?.typewriter?.speedsMsPerChar || {};
-  if (type === "document") return Number(speeds.document) || 12;
-  if (type === "voice") return Number(speeds.voice) || 45;
-  if (type === "text") return Number(speeds.text) || 35;
-  return Number(speeds.title) || 0;
+  const speedPolicy = manifest?.engineUiPolicy?.typewriter || {};
+  const presetName = userDisplaySettings?.speed?.[type] || speedPolicy?.defaultPreset?.[type] || "normal";
+  const presetSpeeds = speedPolicy?.speedPresetsMsPerChar?.[presetName] || {};
+  const legacySpeeds = speedPolicy?.speedsMsPerChar || {};
+  if (type === "document") return Number(presetSpeeds.document ?? legacySpeeds.document) || 12;
+  if (type === "voice") return Number(presetSpeeds.voice ?? legacySpeeds.voice) || 45;
+  if (type === "text") return Number(presetSpeeds.text ?? legacySpeeds.text) || 35;
+  return Number(legacySpeeds.title) || 0;
 }
 
 function startTypewriter(text, type) {

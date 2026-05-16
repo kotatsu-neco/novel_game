@@ -61,6 +61,16 @@ export function runValidator(scenario) {
         if (!Array.isArray(step.choices) || step.choices.length === 0) {
           errors.push(`${label}: choice must have choices`);
         }
+        if ("timeLimitMs" in step && (!(Number(step.timeLimitMs) > 0))) {
+          errors.push(`${label}: timeLimitMs must be positive number`);
+        }
+        if (step.timeoutNext) checkNext(`${label}.timeoutNext`, step.timeoutNext);
+        if (step.timeoutChoiceLabel && !(step.choices || []).some((choice) => choice.label === step.timeoutChoiceLabel)) {
+          errors.push(`${label}: timeoutChoiceLabel does not match any choice label`);
+        }
+        if (step.timeLimitMs && !step.timeoutNext && !step.timeoutChoiceLabel) {
+          errors.push(`${label}: timed choice requires timeoutNext or timeoutChoiceLabel`);
+        }
         for (const [choiceIndex, choice] of (step.choices || []).entries()) {
           const choiceLabel = `${label}.choices[${choiceIndex}]`;
           checkNext(choiceLabel, choice.next);

@@ -1,3 +1,0 @@
-INTERNAL CHECK v0.8
-
-No static consistency errors found.

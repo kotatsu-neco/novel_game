@@ -435,3 +435,84 @@ body {
   word-break: keep-all;
   overflow-wrap: normal;
 }
+
+
+/* v22 settings UI, independent type/font controls, and timed choices */
+.settings-panel {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.18);
+}
+
+.settings-panel h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.settings-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.82);
+}
+
+.settings-grid select {
+  min-height: 34px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(18,14,14,0.92);
+  color: #fff;
+  padding: 4px 8px;
+}
+
+.settings-note {
+  margin: 8px 0 0;
+  font-size: 11px;
+  color: rgba(255,255,255,0.68);
+  line-height: 1.5;
+}
+
+.choice-timer {
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba(255,245,230,0.92);
+  text-align: center;
+  padding: 4px 0 8px;
+}
+
+html[data-font-text="small"] .text:not(.voice-text):not(.document-text) {
+  font-size: clamp(14px, 3.8vw, 15px);
+}
+html[data-font-text="normal"] .text:not(.voice-text):not(.document-text) {
+  font-size: clamp(15px, 4.2vw, 17px);
+}
+html[data-font-text="large"] .text:not(.voice-text):not(.document-text) {
+  font-size: clamp(17px, 4.8vw, 20px);
+}
+
+html[data-font-voice="small"] .voice-text {
+  font-size: clamp(14px, 3.8vw, 15px);
+}
+html[data-font-voice="normal"] .voice-text {
+  font-size: clamp(15px, 4.2vw, 17px);
+}
+html[data-font-voice="large"] .voice-text {
+  font-size: clamp(17px, 4.8vw, 20px);
+}
+
+html[data-font-document="small"] .document-text {
+  font-size: clamp(14px, 3.7vw, 15px);
+}
+html[data-font-document="normal"] .document-text {
+  font-size: clamp(15px, 4.0vw, 16px);
+}
+html[data-font-document="large"] .document-text {
+  font-size: clamp(17px, 4.6vw, 19px);
+}

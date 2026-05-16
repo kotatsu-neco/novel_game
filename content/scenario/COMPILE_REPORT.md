@@ -28,7 +28,7 @@ content/manifest.json
 - ambience audio数: 0
 - se audio数: 0
 - validation errors: 0
-- existing main.json semantic match except meta: False
+- existing main.json semantic match except meta: True
 
 ## 5. エラー
 

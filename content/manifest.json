@@ -1,6 +1,6 @@
 {
   "title": "面会札",
-  "version": "v21",
+  "version": "v22a-menkai-v05",
   "entryScenario": "content/scenario/main.json",
   "engine": "html-js-minimal",
   "assetPolicy": "Scene backgrounds are included as local PNG files. Audio remains Web Audio placeholder tones in v0.2.",
@@ -19,15 +19,15 @@
     "cssSplitFuturePlan": "styles/base.css will be split into engine.css and theme.css in a later version",
     "paginationProfile": {
       "document": {
-        "charsPerLine": 18,
+        "charsPerLine": 17,
         "maxLines": 12
       },
       "voice": {
-        "charsPerLine": 20,
-        "maxLines": 7
+        "charsPerLine": 17,
+        "maxLines": 8
       },
       "text": {
-        "charsPerLine": 20,
+        "charsPerLine": 19,
         "maxLines": 10
       }
     },
@@ -36,16 +36,43 @@
       "tapWhileTyping": "show_full_page",
       "tapAfterComplete": "advance_page_or_step",
       "speedsMsPerChar": {
-        "text": 35,
-        "voice": 45,
-        "document": 12,
+        "text": 45,
+        "voice": 55,
+        "document": 18,
         "title": 0
       },
       "futureSettingCandidates": [
         "standard",
         "fast",
         "instant"
-      ]
+      ],
+      "defaultPreset": {
+        "text": "normal",
+        "voice": "normal",
+        "document": "normal"
+      },
+      "speedPresetsMsPerChar": {
+        "slow": {
+          "text": 60,
+          "voice": 70,
+          "document": 28
+        },
+        "normal": {
+          "text": 45,
+          "voice": 55,
+          "document": 18
+        },
+        "fast": {
+          "text": 22,
+          "voice": 28,
+          "document": 8
+        },
+        "instant": {
+          "text": 0,
+          "voice": 0,
+          "document": 0
+        }
+      }
     },
     "viewportHeightPolicy": "prefer_100svh_for_mobile_safari",
     "saveLoad": {
@@ -87,6 +114,18 @@
       "autoPagination": true,
       "kinsoku": true,
       "backlogKindEntries": true
+    },
+    "fontSize": {
+      "defaultPreset": {
+        "text": "normal",
+        "voice": "normal",
+        "document": "normal"
+      },
+      "presets": [
+        "small",
+        "normal",
+        "large"
+      ]
     }
   },
   "authoringSystem": {
