@@ -12,8 +12,9 @@ const toastEl = document.getElementById("toast");
 const backlogEl = document.getElementById("backlog");
 
 const audio = createAudioEngine();
-const saveLoad = new SaveLoad("kaeshisuzu_save_v01");
+let saveLoad = null;
 
+let manifest = {};
 let scenario = null;
 let scene = null;
 let stepIndex = 0;
@@ -27,20 +28,12 @@ let typewriterTimer = null;
 let currentFullText = "";
 let currentVisibleText = "";
 let currentStepLoggedKey = "";
+let currentBackgroundClass = "";
 
-const bgClasses = [
-  "bg-black_rain",
-  "bg-black_plain",
-  "bg-old_house_evening",
-  "bg-butsuma_night",
-  "bg-mountain_path",
-  "bg-shrine_night",
-  "bg-shrine_dawn",
-  "bg-old_house_morning",
-  "bg-butsuma_morning"
-];
 
 async function init() {
+  manifest = await loadManifest();
+  initializeContentPackRuntime();
   const response = await fetch("content/scenario/main.json");
   scenario = await response.json();
   const validation = runValidator(scenario);
@@ -51,6 +44,34 @@ async function init() {
   state = structuredClone(scenario.stateDefaults);
   bindUi();
   await goToScene(scenario.startScene);
+}
+
+
+function ensureSaveLoad() {
+  if (!saveLoad) {
+    const saveKey = manifest?.saveKey || manifest?.gameId || "novel_game_save_v01";
+    saveLoad = new SaveLoad(saveKey);
+  }
+  return saveLoad;
+}
+
+function initializeContentPackRuntime() {
+  audio.configure(manifest?.audio || {});
+  const saveKey = manifest?.saveKey || manifest?.gameId || "novel_game_save_v01";
+  saveLoad = new SaveLoad(saveKey);
+  if (manifest?.title) {
+    document.title = manifest.title;
+  }
+}
+
+
+async function loadManifest() {
+  try {
+    const response = await fetch("content/manifest.json");
+    return await response.json();
+  } catch {
+    return {};
+  }
 }
 
 function bindUi() {
@@ -65,7 +86,7 @@ function bindUi() {
   document.getElementById("btn-close-panel").addEventListener("click", () => panelEl.classList.add("hidden"));
   document.getElementById("btn-backlog").addEventListener("click", () => {
     backlogEl.classList.toggle("hidden");
-    backlogEl.textContent = backlog.join("\n\n---\n\n");
+    backlogEl.textContent = formatBacklog(backlog);
   });
   document.getElementById("btn-restart").addEventListener("click", async () => {
     stopTypewriter();
@@ -76,19 +97,19 @@ function bindUi() {
     await goToScene(scenario.startScene);
   });
   document.getElementById("btn-save").addEventListener("click", () => {
-    saveLoad.save({ state, sceneId: scene.id, stepIndex, backlog, pageIndex, currentStepLoggedKey });
+    ensureSaveLoad().save({ state, sceneId: scene.id, stepIndex, backlog, pageIndex, currentStepLoggedKey });
     showToast("保存しました");
   });
   document.getElementById("btn-load").addEventListener("click", async () => {
-    const data = saveLoad.load();
+    const data = ensureSaveLoad().load();
     if (!data) {
       showToast("保存データがありません");
       return;
     }
     stopTypewriter();
     state = data.state;
-    backlog = data.backlog || [];
-    currentStepLoggedKey = "";
+    backlog = normalizeBacklog(data.backlog || []);
+    currentStepLoggedKey = data.currentStepLoggedKey || "";
     await goToScene(data.sceneId, data.stepIndex || 0, data.pageIndex || 0);
     showToast("読み込みました");
   });
@@ -130,13 +151,59 @@ async function goToScene(sceneId, startStep = 0, startPage = 0) {
 }
 
 function setBackground(background) {
-  for (const c of bgClasses) stageEl.classList.remove(c);
-  stageEl.classList.add(`bg-${background || "black_rain"}`);
+  const backgroundId = background || "black_rain";
+  if (currentBackgroundClass) {
+    stageEl.classList.remove(currentBackgroundClass);
+    currentBackgroundClass = "";
+  }
+  stageEl.style.backgroundImage = "";
+  stageEl.style.backgroundSize = "";
+  stageEl.style.backgroundPosition = "";
+  stageEl.style.backgroundRepeat = "";
+
+  const spec = manifest?.backgrounds?.[backgroundId];
+
+  if (spec?.kind === "image" && spec.src) {
+    stageEl.style.backgroundImage = `linear-gradient(180deg, rgba(18,12,10,0.48), rgba(5,4,4,0.66)), url("${spec.src}")`;
+    stageEl.style.backgroundSize = "cover";
+    stageEl.style.backgroundPosition = "center center";
+    stageEl.style.backgroundRepeat = "no-repeat";
+    return;
+  }
+
+  const className = spec?.className || `bg-${backgroundId}`;
+  stageEl.classList.add(className);
+  currentBackgroundClass = className;
 }
 
 function applyAmbience() {
   if (!soundEnabled) return;
   audio.setAmbience(scene?.ambience || "silent");
+}
+
+function preparePagesForStep(step) {
+  if (Array.isArray(step.pages) && step.pages.length > 0) {
+    return step.pages.map((page) => normalizeInlineCommands(String(page)));
+  }
+
+  const rawText = String(step.text || "");
+  const manualChunks = splitByManualPageBreak(rawText);
+  const pages = [];
+  for (const chunk of manualChunks) {
+    const normalized = normalizeInlineCommands(chunk);
+    pages.push(...paginateText(normalized, step.type));
+  }
+  return pages.length ? pages : [normalizeInlineCommands(rawText)];
+}
+
+function splitByManualPageBreak(text) {
+  return String(text).split("[p]");
+}
+
+function normalizeInlineCommands(text) {
+  return String(text)
+    .replaceAll("[r]", "\n")
+    .replaceAll("[p]", "\n");
 }
 
 function paginateText(text, type) {
@@ -175,72 +242,86 @@ function paginateText(text, type) {
 }
 
 function paginationConfig(type) {
-  if (type === "document") return { charsPerLine: 18, maxLines: 12 };
-  if (type === "voice") return { charsPerLine: 20, maxLines: 7 };
-  return { charsPerLine: 20, maxLines: 10 };
+  const profile = manifest?.engineUiPolicy?.paginationProfile || {};
+  if (type === "document") return withPaginationDefaults(profile.document, { charsPerLine: 18, maxLines: 12 });
+  if (type === "voice") return withPaginationDefaults(profile.voice, { charsPerLine: 20, maxLines: 7 });
+  return withPaginationDefaults(profile.text, { charsPerLine: 20, maxLines: 10 });
+}
+
+function withPaginationDefaults(value, fallback) {
+  if (!value || typeof value !== "object") return fallback;
+  return {
+    charsPerLine: Number(value.charsPerLine) || fallback.charsPerLine,
+    maxLines: Number(value.maxLines) || fallback.maxLines
+  };
 }
 
 function wrapParagraph(paragraph, charsPerLine) {
   const result = [];
   const explicitLines = String(paragraph).split("\n");
   for (const line of explicitLines) {
-    const wrapped = wrapLineStrict(line, charsPerLine);
+    const wrapped = wrapLineKinsoku(line, charsPerLine);
     result.push(...wrapped);
   }
   return result;
 }
 
-function wrapLineStrict(line, charsPerLine) {
-  if (line.length <= charsPerLine) return [line];
+function wrapLineKinsoku(line, charsPerLine) {
+  const chars = Array.from(String(line));
+  if (chars.length <= charsPerLine) return [line];
 
-  const chunks = splitForJapaneseLineWrap(line);
-  const result = [];
+  const lines = [];
   let current = "";
 
-  for (const chunk of chunks) {
-    const pieces = hardSplitByLength(chunk, charsPerLine);
-    for (const piece of pieces) {
-      if (!current) {
-        current = piece;
-      } else if ((current + piece).length <= charsPerLine) {
-        current += piece;
-      } else {
-        result.push(current);
-        current = piece;
-      }
+  for (const ch of chars) {
+    if (current.length === 0) {
+      current = ch;
+      continue;
     }
+
+    if ((current + ch).length <= charsPerLine) {
+      current += ch;
+      continue;
+    }
+
+    if (isNoLineStartChar(ch)) {
+      current += ch;
+      lines.push(current);
+      current = "";
+      continue;
+    }
+
+    lines.push(current);
+    current = ch;
   }
 
-  if (current) result.push(current);
+  if (current.length > 0) lines.push(current);
+  return mergePunctuationOnlyLines(lines);
+}
+
+function isNoLineStartChar(ch) {
+  return "、。，．,.！？!?」』）】〕〉》".includes(ch);
+}
+
+function mergePunctuationOnlyLines(lines) {
+  const result = [];
+  for (const line of lines) {
+    if (isPunctuationOnly(line) && result.length > 0) {
+      result[result.length - 1] += line;
+    } else {
+      result.push(line);
+    }
+  }
   return result;
 }
 
-function hardSplitByLength(text, charsPerLine) {
-  const chars = Array.from(String(text));
-  const result = [];
-  for (let i = 0; i < chars.length; i += charsPerLine) {
-    result.push(chars.slice(i, i + charsPerLine).join(""));
-  }
-  return result;
-}
-
-function splitForJapaneseLineWrap(line) {
-  const result = [];
-  let buffer = "";
-  for (const ch of String(line)) {
-    buffer += ch;
-    if ("。！？』」".includes(ch)) {
-      result.push(buffer);
-      buffer = "";
-    }
-  }
-  if (buffer.length > 0) result.push(buffer);
-  return result.length ? result : [line];
+function isPunctuationOnly(text) {
+  return Array.from(String(text)).every((ch) => isNoLineStartChar(ch));
 }
 
 function prepareCurrentStep(step) {
   if (["text", "document", "voice", "title"].includes(step.type)) {
-    pageSegments = paginateText(step.text, step.type);
+    pageSegments = preparePagesForStep(step);
     if (pageIndex >= pageSegments.length) pageIndex = 0;
   } else {
     pageSegments = [];
@@ -294,7 +375,7 @@ function renderCurrentStep() {
         if (choice.set) Object.assign(state, choice.set);
         if (typeof choice.score === "number") state.score += choice.score;
         if (choice.forceEnding) state.ending = choice.forceEnding;
-        backlog.push(`【選択】${choice.label}`);
+        pushBacklog({ kind: "choice", text: choice.label, sceneId: scene.id, stepIndex });
         await goToScene(choice.next);
       });
       choicesEl.appendChild(btn);
@@ -304,6 +385,13 @@ function renderCurrentStep() {
 
   if (step.type === "jump") {
     goToScene(step.next);
+    return;
+  }
+
+  if (step.type === "pageBreak") {
+    stepIndex += 1;
+    pageIndex = 0;
+    renderCurrentStep();
     return;
   }
 
@@ -341,16 +429,42 @@ function logStepOnce(step) {
   const key = `${scene.id}:${stepIndex}`;
   if (currentStepLoggedKey === key) return;
   currentStepLoggedKey = key;
-  if (!step.text) return;
-  if (backlog[backlog.length - 1] === step.text) return;
-  backlog.push(step.text);
+  if (!step.text && !step.pages) return;
+  const rawText = Array.isArray(step.pages) ? step.pages.join("\n\n---\n\n") : step.text;
+  pushBacklog({ kind: step.type, text: normalizeInlineCommands(rawText), sceneId: scene.id, stepIndex });
+}
+
+function pushBacklog(entry) {
+  const normalized = typeof entry === "string" ? { kind: "text", text: entry } : entry;
+  if (!normalized || !normalized.text) return;
+  const last = backlog[backlog.length - 1];
+  if (typeof last === "string" && last === normalized.text) return;
+  if (last && typeof last === "object" && last.text === normalized.text && last.kind === normalized.kind) return;
+  backlog.push(normalized);
+}
+
+function normalizeBacklog(items) {
+  return items.map((item) => {
+    if (typeof item === "string") return { kind: "text", text: item };
+    return item;
+  });
+}
+
+function formatBacklog(items) {
+  return normalizeBacklog(items).map((item) => {
+    const label = item.kind === "choice" ? "選択" :
+      item.kind === "document" ? "文書" :
+      item.kind === "voice" ? "声" : "本文";
+    return `【${label}】\n${item.text}`;
+  }).join("\n\n---\n\n");
 }
 
 function typewriterSpeed(type) {
-  if (type === "document") return 12;
-  if (type === "voice") return 45;
-  if (type === "text") return 35;
-  return 0;
+  const speeds = manifest?.engineUiPolicy?.typewriter?.speedsMsPerChar || {};
+  if (type === "document") return Number(speeds.document) || 12;
+  if (type === "voice") return Number(speeds.voice) || 45;
+  if (type === "text") return Number(speeds.text) || 35;
+  return Number(speeds.title) || 0;
 }
 
 function startTypewriter(text, type) {

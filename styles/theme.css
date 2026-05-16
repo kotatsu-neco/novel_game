@@ -1,0 +1,12 @@
+/* theme.css
+   v1.6 Content Pack preparation.
+   This file is the future home for work-specific visual theme rules.
+   v1.6 still keeps styles/base.css loaded for compatibility.
+
+   For new content packs, move color, background, shadow, and atmosphere
+   from base.css into this file after engine/theme separation is complete.
+*/
+
+:root {
+  --theme-title: "返し鈴";
+}

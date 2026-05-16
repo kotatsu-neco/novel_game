@@ -3,6 +3,15 @@ export function createAudioEngine() {
   let context = null;
   let rainNode = null;
   let rainGain = null;
+  let currentAmbienceAudio = null;
+  let audioAssets = { ambiences: {}, se: {} };
+
+  function configure(assets) {
+    audioAssets = {
+      ambiences: assets?.ambiences || {},
+      se: assets?.se || {}
+    };
+  }
 
   async function ensureContext() {
     if (!context) {
@@ -14,13 +23,47 @@ export function createAudioEngine() {
   async function setEnabled(value) {
     enabled = value;
     if (enabled) await ensureContext();
-    if (!enabled) stopRain();
+    if (!enabled) {
+      stopRain();
+      stopFileAmbience();
+    }
   }
 
   function setAmbience(kind) {
     if (!enabled || !context) return;
+
+    const asset = audioAssets?.ambiences?.[kind];
+    if (asset?.src) {
+      startFileAmbience(asset);
+      return;
+    }
+
+    stopFileAmbience();
     if (kind && kind.startsWith("rain")) startRain(kind);
     else stopRain();
+  }
+
+  function startFileAmbience(asset) {
+    stopRain();
+    stopFileAmbience();
+
+    const audio = new Audio(asset.src);
+    audio.loop = asset.loop !== false;
+    audio.volume = Number.isFinite(Number(asset.volume)) ? Number(asset.volume) : 0.4;
+    currentAmbienceAudio = audio;
+    audio.play().catch(() => {
+      // Live browser checks must confirm file audio playback and autoplay policy.
+    });
+  }
+
+  function stopFileAmbience() {
+    if (currentAmbienceAudio) {
+      try {
+        currentAmbienceAudio.pause();
+        currentAmbienceAudio.currentTime = 0;
+      } catch {}
+      currentAmbienceAudio = null;
+    }
   }
 
   function startRain(kind) {
@@ -55,6 +98,17 @@ export function createAudioEngine() {
 
   function playSe(kind) {
     if (!enabled || !context) return;
+
+    const asset = audioAssets?.se?.[kind];
+    if (asset?.src) {
+      const audio = new Audio(asset.src);
+      audio.volume = Number.isFinite(Number(asset.volume)) ? Number(asset.volume) : 0.6;
+      audio.play().catch(() => {
+        // Live browser checks must confirm file audio playback.
+      });
+      return;
+    }
+
     if (kind.includes("bell")) playBell(kind === "bell_close" ? 880 : 660);
     if (kind.includes("footstep")) playThump();
   }
@@ -86,5 +140,5 @@ export function createAudioEngine() {
     osc.stop(now + 0.2);
   }
 
-  return { setEnabled, setAmbience, playSe };
+  return { configure, setEnabled, setAmbience, playSe };
 }

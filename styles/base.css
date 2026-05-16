@@ -420,3 +420,18 @@ body {
   line-height: 1.52;
   letter-spacing: 0.005em;
 }
+
+
+/* v1.3 Japanese kinsoku readability
+   JS inserts controlled line breaks, but these hints help browser fallback. */
+.text {
+  line-break: strict;
+  word-break: keep-all;
+  overflow-wrap: normal;
+}
+
+.document-text {
+  line-break: strict;
+  word-break: keep-all;
+  overflow-wrap: normal;
+}

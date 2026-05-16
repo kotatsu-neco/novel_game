@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "返し鈴",
-    "version": "v1.2",
+    "version": "v1.9",
     "language": "ja",
     "estimatedMinutes": 5,
     "description": "現代の一晩に焦点を当てた和風ホラー短編サウンドノベル。",
@@ -10,6 +10,33 @@
       "neutralChoice": 0,
       "badChoice": -1,
       "voiceAnswer": "force_bad"
+    },
+    "compiledFrom": "content/scenario/SCENARIO_SOURCE.md",
+    "sourceStatusByScene": {
+      "title": "human_review",
+      "mother_intro": "human_review",
+      "house_intro": "human_review",
+      "butsuma_box": "human_final",
+      "documents": "human_final",
+      "choice_bell": "human_final",
+      "bell_wrap_result": "human_review",
+      "bell_pocket_result": "human_review",
+      "bell_ring_result": "human_review",
+      "road_to_shrine": "human_review",
+      "shrine_ema": "human_review",
+      "choice_ema": "human_final",
+      "ema_place_bell_result": "human_review",
+      "ema_read_name_result": "human_review",
+      "ema_remove_result": "human_review",
+      "return_path": "human_review",
+      "choice_voice": "human_final",
+      "voice_no_turn_result": "human_review",
+      "voice_run_result": "human_review",
+      "voice_answer_result": "human_review",
+      "ending_check": "human_review",
+      "ending_bad": "human_review",
+      "ending_normal": "human_review",
+      "ending_true": "human_review"
     }
   },
   "startScene": "title",
@@ -23,8 +50,6 @@
   "scenes": [
     {
       "id": "title",
-      "background": "black_rain",
-      "ambience": "rain_light",
       "steps": [
         {
           "type": "text",
@@ -38,12 +63,12 @@
           "type": "jump",
           "next": "mother_intro"
         }
-      ]
+      ],
+      "background": "black_rain",
+      "ambience": "rain_light"
     },
     {
       "id": "mother_intro",
-      "background": "black_plain",
-      "ambience": "silent",
       "steps": [
         {
           "type": "text",
@@ -65,12 +90,12 @@
           "type": "jump",
           "next": "house_intro"
         }
-      ]
+      ],
+      "background": "black_plain",
+      "ambience": "silent"
     },
     {
       "id": "house_intro",
-      "background": "old_house_evening",
-      "ambience": "rain_light",
       "steps": [
         {
           "type": "text",
@@ -80,12 +105,12 @@
           "type": "jump",
           "next": "butsuma_box"
         }
-      ]
+      ],
+      "background": "old_house_evening",
+      "ambience": "rain_light"
     },
     {
       "id": "butsuma_box",
-      "background": "butsuma_night",
-      "ambience": "rain_medium",
       "steps": [
         {
           "type": "text",
@@ -107,12 +132,12 @@
           "type": "jump",
           "next": "documents"
         }
-      ]
+      ],
+      "background": "butsuma_night",
+      "ambience": "rain_medium"
     },
     {
       "id": "documents",
-      "background": "butsuma_night",
-      "ambience": "rain_medium",
       "steps": [
         {
           "type": "text",
@@ -148,12 +173,12 @@
           "type": "jump",
           "next": "choice_bell"
         }
-      ]
+      ],
+      "background": "butsuma_night",
+      "ambience": "rain_medium"
     },
     {
       "id": "choice_bell",
-      "background": "butsuma_night",
-      "ambience": "rain_medium",
       "steps": [
         {
           "type": "choice",
@@ -161,36 +186,36 @@
           "choices": [
             {
               "label": "白布に包む",
+              "next": "bell_wrap_result",
+              "score": 1,
               "set": {
                 "bell_handling": "bell_wrap"
-              },
-              "score": 1,
-              "next": "bell_wrap_result"
+              }
             },
             {
               "label": "そのまま持つ",
+              "next": "bell_pocket_result",
+              "score": 0,
               "set": {
                 "bell_handling": "bell_pocket"
-              },
-              "score": 0,
-              "next": "bell_pocket_result"
+              }
             },
             {
               "label": "鈴を鳴らして確かめる",
+              "next": "bell_ring_result",
+              "score": -1,
               "set": {
                 "bell_handling": "bell_ring"
-              },
-              "score": -1,
-              "next": "bell_ring_result"
+              }
             }
           ]
         }
-      ]
+      ],
+      "background": "butsuma_night",
+      "ambience": "rain_medium"
     },
     {
       "id": "bell_wrap_result",
-      "background": "butsuma_night",
-      "ambience": "rain_medium",
       "steps": [
         {
           "type": "text",
@@ -200,12 +225,12 @@
           "type": "jump",
           "next": "road_to_shrine"
         }
-      ]
+      ],
+      "background": "butsuma_night",
+      "ambience": "rain_medium"
     },
     {
       "id": "bell_pocket_result",
-      "background": "butsuma_night",
-      "ambience": "rain_medium",
       "steps": [
         {
           "type": "text",
@@ -216,12 +241,12 @@
           "type": "jump",
           "next": "road_to_shrine"
         }
-      ]
+      ],
+      "background": "butsuma_night",
+      "ambience": "rain_medium"
     },
     {
       "id": "bell_ring_result",
-      "background": "butsuma_night",
-      "ambience": "silent",
       "steps": [
         {
           "type": "text",
@@ -232,12 +257,12 @@
           "type": "jump",
           "next": "road_to_shrine"
         }
-      ]
+      ],
+      "background": "butsuma_night",
+      "ambience": "silent"
     },
     {
       "id": "road_to_shrine",
-      "background": "mountain_path",
-      "ambience": "rain_heavy",
       "steps": [
         {
           "type": "text",
@@ -249,7 +274,7 @@
         },
         {
           "type": "document",
-          "text": "『志乃と惣太\n社の前にて』"
+          "text": "『志乃と惣太　社の前にて』"
         },
         {
           "type": "voice",
@@ -264,12 +289,12 @@
           "type": "jump",
           "next": "shrine_ema"
         }
-      ]
+      ],
+      "background": "mountain_path",
+      "ambience": "rain_heavy"
     },
     {
       "id": "shrine_ema",
-      "background": "shrine_night",
-      "ambience": "rain_heavy",
       "steps": [
         {
           "type": "text",
@@ -299,12 +324,12 @@
           "type": "jump",
           "next": "choice_ema"
         }
-      ]
+      ],
+      "background": "shrine_night",
+      "ambience": "rain_heavy"
     },
     {
       "id": "choice_ema",
-      "background": "shrine_night",
-      "ambience": "rain_heavy",
       "steps": [
         {
           "type": "choice",
@@ -312,36 +337,36 @@
           "choices": [
             {
               "label": "名前を読まず、鈴を置く",
+              "next": "ema_place_bell_result",
+              "score": 1,
               "set": {
                 "ema_action": "ema_place_bell"
-              },
-              "score": 1,
-              "next": "ema_place_bell_result"
+              }
             },
             {
               "label": "書かれた名前を小声で読む",
+              "next": "ema_read_name_result",
+              "score": -1,
               "set": {
                 "ema_action": "ema_read_name"
-              },
-              "score": -1,
-              "next": "ema_read_name_result"
+              }
             },
             {
               "label": "絵馬を外して裏を見る",
+              "next": "ema_remove_result",
+              "score": 0,
               "set": {
                 "ema_action": "ema_remove"
-              },
-              "score": 0,
-              "next": "ema_remove_result"
+              }
             }
           ]
         }
-      ]
+      ],
+      "background": "shrine_night",
+      "ambience": "rain_heavy"
     },
     {
       "id": "ema_place_bell_result",
-      "background": "shrine_night",
-      "ambience": "rain_heavy",
       "steps": [
         {
           "type": "text",
@@ -351,12 +376,12 @@
           "type": "jump",
           "next": "return_path"
         }
-      ]
+      ],
+      "background": "shrine_night",
+      "ambience": "rain_heavy"
     },
     {
       "id": "ema_read_name_result",
-      "background": "shrine_night",
-      "ambience": "rain_heavy",
       "steps": [
         {
           "type": "text",
@@ -379,12 +404,12 @@
           "type": "jump",
           "next": "return_path"
         }
-      ]
+      ],
+      "background": "shrine_night",
+      "ambience": "rain_heavy"
     },
     {
       "id": "ema_remove_result",
-      "background": "shrine_night",
-      "ambience": "rain_heavy",
       "steps": [
         {
           "type": "text",
@@ -402,12 +427,12 @@
           "type": "jump",
           "next": "return_path"
         }
-      ]
+      ],
+      "background": "shrine_night",
+      "ambience": "rain_heavy"
     },
     {
       "id": "return_path",
-      "background": "shrine_night",
-      "ambience": "rain_fade",
       "steps": [
         {
           "type": "text",
@@ -437,12 +462,12 @@
           "type": "jump",
           "next": "choice_voice"
         }
-      ]
+      ],
+      "background": "shrine_night",
+      "ambience": "rain_fade"
     },
     {
       "id": "choice_voice",
-      "background": "shrine_night",
-      "ambience": "silent",
       "steps": [
         {
           "type": "choice",
@@ -450,36 +475,36 @@
           "choices": [
             {
               "label": "振り返らない",
+              "next": "voice_no_turn_result",
+              "score": 1,
               "set": {
                 "voice_action": "voice_no_turn"
-              },
-              "score": 1,
-              "next": "voice_no_turn_result"
+              }
             },
             {
               "label": "鳥居まで走る",
+              "next": "voice_run_result",
+              "score": 0,
               "set": {
                 "voice_action": "voice_run"
-              },
-              "score": 0,
-              "next": "voice_run_result"
+              }
             },
             {
               "label": "返事をする",
+              "next": "voice_answer_result",
+              "forceEnding": "ending_bad",
               "set": {
                 "voice_action": "voice_answer"
-              },
-              "forceEnding": "ending_bad",
-              "next": "voice_answer_result"
+              }
             }
           ]
         }
-      ]
+      ],
+      "background": "shrine_night",
+      "ambience": "silent"
     },
     {
       "id": "voice_no_turn_result",
-      "background": "shrine_night",
-      "ambience": "silent",
       "steps": [
         {
           "type": "text",
@@ -490,12 +515,12 @@
           "type": "jump",
           "next": "ending_check"
         }
-      ]
+      ],
+      "background": "shrine_night",
+      "ambience": "silent"
     },
     {
       "id": "voice_run_result",
-      "background": "shrine_night",
-      "ambience": "rain_heavy",
       "steps": [
         {
           "type": "text",
@@ -505,12 +530,12 @@
           "type": "jump",
           "next": "ending_check"
         }
-      ]
+      ],
+      "background": "shrine_night",
+      "ambience": "rain_heavy"
     },
     {
       "id": "voice_answer_result",
-      "background": "shrine_night",
-      "ambience": "silent",
       "steps": [
         {
           "type": "text",
@@ -524,21 +549,21 @@
           "type": "jump",
           "next": "ending_bad"
         }
-      ]
+      ],
+      "background": "shrine_night",
+      "ambience": "silent"
     },
     {
       "id": "ending_check",
-      "background": "black_rain",
       "steps": [
         {
           "type": "endingCheck"
         }
-      ]
+      ],
+      "background": "black_rain"
     },
     {
       "id": "ending_bad",
-      "background": "butsuma_morning",
-      "ambience": "silent",
       "steps": [
         {
           "type": "text",
@@ -567,12 +592,12 @@
           "title": "BAD END",
           "subtitle": "名を返す"
         }
-      ]
+      ],
+      "background": "butsuma_morning",
+      "ambience": "silent"
     },
     {
       "id": "ending_normal",
-      "background": "old_house_morning",
-      "ambience": "rain_after",
       "steps": [
         {
           "type": "text",
@@ -593,12 +618,12 @@
           "title": "NORMAL END",
           "subtitle": "夜明けの鈴"
         }
-      ]
+      ],
+      "background": "old_house_morning",
+      "ambience": "rain_after"
     },
     {
       "id": "ending_true",
-      "background": "shrine_dawn",
-      "ambience": "dawn_silence",
       "steps": [
         {
           "type": "text",
@@ -638,7 +663,9 @@
           "title": "TRUE END",
           "subtitle": "返し鈴"
         }
-      ]
+      ],
+      "background": "shrine_dawn",
+      "ambience": "dawn_silence"
     }
   ]
 }

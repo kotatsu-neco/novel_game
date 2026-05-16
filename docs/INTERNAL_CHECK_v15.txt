@@ -1,0 +1,17 @@
+INTERNAL CHECK v1.5
+
+No static consistency errors found.
+
+Route counts: {'ending_true': 4, 'ending_bad': 13, 'ending_normal': 10}
+
+Checked:
+- JSON parse
+- manifest/scenario version
+- authoringSystem presence
+- scene references
+- JS syntax
+- route enumeration
+- CSS url references
+- required authoring files
+- SCENARIO_SOURCE scene coverage
+- runtime JS does not read authoring markdown

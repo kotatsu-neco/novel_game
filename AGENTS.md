@@ -65,3 +65,123 @@ Pythonを追加した場合は、型・構文確認として可能な範囲で `
 - 文書表示は「できるだけ一度で読む」よりも「画面から溢れない」を優先する。
 - `charsPerLine` / `maxLines` を変更する場合は、iPhone Safariでの可読性リスクを報告する。
 - `100svh` 指定は、モバイルSafari下部UIに本文が隠れるリスクを下げるための暫定対策として維持する。
+
+## v1.3 Japanese Kinsoku Rules
+
+- 日本語本文で、句点・読点・閉じ括弧だけを次行へ送らない。
+- 行頭禁則文字は前行へ結合する。
+- 句読点だけの行が出る修正は不合格。
+- 改行・ページ分割を変更する場合は、句読点単独行の有無を検査する。
+
+## v1.4 Text Layout Rules
+
+- 本文表示はText Layout Engineとして扱う。
+- シナリオの重要な切れ目には `pages` または `[p]` を使ってよい。
+- `[r]` は改行、`[p]` は改ページとして扱う。
+- `[l]` は将来予約。勝手に別用途へ使わない。
+- バックログは kind 付き構造を維持する。
+- 制作時は `docs/TEXT_GUIDE.md` を参照する。
+
+## v1.5 Authoring Rules
+
+- Runtime Engineは `main.json` のみを読む。
+- AIは `STORY_BIBLE.md` を最上位設定正本として扱う。
+- AIは `SCENARIO_SOURCE.md` のstatusを確認してから作業する。
+- `locked` と `human_final` は変更禁止。問題指摘のみ。
+- scene ID / next / score / forceEnding / endingCheck は本文修正タスクで変更しない。
+- AIシナリオ作業では `docs/AI_SCENARIO_RULES.md` を必ず読む。
+- 人間向け説明は `docs/HUMAN_MANUAL.md` を参照する。
+
+## v1.6 Content Pack Rules
+
+- 作品名は `manifest.title` を参照する。
+- 保存キーは `manifest.saveKey` を参照する。
+- 背景IDは `manifest.backgrounds` で解決する。
+- 新しい作品へ積み替える時は、Runtime EngineのJSに背景IDを直書きしない。
+- `styles/engine.css` と `styles/theme.css` は追加済み。ただしv1.6では `base.css` 互換を維持する。
+- Authoring MarkdownをRuntime Engineで直接読ませない。
+
+## v1.6-docfix Current Work Scope
+
+### Runtime files
+
+Editable with care:
+
+```text
+index.html
+src/main.js
+src/engine/
+styles/engine.css
+styles/theme.css
+styles/base.css
+content/manifest.json
+content/scenario/main.json
+```
+
+Rules:
+
+- Runtime Engine must not read Authoring Markdown directly.
+- Runtime Engine reads `content/manifest.json` and `content/scenario/main.json`.
+- Do not hard-code content-specific background IDs in `src/main.js`.
+- Use `manifest.backgrounds` for background resolution.
+- Use `manifest.saveKey` for save data.
+- Use `manifest.title` for document title.
+
+### Authoring files
+
+Editable only according to status and authority rules:
+
+```text
+content/scenario/STORY_BIBLE.md
+content/scenario/SCENARIO_SOURCE.md
+content/scenario/COMPILE_REPORT.md
+docs/AI_SCENARIO_RULES.md
+docs/HUMAN_MANUAL.md
+docs/SCENARIO_REVIEW_CHECKLIST.md
+docs/TEXT_GUIDE.md
+```
+
+Rules:
+
+- `STORY_BIBLE.md` is the highest story authority.
+- `SCENARIO_SOURCE.md` is the human/AI scenario source.
+- `main.json` is the runtime JSON.
+- Do not change `locked` or `human_final` content unless explicitly instructed by the user.
+- Do not change scene IDs, `next`, `score`, `forceEnding`, `endingCheck`, or `stateDefaults` during prose-only tasks.
+
+### CSS split status
+
+v1.6-docfix is not a complete CSS split.
+
+```text
+styles/engine.css  = future engine layout home
+styles/theme.css   = future work-specific visual theme home
+styles/base.css    = compatibility CSS still active
+```
+
+Do not delete `styles/base.css` until a full visual regression check has been completed outside this chat environment.
+
+## v1.7 Compiler Rules
+
+- `tools/compile_scenario.py` はAuthoring System用の変換器。
+- Runtime Engineからcompilerを呼び出さない。
+- `SCENARIO_SOURCE.md` を変更した場合は、`python tools/compile_scenario.py --check-only` を実行する。
+- `main.json` を更新する場合は、`python tools/compile_scenario.py` を実行する。
+- compilerがエラーを出した場合、`main.json` を手作業でつじつま合わせしない。
+- `[text se=...]` のようなタグ属性はcompiler仕様として扱う。
+
+## v1.8 Source Metadata Rules
+
+- `SCENARIO_SOURCE.md` 先頭の `# content-pack` と `# backgrounds` はcompiler入力である。
+- `title`, `gameId`, `saveKey`, `startScene` はsource-level metadataで管理できる。
+- 背景定義はsourceの `# backgrounds` から `manifest.backgrounds` へ同期される。
+- 別作品へ積み替える時は、manifestを手で直接合わせる前に `SCENARIO_SOURCE.md` metadataを更新し、compilerを実行する。
+- Runtime EngineにAuthoring Markdownを読ませない。
+
+## v1.9 Asset Rules
+
+- 新しい背景画像を使う場合、`SCENARIO_SOURCE.md` の `# backgrounds` に必ず定義する。
+- 新しい環境音・効果音を使う場合、`SCENARIO_SOURCE.md` の `# audio` に必ず定義する。
+- シナリオ内の `background`, `ambience`, `se` がmanifest定義に存在するか検査する。
+- 画像・音声ファイルを追加した場合、実ファイル存在・拡張子・パスを確認する。
+- Runtime JSに作品固有の画像ID・音声IDを直書きしない。

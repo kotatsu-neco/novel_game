@@ -268,3 +268,172 @@
 - CSS参照OK。
 - 主要ロジックマーカー確認済み。
 - 実ブラウザ表示は未確認（チャット環境対象外）。
+
+## v1.3 追加実施内容
+
+- `content/scenario/main.json` の写真裏文書を `『志乃と惣太　社の前にて』` へ修正。
+- `src/main.js` の改行処理を `wrapLineKinsoku()` へ変更。
+- `isNoLineStartChar()`, `mergePunctuationOnlyLines()`, `isPunctuationOnly()` を追加。
+- 句点・読点・閉じ括弧類が行頭に来ないようにした。
+- 句読点だけの行が発生した場合は前行へ結合する。
+- `content/manifest.json` に `kinsoku` 方針を追加。
+- `styles/base.css` に補助的な `line-break: strict` / `word-break: keep-all` を追加。
+
+## v1.3 静的確認
+
+- JSON構文OK。
+- JS構文チェックOK。
+- シーン参照OK。
+- CSS参照OK。
+- 写真裏文書の1行化確認済み。
+- 禁則処理の疑似検査OK。
+- 実ブラウザ表示は未確認（チャット環境対象外）。
+
+## v1.4 追加実施内容
+
+- `src/main.js` を更新し、Text Layout Engine相当の処理を追加。
+- `preparePagesForStep()` を追加し、`pages` 指定・`[p]` 指定・自動ページ分割を統合。
+- `[r]` を改行、`[p]` を改ページとして処理。
+- `paginationConfig()` を `manifest.engineUiPolicy.paginationProfile` 参照へ変更。
+- `typewriterSpeed()` を `manifest.engineUiPolicy.typewriter.speedsMsPerChar` 参照へ変更。
+- バックログを文字列配列から `kind/text/sceneId/stepIndex` を持つ構造へ変更。
+- `formatBacklog()` を追加。
+- `docs/TEXT_GUIDE.md` を追加。
+- 正本系ファイルへv1.4仕様を反映。
+
+## v1.4 静的確認
+
+- JSON構文OK。
+- JS構文チェックOK。
+- シーン参照OK。
+- CSS参照OK。
+- 分岐総当たりOK。
+- Text Layout Engine関連マーカー確認済み。
+- 実ブラウザ表示は未確認（チャット環境対象外）。
+
+## v1.5 追加実施内容
+
+- シナリオ積み替えに向けた Authoring System を導入。
+- `content/scenario/STORY_BIBLE.md` を追加。
+- `content/scenario/SCENARIO_SOURCE.md` を既存 `main.json` から生成。
+- `content/scenario/COMPILE_REPORT.md` を追加。
+- `docs/AI_SCENARIO_RULES.md` を追加。
+- `docs/HUMAN_MANUAL.md` を追加。
+- `docs/SCENARIO_REVIEW_CHECKLIST.md` を追加。
+- `manifest.authoringSystem` を追加。
+- `SPEC.md`, `ARCHITECTURE.md`, `DESIGN.md`, `AGENTS.md`, `README.md` にv1.5仕様を反映。
+
+## v1.5 静的確認
+
+- JSON構文OK。
+- JS構文チェックOK。
+- シーン参照OK。
+- 分岐総当たりOK。
+- 新規Authoringファイル存在確認OK。
+- Runtime EngineがMarkdownを直接読む変更は入れていない。
+- 実ブラウザ表示は未確認（チャット環境対象外）。
+
+## v1.6 追加実施内容
+
+- `content/manifest.json` に `gameId`, `title`, `saveKey`, `contentPack`, `backgrounds` を追加。
+- `src/main.js` の背景ID固定リストを削除。
+- `setBackground()` を `manifest.backgrounds` 参照へ変更。
+- `SaveLoad` の保存キーを `manifest.saveKey` 参照へ変更。
+- `document.title` を `manifest.title` で更新する処理を追加。
+- `styles/engine.css` と `styles/theme.css` を追加。
+- `index.html` に `engine.css`, `theme.css`, `base.css` の読み込みを追加。
+- 正本系ファイルへv1.6仕様を反映。
+
+## v1.6 静的確認
+
+- JSON構文OK。
+- JS構文チェックOK。
+- シーン参照OK。
+- 分岐総当たりOK。
+- CSS参照OK。
+- manifest.backgrounds とシナリオ背景IDの対応OK。
+- Runtime JSに背景ID固定リストが残っていないことを確認。
+- 実ブラウザ表示は未確認（チャット環境対象外）。
+
+## v1.6-docfix 実施内容
+
+- README.md冒頭の `v0.9` 表記を `v1.6-docfix` へ修正。
+- README.mdに現在版サマリーを追加。
+- AGENTS.mdにv1.6-docfixのRuntime / Authoring / CSS分離ルールを追記。
+- COMPILE_REPORT.mdをv1.6-docfix時点の状態へ更新。
+- docs/CSS_SPLIT_PLAN.mdを現在仕様へ全面更新。
+- SPEC.md / ARCHITECTURE.mdに、履歴追記型ファイルであることと現在仕様の優先情報を追記。
+- `src/main.js` の `kaeshisuzu_save_v01` 初期フォールバックを削除し、`saveLoad = null` からmanifest読込後に初期化する形へ変更。
+- 保存 / 読込ボタンで `ensureSaveLoad()` を使うように修正。
+- `manifest.version` と `scenario.meta.version` を `v1.6-docfix` へ更新。
+
+## v1.6-docfix 静的確認
+
+- JSON構文OK。
+- JS構文チェックOK。
+- シーン参照OK。
+- 分岐総当たりOK。
+- CSS参照OK。
+- Runtime JS内に `kaeshisuzu_save_v01` が残っていないことを確認。
+- README / AGENTS / COMPILE_REPORT / CSS_SPLIT_PLAN の更新確認済み。
+- 実ブラウザ表示は未確認（チャット環境対象外）。
+
+## v1.7 実施内容
+
+- `tools/compile_scenario.py` を追加。
+- compilerで `SCENARIO_SOURCE.md` を解析し、`main.json` を生成可能にした。
+- compilerは固定Markdown記法のみを対象とし、自由Markdownは対象外。
+- `[text se=bell_far]` のようなタグ属性に対応。
+- 既存 `SCENARIO_SOURCE.md` に `se` 情報を明示した。
+- `content/scenario/SCENARIO_SCHEMA.json` を追加。
+- `src/engine/validator.js` を強化。
+- `content/scenario/COMPILE_REPORT.md` をcompiler実行結果へ更新。
+- `manifest.authoringSystem.compilerImplemented` を true にした。
+
+## v1.7 静的確認
+
+- compiler check-only OK。
+- compiler実行OK。
+- 生成後 `main.json` JSON構文OK。
+- JS構文チェックOK。
+- シーン参照OK。
+- 分岐総当たりOK。
+- Runtime JSがAuthoring Markdownを直接読まないことを確認。
+- 実ブラウザ表示は未確認（チャット環境対象外）。
+
+## v1.8 実施内容
+
+- `SCENARIO_SOURCE.md` 先頭に `# content-pack` と `# backgrounds` を追加。
+- `tools/compile_scenario.py` をmetadata対応版へ更新。
+- compilerが `main.json` に加えて `manifest.json` も同期するようにした。
+- `startScene` をsource metadataから設定できるようにした。
+- 別Content Packで開始シーンIDを `title` に固定しなくてよい構造にした。
+- `SCENARIO_SCHEMA.json` をv1.8向けに更新。
+- 正本系ファイルへv1.8仕様を反映。
+
+## v1.8 静的確認
+
+- compiler check-only OK。
+- compiler実行OK。
+- Python compiler構文OK。
+- JSON構文OK。
+- JS構文チェックOK。
+- シーン参照OK。
+- manifest.backgrounds対応OK。
+- 分岐総当たりOK。
+- 実ブラウザ表示は未確認（チャット環境対象外）。
+
+## v1.9 実施内容
+
+- `sound_novel_starter_v19` として成果物名を変更。
+- `src/engine/audioManager.js` を更新し、`manifest.audio` の音声ファイルを扱えるようにした。
+- `src/main.js` で `audio.configure(manifest.audio)` を呼ぶようにした。
+- `tools/compile_scenario.py` を更新し、`# audio` metadataをmanifestへ同期するようにした。
+- シナリオCを作成し、ダミー背景PNGとダミーWAV音声を同梱して積み替え検証した。
+- 画像・音声の参照整合、ファイル存在、分岐、compiler実行を静的に確認した。
+
+## v1.9 未確認
+
+- 実ブラウザでの画像表示
+- 実ブラウザでの音声再生
+- iPhone Safariでの音声再生挙動

@@ -292,3 +292,200 @@ text: charsPerLine 20 / maxLines 10
 ```
 
 この値は、読めないことを避けるため安全側に倒した暫定値である。
+
+## v1.3 Japanese kinsoku note
+
+v1.3では、日本語表示で句点・読点・閉じ括弧だけが行頭または単独行に送られる問題を避けるため、簡易禁則処理を追加する。
+
+対象例:
+
+```text
+、 。 」 』 ）
+```
+
+方針:
+
+- 行頭禁則文字は前行へ結合する。
+- 句読点だけの行は前行へ結合する。
+- 多少1行の文字数が増えても、句読点だけが送られるより可読性を優先する。
+
+## v1.4 Text Layout Engine
+
+v1.4では、テキスト表示を単なる文字列表示ではなく、Text Layout Engineとして扱う。
+
+### 対応済み
+
+- 自動ページ分割
+- 手動ページ指定 `pages`
+- インライン改行 `[r]`
+- インライン改ページ `[p]`
+- 日本語禁則処理
+- 文字送り
+- 種別別文字送り速度
+- kind付きバックログ
+
+### 予約
+
+- `[l]` はクリック待ち命令として予約。v1.4では未実装。
+
+### 方針
+
+制作側は演出上の切れ目を指定し、エンジン側は安全な表示・禁則処理・ページ送りを担う。
+
+## v1.5 Authoring System
+
+v1.5では、シナリオ積み替えに備えて Authoring System を導入する。
+
+### 追加ファイル
+
+```text
+content/scenario/STORY_BIBLE.md
+content/scenario/SCENARIO_SOURCE.md
+content/scenario/COMPILE_REPORT.md
+docs/AI_SCENARIO_RULES.md
+docs/HUMAN_MANUAL.md
+docs/SCENARIO_REVIEW_CHECKLIST.md
+```
+
+### 方針
+
+- Runtime Engineは `main.json` のみを読む。
+- `SCENARIO_SOURCE.md` は人間とAIが共同で扱う原稿正本。
+- `STORY_BIBLE.md` は最上位の設定正本。
+- `main.json` は実行用生成物。
+- v1.5では自動コンパイラは未実装。
+
+## v1.6 Content Pack
+
+v1.6では、別シナリオへの積み替えに向けて、作品固有情報を `content/manifest.json` に寄せる。
+
+### manifestで管理する作品固有情報
+
+```text
+gameId
+title
+saveKey
+backgrounds
+contentPack
+```
+
+### Runtime方針
+
+- Runtime Engineは `manifest.json` と `main.json` を読む。
+- 背景IDは `manifest.backgrounds` で解決する。
+- 保存キーは `manifest.saveKey` を使う。
+- 作品名は `manifest.title` を使う。
+- Authoring Markdownは実行時に直接読まない。
+
+### v1.6で未完了
+
+- CSS完全分離は未完了。
+- `styles/engine.css` と `styles/theme.css` は追加済みだが、互換維持のため `styles/base.css` も読み込む。
+- `SCENARIO_SOURCE.md` から `main.json` への自動コンパイラは未実装。
+
+## v1.6-docfix Current Specification Note
+
+このファイルは履歴追記型で運用されているため、前半に古いv0.9等の記述が残る。  
+現在仕様として優先するのは、後方のv1.4〜v1.6-docfix関連記述である。
+
+現在の重要仕様:
+
+- Runtime Engineは `manifest.json` と `main.json` を読む。
+- Authoring MarkdownはRuntime Engineが直接読まない。
+- 保存キーは `manifest.saveKey`。
+- 作品名は `manifest.title`。
+- 背景は `manifest.backgrounds`。
+- ページ分割値は `manifest.engineUiPolicy.paginationProfile`。
+- CSS完全分離は未完了。`base.css`互換維持中。
+
+将来的には、Current仕様とHistoryを分離して読みやすくする。
+
+## v1.7 Scenario Compiler
+
+v1.7では、`SCENARIO_SOURCE.md` から `main.json` を生成するcompilerを追加する。
+
+### 追加ファイル
+
+```text
+tools/compile_scenario.py
+content/scenario/SCENARIO_SCHEMA.json
+```
+
+### 対応記法
+
+```text
+[text]
+[text se=bell_far]
+[voice]
+[document]
+[title]
+[choice]
+[next: scene_id]
+[endingCheck]
+[ending]
+[pageBreak]
+[page N]
+```
+
+### 方針
+
+- Runtime Engineは引き続き `main.json` のみを読む。
+- compilerはAuthoring Systemの支援ツールであり、Runtime Engineには組み込まない。
+- `SCENARIO_SOURCE.md` の自由なMarkdownは対象外。固定記法のみを扱う。
+- `COMPILE_REPORT.md` はcompilerが更新する。
+
+## v1.8 Source-level Metadata
+
+v1.8では、`SCENARIO_SOURCE.md` の先頭に source-level metadata を追加する。
+
+### 対応項目
+
+```text
+title
+gameId
+saveKey
+startScene
+backgrounds
+```
+
+compilerはこのmetadataから、`main.json` と `manifest.json` を同期する。
+
+### 方針
+
+- `startScene` は `SCENARIO_SOURCE.md` 側で指定できる。
+- `manifest.title` / `gameId` / `saveKey` も source 側から生成・同期できる。
+- 背景IDは source 側の `# backgrounds` で定義し、manifestへ反映する。
+- Runtime Engineは引き続きAuthoring Markdownを直接読まない。
+
+## v1.9 Image and Audio Asset Handling
+
+v1.9では、Content Pack差し替え時の画像・音声ファイル取扱いを検証する。
+
+### manifest.audio
+
+```json
+{
+  "audio": {
+    "ambiences": {
+      "scenario_c_loop": {
+        "src": "assets/audio/scenario_c_loop.wav",
+        "loop": true,
+        "volume": 0.25
+      }
+    },
+    "se": {
+      "scenario_c_chime": {
+        "src": "assets/audio/scenario_c_chime.wav",
+        "volume": 0.7
+      }
+    }
+  }
+}
+```
+
+### 方針
+
+- 背景画像は `manifest.backgrounds` で管理する。
+- 音声ファイルは `manifest.audio` で管理する。
+- シナリオ内の `background`, `ambience`, `se` はmanifest定義と照合する。
+- RuntimeはAuthoring Markdownを直接読まない。

@@ -161,3 +161,181 @@ text: charsPerLine 20 / maxLines 10
 ```
 
 この値は、読めないことを避けるため安全側に倒した暫定値である。
+
+## v1.3 Japanese kinsoku note
+
+v1.3では、日本語表示で句点・読点・閉じ括弧だけが行頭または単独行に送られる問題を避けるため、簡易禁則処理を追加する。
+
+対象例:
+
+```text
+、 。 」 』 ）
+```
+
+方針:
+
+- 行頭禁則文字は前行へ結合する。
+- 句読点だけの行は前行へ結合する。
+- 多少1行の文字数が増えても、句読点だけが送られるより可読性を優先する。
+
+## v1.4 Text Layout Architecture
+
+`src/main.js` に Text Layout Engine 相当の処理を追加した。
+
+主要処理:
+
+```text
+preparePagesForStep()
+splitByManualPageBreak()
+normalizeInlineCommands()
+paginateText()
+wrapLineKinsoku()
+formatBacklog()
+```
+
+`manifest.engineUiPolicy.paginationProfile` と `manifest.engineUiPolicy.typewriter.speedsMsPerChar` を参照する。
+
+## v1.5 Authoring Architecture
+
+v1.5では、実行エンジンと制作支援を分離する。
+
+```text
+Authoring System:
+  STORY_BIBLE.md
+  SCENARIO_SOURCE.md
+  AI_SCENARIO_RULES.md
+  HUMAN_MANUAL.md
+  SCENARIO_REVIEW_CHECKLIST.md
+
+Future Compiler / Validator:
+  SCENARIO_SOURCE.md -> main.json
+  COMPILE_REPORT.md
+
+Runtime Engine:
+  manifest.json
+  main.json
+  assets
+  styles
+```
+
+Runtime EngineはMarkdown原稿を直接読まない。
+
+## v1.6 Content Pack Architecture
+
+v1.6では、Runtime Engineから作品固有情報を切り離し始める。
+
+```text
+content/manifest.json
+  gameId
+  title
+  saveKey
+  backgrounds
+  contentPack
+
+content/scenario/main.json
+  runtime scenario
+
+styles/engine.css
+  future engine layout css
+
+styles/theme.css
+  future content pack theme css
+
+styles/base.css
+  compatibility css retained in v1.6
+```
+
+### 背景解決
+
+`setBackground()` は固定背景IDリストを持たず、`manifest.backgrounds` を参照する。
+
+### 保存キー
+
+`SaveLoad` は `manifest.saveKey` を使う。  
+別作品へ積み替えても保存データが衝突しにくい。
+
+## v1.6-docfix Current Architecture Note
+
+このファイルは履歴追記型で運用されている。  
+現在アーキテクチャの基準は以下。
+
+```text
+Runtime Engine:
+  index.html
+  src/main.js
+  src/engine/
+  styles/engine.css
+  styles/theme.css
+  styles/base.css
+
+Content Pack:
+  content/manifest.json
+  content/scenario/main.json
+  assets/bg/
+
+Authoring System:
+  content/scenario/STORY_BIBLE.md
+  content/scenario/SCENARIO_SOURCE.md
+  content/scenario/COMPILE_REPORT.md
+  docs/AI_SCENARIO_RULES.md
+  docs/HUMAN_MANUAL.md
+  docs/SCENARIO_REVIEW_CHECKLIST.md
+```
+
+Runtime EngineはAuthoring Markdownを直接読まない。  
+将来的にはCurrent ArchitectureとHistoryを分離する。
+
+## v1.7 Compiler Architecture
+
+v1.7では Authoring System にcompilerを追加する。
+
+```text
+SCENARIO_SOURCE.md
+  ↓ tools/compile_scenario.py
+main.json
+  ↓ Runtime Engine
+game
+```
+
+### compilerの役割
+
+- `SCENARIO_SOURCE.md` を解析する
+- `main.json` を生成する
+- scene ID重複・next参照・表記ルールを検査する
+- `COMPILE_REPORT.md` を出力する
+
+Runtime Engineはcompilerを呼び出さない。
+
+## v1.8 Metadata-aware Compiler Architecture
+
+v1.8では compiler が `SCENARIO_SOURCE.md` の source-level metadata を読み取り、`main.json` と `manifest.json` の両方を同期する。
+
+```text
+SCENARIO_SOURCE.md
+  ├─ # content-pack
+  ├─ # backgrounds
+  └─ # scene: ...
+
+tools/compile_scenario.py
+  ├─ main.json
+  └─ manifest.json
+```
+
+これにより、別Content Packで開始シーンIDを自由に変えられる。
+
+## v1.9 Asset-aware Content Pack Architecture
+
+v1.9では、Content Packに画像・音声ファイルを含める検証を行う。
+
+```text
+assets/bg/
+  scenario_c_room.png
+  scenario_c_gate.png
+
+assets/audio/
+  scenario_c_loop.wav
+  scenario_c_chime.wav
+```
+
+compilerは `SCENARIO_SOURCE.md` の `# backgrounds` と `# audio` から `manifest.json` を同期する。
+Runtime Audio Engineは `manifest.audio` を参照する。

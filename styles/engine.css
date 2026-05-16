@@ -1,0 +1,25 @@
+/* engine.css
+   v1.6 Content Pack preparation.
+   This file is the future home for runtime layout rules.
+   v1.6 still keeps styles/base.css loaded for compatibility. */
+
+html, body {
+  overflow: hidden;
+}
+
+.app,
+.stage,
+.novel-area,
+.text-window,
+.choices,
+.panel,
+.toast {
+  box-sizing: border-box;
+}
+
+/* Runtime policy:
+   - no page scroll
+   - no text-window scroll
+   - whole-stage tap to advance
+   - choices and controls excluded from advance
+*/

@@ -1,0 +1,11 @@
+INTERNAL CHECK v1.9
+
+No static consistency errors found.
+
+Checked:
+- compiler run/check-only
+- JS syntax
+- Python syntax
+- manifest.audio support
+- runtime audio configure marker
+- authoring/runtime separation

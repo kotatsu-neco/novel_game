@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Runtime Scenario Schema v1.8",
+  "type": "object",
+  "required": [
+    "meta",
+    "startScene",
+    "stateDefaults",
+    "scenes"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "compiledFrom": {
+          "type": "string"
+        },
+        "sourceStatusByScene": {
+          "type": "object"
+        }
+      }
+    },
+    "startScene": {
+      "type": "string"
+    },
+    "stateDefaults": {
+      "type": "object"
+    },
+    "scenes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "background",
+          "steps"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "background": {
+            "type": "string"
+          },
+          "ambience": {
+            "type": "string"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "type"
+              ],
+              "properties": {
+                "type": {
+                  "enum": [
+                    "text",
+                    "voice",
+                    "document",
+                    "title",
+                    "choice",
+                    "jump",
+                    "endingCheck",
+                    "ending",
+                    "pageBreak"
+                  ]
+                },
+                "text": {
+                  "type": "string"
+                },
+                "pages": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "se": {
+                  "type": "string"
+                },
+                "prompt": {
+                  "type": "string"
+                },
+                "choices": {
+                  "type": "array"
+                },
+                "next": {
+                  "type": "string"
+                },
+                "ending": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "subtitle": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

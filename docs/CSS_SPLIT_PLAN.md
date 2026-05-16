@@ -1,81 +1,94 @@
 # CSS_SPLIT_PLAN.md
 
-## 目的
+## 1. 目的
 
-v0.9時点では `styles/base.css` に、エンジンUIと作品テーマが混在している。  
-今後、短編ノベルゲームエンジンとして複数作品へ流用する場合は、CSSを以下に分離する。
+この文書は、現在 `styles/base.css` に混在しているエンジンUIと作品テーマを、将来的に分離するための計画書である。
+
+v1.6-docfix時点では、以下の3ファイルを読み込む。
 
 ```text
 styles/engine.css
 styles/theme.css
+styles/base.css
 ```
 
-## 1. engine.css に移すもの
+ただし、完全分離は未完了であり、`base.css` が引き続き主要な見た目を担っている。
 
-エンジンの構造・操作・読書体験に関わるもの。
+## 2. 現在の状態
 
-- `html`, `body` のスクロール禁止
-- `.app`
-- `.stage`
-- `.topbar`
-- `.novel-area`
-- `.text-window`
-- `.choices`
-- `.choice-button` の構造
-- `.panel`
-- `.toast`
-- `.hidden`
+### engine.css
+
+将来のエンジン共通レイアウト用。  
+v1.6-docfixでは分離準備ファイル。
+
+入れるべきもの:
+
+- 画面固定
 - セーフエリア対応
-- 画面全体タップ前提のレイアウト
-- 選択肢表示時の `.stage.has-choices`
+- スクロール禁止
+- 本文領域構造
+- 選択肢領域構造
+- 全画面タップ前提の構造
+- パネル
+- トースト
+- 非表示クラス
 
-## 2. theme.css に移すもの
+### theme.css
 
-作品ごとの見た目・雰囲気に関わるもの。
+将来の作品固有テーマ用。  
+v1.6-docfixでは分離準備ファイル。
+
+入れるべきもの:
 
 - 色
 - 背景画像
-- 背景オーバーレイ
-- グラデーション
 - 文字影
-- 文書表示の雰囲気
-- ホラー向け暗さ
-- 作品固有の背景IDクラス
+- 暗さ
+- グラデーション
+- 角丸
+- 作品固有の視覚演出
 
-## 3. 分離時の注意
+### base.css
 
-### 3.1 エンジン側に作品名を入れない
+v1.6-docfixでは互換維持のため継続使用。  
+完全分離が終わるまで削除しない。
 
-`返し鈴`, `遙`, `惣太`, `片桐`, `返鈴` などは `content/` またはテーマ側に置く。  
-エンジン側には入れない。
+## 3. 現在のページ分割値
 
-### 3.2 背景画像はテーマ側
+ページ分割値はCSSではなく、`content/manifest.json` の以下で管理する。
 
-背景画像は `assets/bg/` と `theme.css` の担当。  
-エンジンは背景IDを受け取り、該当クラスを付与するだけにする。
-
-### 3.3 ページ分割量は設定化する
-
-現状の `document: 180`, `voice: 88`, `text: 150` は `src/main.js` に直書きされている。  
-分離時には、以下のような設定に移す。
-
-```json
-{
-  "ui": {
-    "pagination": {
-      "document": 180,
-      "voice": 88,
-      "text": 150
-    }
-  }
-}
+```text
+manifest.engineUiPolicy.paginationProfile
 ```
 
-## 4. 推奨手順
+現行値:
 
-1. `styles/base.css` をコピーして `engine.css` と `theme.css` の草案を作る。
-2. 画面固定・本文領域・選択肢領域を `engine.css` へ移す。
-3. 色・背景・文字影・暗さを `theme.css` へ移す。
-4. `index.html` で両方を読み込む。
-5. 静的検査でCSS参照先を確認する。
-6. Codex / ローカルで実ブラウザ確認する。
+```text
+document: charsPerLine 18 / maxLines 12
+voice: charsPerLine 20 / maxLines 7
+text: charsPerLine 20 / maxLines 10
+```
+
+旧値 `document: 180 / voice: 88 / text: 150` は廃止済み。
+
+## 4. 分離時の注意
+
+- 背景IDはJSに直書きしない。
+- 背景解決は `manifest.backgrounds` を使う。
+- 保存キーは `manifest.saveKey` を使う。
+- 作品名は `manifest.title` を使う。
+- Authoring MarkdownをRuntime Engineで直接読ませない。
+- `base.css` 削除は、実ブラウザ・iPhone Safari確認後に行う。
+
+## 5. 推奨手順
+
+```text
+1. base.cssをengine/theme観点で棚卸し
+2. レイアウト構造をengine.cssへ移す
+3. 色・背景・文字影をtheme.cssへ移す
+4. base.cssを空に近づける
+5. 静的検査
+6. Codexまたはローカルで実ブラウザ検査
+7. iPhone Safari実機確認
+8. base.css削除可否を判断
+```

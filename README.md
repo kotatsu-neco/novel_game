@@ -1,4 +1,44 @@
-# 返し鈴 v0.9
+# 返し鈴 v1.6-docfix
+
+## v1.6-docfix 現在版サマリー
+
+この成果物は、v1.6のContent Pack化準備に対する文書整合修正版です。
+
+### 現在の実行構造
+
+```text
+Runtime Engine:
+  index.html
+  src/main.js
+  src/engine/
+  styles/engine.css
+  styles/theme.css
+  styles/base.css
+
+Content Pack:
+  content/manifest.json
+  content/scenario/main.json
+  assets/bg/
+
+Authoring System:
+  content/scenario/STORY_BIBLE.md
+  content/scenario/SCENARIO_SOURCE.md
+  content/scenario/COMPILE_REPORT.md
+  docs/AI_SCENARIO_RULES.md
+  docs/HUMAN_MANUAL.md
+  docs/SCENARIO_REVIEW_CHECKLIST.md
+```
+
+### 現在の重要仕様
+
+- Runtime Engineは `main.json` を読む。
+- Authoring Markdownは実行時に直接読まない。
+- 背景は `manifest.backgrounds` で管理する。
+- 保存キーは `manifest.saveKey` を使う。
+- 作品名は `manifest.title` を使う。
+- v1.6-docfixでは `styles/base.css` 互換を維持する。
+- `styles/engine.css` / `styles/theme.css` は分離準備段階。
+
 
 和風ホラー短編サウンドノベルの最小プレイ版です。
 
@@ -148,3 +188,86 @@ v0.9では第三者音源ファイルを同梱していません。
 - 20字前後を超える文のかたまりが1行扱いにならないよう、厳密に分割するようにしました。
 - iPhone Safariの下部ブラウザUIに本文領域が隠れにくいよう、`100svh` 寄りの高さ指定へ変更しました。
 - 保存 / 読込後にバックログが重複しにくいよう修正しました。
+
+## v1.3 更新
+
+- 『志乃と惣太　社の前にて』を1行表記へ修正しました。
+- 句点・読点・閉じ括弧だけが次行へ送られないよう、日本語禁則処理を追加しました。
+- ページ分割時に、句読点だけの行が出ないようにしました。
+
+## v1.4 更新
+
+- Text Layout Engine仕様を追加しました。
+- `pages` による手動ページ指定に対応しました。
+- `[r]` を明示改行、`[p]` を明示改ページとして扱います。
+- 文字送り速度とページ分割値を `manifest` から読むようにしました。
+- バックログを `kind` 付き構造へ変更しました。
+- `docs/TEXT_GUIDE.md` を追加しました。
+
+## v1.5 更新
+
+- シナリオ積み替えに向けた Authoring System を追加しました。
+- `STORY_BIBLE.md` を設定正本として追加。
+- `SCENARIO_SOURCE.md` を人間・AI編集用のシナリオ原稿として追加。
+- `AI_SCENARIO_RULES.md`、`HUMAN_MANUAL.md`、`SCENARIO_REVIEW_CHECKLIST.md` を追加。
+- v1.5では自動コンパイラは未実装です。Runtime Engineは引き続き `main.json` を読みます。
+
+## v1.6 更新
+
+- Content Pack化の準備を追加しました。
+- `manifest.json` に `gameId`, `title`, `saveKey`, `backgrounds`, `contentPack` を追加しました。
+- 背景ID固定リストをRuntime Engineから外し、`manifest.backgrounds` を参照するようにしました。
+- 保存キーを `manifest.saveKey` 参照にしました。
+- `styles/engine.css` と `styles/theme.css` を追加しました。
+- 互換維持のため、v1.6では `styles/base.css` も引き続き読み込みます。
+
+## v1.7 更新
+
+- `tools/compile_scenario.py` を追加しました。
+- `SCENARIO_SOURCE.md` から `main.json` を生成できるようにしました。
+- `SCENARIO_SOURCE.md` の `[text se=...]` 形式に対応しました。
+- `content/scenario/SCENARIO_SCHEMA.json` を追加しました。
+- `src/engine/validator.js` を強化しました。
+- `COMPILE_REPORT.md` を compiler 実行結果で更新するようにしました。
+
+### 変換コマンド
+
+```bash
+python tools/compile_scenario.py
+```
+
+検査のみ行う場合:
+
+```bash
+python tools/compile_scenario.py --check-only
+```
+
+## v1.8 更新
+
+- `SCENARIO_SOURCE.md` に source-level metadata を追加しました。
+- compiler が `startScene`, `title`, `gameId`, `saveKey`, `backgrounds` を source 側から読み取れるようになりました。
+- compiler が `main.json` だけでなく `manifest.json` も同期します。
+- 別作品Content Packで開始シーンIDを `title` に固定する必要がなくなりました。
+
+### source-level metadata 例
+
+```md
+# content-pack
+title: 返し鈴
+gameId: kaeshisuzu
+saveKey: kaeshisuzu_save_v01
+startScene: title
+
+# backgrounds
+- id: black_plain
+  kind: cssClass
+  className: bg-black_plain
+```
+
+## v1.9 更新
+
+- 成果物名を `sound_novel_starter_v19` 系へ変更。
+- 外部画像ファイル・外部音声ファイルをContent Pack側で扱う検証を追加。
+- `manifest.audio.ambiences` / `manifest.audio.se` をcompiler同期対象に追加。
+- Runtime Audio Engineがmanifest上の音声ファイルを参照できるようにした。
+- シナリオCによるダミー画像・ダミー音声付き積み替え検証を実施。

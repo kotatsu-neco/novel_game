@@ -1,0 +1,22 @@
+INTERNAL CHECK v1.7
+
+No static consistency errors found.
+
+Warnings: []
+
+Route counts: {'ending_true': 4, 'ending_bad': 13, 'ending_normal': 10}
+
+Checked:
+- compiler check-only
+- compiler py_compile
+- JSON parse
+- manifest/scenario version
+- scene references
+- JS syntax
+- CSS url references
+- background manifest coverage
+- route enumeration
+- compiler markers
+- runtime/authoring separation
+
+Post-check: compiledFrom relative path OK.
