@@ -1,0 +1,9 @@
+INTERNAL CHECK v0.6
+
+No static consistency errors found.
+
+
+Checked:
+- CSS markers for upper reading layout
+- JSON scene references
+- JS syntax

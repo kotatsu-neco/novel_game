@@ -20,9 +20,12 @@ let stepIndex = 0;
 let state = {};
 let backlog = [];
 let soundEnabled = false;
+let pageSegments = [];
+let pageIndex = 0;
 
 const bgClasses = [
   "bg-black_rain",
+  "bg-black_plain",
   "bg-old_house_evening",
   "bg-butsuma_night",
   "bg-mountain_path",
@@ -66,7 +69,7 @@ function bindUi() {
     await goToScene(scenario.startScene);
   });
   document.getElementById("btn-save").addEventListener("click", () => {
-    saveLoad.save({ state, sceneId: scene.id, stepIndex, backlog });
+    saveLoad.save({ state, sceneId: scene.id, stepIndex, backlog, pageIndex });
     showToast("保存しました");
   });
   document.getElementById("btn-load").addEventListener("click", async () => {
@@ -77,7 +80,7 @@ function bindUi() {
     }
     state = data.state;
     backlog = data.backlog || [];
-    await goToScene(data.sceneId, data.stepIndex || 0);
+    await goToScene(data.sceneId, data.stepIndex || 0, data.pageIndex || 0);
     showToast("読み込みました");
   });
   document.getElementById("btn-sound").addEventListener("click", async () => {
@@ -94,13 +97,14 @@ function renderError(errors) {
   choicesEl.classList.add("hidden");
 }
 
-async function goToScene(sceneId, startStep = 0) {
+async function goToScene(sceneId, startStep = 0, startPage = 0) {
   scene = scenario.scenes.find((item) => item.id === sceneId);
   if (!scene) {
     renderError([`Scene not found: ${sceneId}`]);
     return;
   }
   stepIndex = startStep;
+  pageIndex = startPage;
   setBackground(scene.background);
   applyAmbience();
   renderCurrentStep();
@@ -116,28 +120,127 @@ function applyAmbience() {
   audio.setAmbience(scene?.ambience || "silent");
 }
 
+function paginateText(text, type) {
+  if (!text || type === "title") return [text || ""];
+  const maxUnits = type === "document" ? 92 : type === "voice" ? 72 : 118;
+  const paras = String(text).split("\n\n");
+  const pages = [];
+  let current = "";
+  let used = 0;
+  for (const para of paras) {
+    const units = estimateUnits(para) + 2;
+    if (!current) {
+      current = para;
+      used = units;
+      continue;
+    }
+    if (used + units <= maxUnits) {
+      current += "\n\n" + para;
+      used += units;
+    } else {
+      pages.push(current);
+      current = para;
+      used = units;
+    }
+  }
+  if (current) pages.push(current);
+  // hard split overly long single page chunks
+  const finalPages = [];
+  for (const page of pages) {
+    if (estimateUnits(page) <= maxUnits) {
+      finalPages.push(page);
+      continue;
+    }
+    finalPages.push(...splitLongPage(page, maxUnits));
+  }
+  return finalPages.length ? finalPages : [text];
+}
+
+function estimateUnits(text) {
+  let units = 0;
+  for (const ch of String(text)) {
+    if (ch === "\n") units += 2;
+    else if (/\s/.test(ch)) units += 0;
+    else units += 1;
+  }
+  return units;
+}
+
+function splitLongPage(text, maxUnits) {
+  const lines = String(text).split("\n");
+  const out = [];
+  let current = "";
+  let used = 0;
+  for (const line of lines) {
+    const parts = splitByPunctuation(line);
+    for (const part of parts) {
+      const chunk = current ? current + (current.endsWith("\n") ? "" : "") + part : part;
+      const u = estimateUnits(part) + 1;
+      if (!current) {
+        current = part;
+        used = u;
+      } else if (used + u <= maxUnits) {
+        current += part;
+        used += u;
+      } else {
+        out.push(current);
+        current = part;
+        used = u;
+      }
+    }
+    if (current && !current.endsWith("\n")) current += "\n";
+  }
+  if (current) out.push(current.trimEnd());
+  return out;
+}
+
+function splitByPunctuation(line) {
+  const parts = [];
+  let buf = "";
+  for (const ch of String(line)) {
+    buf += ch;
+    if ("。！？』」".includes(ch)) {
+      parts.push(buf);
+      buf = "";
+    }
+  }
+  if (buf) parts.push(buf);
+  return parts.length ? parts : [line];
+}
+
+function prepareCurrentStep(step) {
+  if (["text", "document", "voice", "title"].includes(step.type)) {
+    pageSegments = paginateText(step.text, step.type);
+    if (pageIndex >= pageSegments.length) pageIndex = 0;
+  } else {
+    pageSegments = [];
+    pageIndex = 0;
+  }
+}
+
 function renderCurrentStep() {
   choicesEl.innerHTML = "";
   choicesEl.classList.add("hidden");
   const step = scene.steps[stepIndex];
   if (!step) return;
 
-  if (step.se && soundEnabled) audio.playSe(step.se);
+  prepareCurrentStep(step);
+  if (step.se && soundEnabled && pageIndex === 0) audio.playSe(step.se);
 
   if (step.type === "text" || step.type === "document" || step.type === "voice" || step.type === "title") {
-    speakerEl.textContent = step.type === "title" ? "" : "";
+    speakerEl.textContent = "";
     textEl.className = "text";
     if (step.type === "document") textEl.classList.add("document-text");
     if (step.type === "voice") textEl.classList.add("voice-text");
-    if (step.type === "title") textEl.innerHTML = `<div class="ending-title">${escapeHtml(step.text)}</div>`;
-    else textEl.textContent = step.text;
-
-    if (step.type !== "title") backlog.push(step.text);
+    const body = pageSegments[pageIndex] || "";
+    if (step.type === "title") textEl.innerHTML = `<div class="ending-title">${escapeHtml(body)}</div>`;
+    else textEl.textContent = body;
     return;
   }
 
   if (step.type === "choice") {
     speakerEl.textContent = "";
+    textEl.className = "text";
     textEl.textContent = step.prompt || "選択してください。";
     choicesEl.classList.remove("hidden");
     step.choices.forEach((choice) => {
@@ -197,7 +300,17 @@ function nextStep() {
   if (!scene) return;
   const step = scene.steps[stepIndex];
   if (!step || step.type === "choice" || step.type === "ending") return;
+  if (["text", "document", "voice", "title"].includes(step.type)) {
+    if (pageIndex < pageSegments.length - 1) {
+      if (pageIndex === 0) backlog.push(step.text);
+      pageIndex += 1;
+      renderCurrentStep();
+      return;
+    }
+    if (pageSegments.length) backlog.push(step.text);
+  }
   stepIndex += 1;
+  pageIndex = 0;
   if (stepIndex >= scene.steps.length) return;
   renderCurrentStep();
 }

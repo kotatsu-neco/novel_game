@@ -19,10 +19,15 @@ docs/BRANCH_MAP.md
 docs/FILE_TREE.txt
 docs/INTERNAL_CHECK_v02.txt
 docs/INTERNAL_CHECK_v04.txt
+docs/INTERNAL_CHECK_v05.txt
+docs/INTERNAL_CHECK_v06.txt
+docs/INTERNAL_CHECK_v07.txt
 docs/LICENSES.md
 docs/PATCH_NOTE_v03.md
 docs/PATCH_NOTE_v04.md
 docs/PATCH_NOTE_v05.md
+docs/PATCH_NOTE_v06.md
+docs/PATCH_NOTE_v07.md
 docs/QA_CHECKLIST.md
 index.html
 src/engine/audioManager.js
