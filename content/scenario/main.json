@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "返し鈴",
-    "version": "v0.1",
+    "version": "v0.5",
     "language": "ja",
     "estimatedMinutes": 5,
     "description": "現代の一晩に焦点を当てた和風ホラー短編サウンドノベル。",
@@ -36,6 +36,33 @@
         },
         {
           "type": "jump",
+          "next": "mother_intro"
+        }
+      ]
+    },
+    {
+      "id": "mother_intro",
+      "background": "black_plain",
+      "ambience": "silent",
+      "steps": [
+        {
+          "type": "text",
+          "text": "雨になりそうだから、早めに行ってきなさい。\n\n母はそう言って、玄関まで見送りに来た。\n\n靴を履く私の背中へ、鍵の鳴る音がした。"
+        },
+        {
+          "type": "voice",
+          "text": "「遙、気を付けて行ってらっしゃい」"
+        },
+        {
+          "type": "voice",
+          "text": "「うん。暗くなる前には戻る」"
+        },
+        {
+          "type": "text",
+          "text": "祖母の家の鍵は、掌の中で思っていたより冷たかった。"
+        },
+        {
+          "type": "jump",
           "next": "house_intro"
         }
       ]
@@ -66,7 +93,7 @@
         },
         {
           "type": "document",
-          "text": "『返鈴箱\n片桐家』"
+          "text": "『返鈴箱　片桐家』"
         },
         {
           "type": "text",
@@ -115,7 +142,7 @@
         },
         {
           "type": "voice",
-          "text": "「それ、わたしの」"
+          "text": "「それ、ぼくの」"
         },
         {
           "type": "jump",
