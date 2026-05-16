@@ -1,6 +1,6 @@
 {
   "title": "返し鈴",
-  "version": "v0.9",
+  "version": "v1.2",
   "entryScenario": "content/scenario/main.json",
   "engine": "html-js-minimal",
   "assetPolicy": "Scene backgrounds are included as local PNG files. Audio remains Web Audio placeholder tones in v0.2.",
@@ -15,7 +15,42 @@
     "screenScroll": "disabled",
     "textWindowScroll": "disabled",
     "advanceTapArea": "whole_stage_except_buttons_choices_panel",
-    "pagination": "automatic_by_step_type",
-    "cssSplitFuturePlan": "styles/base.css will be split into engine.css and theme.css in a later version"
+    "pagination": "automatic_by_strict_wrapped_lines",
+    "cssSplitFuturePlan": "styles/base.css will be split into engine.css and theme.css in a later version",
+    "paginationProfile": {
+      "document": {
+        "charsPerLine": 18,
+        "maxLines": 12
+      },
+      "voice": {
+        "charsPerLine": 20,
+        "maxLines": 7
+      },
+      "text": {
+        "charsPerLine": 20,
+        "maxLines": 10
+      }
+    },
+    "typewriter": {
+      "enabled": true,
+      "tapWhileTyping": "show_full_page",
+      "tapAfterComplete": "advance_page_or_step",
+      "speedsMsPerChar": {
+        "text": 35,
+        "voice": 45,
+        "document": 12,
+        "title": 0
+      },
+      "futureSettingCandidates": [
+        "standard",
+        "fast",
+        "instant"
+      ]
+    },
+    "viewportHeightPolicy": "prefer_100svh_for_mobile_safari",
+    "saveLoad": {
+      "storesCurrentStepLoggedKey": true,
+      "doesNotStoreTypewriterCharacterIndex": true
+    }
   }
 }

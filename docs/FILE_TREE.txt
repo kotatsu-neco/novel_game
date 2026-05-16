@@ -24,6 +24,9 @@ docs/INTERNAL_CHECK_v05.txt
 docs/INTERNAL_CHECK_v06.txt
 docs/INTERNAL_CHECK_v07.txt
 docs/INTERNAL_CHECK_v08.txt
+docs/INTERNAL_CHECK_v09.txt
+docs/INTERNAL_CHECK_v10.txt
+docs/INTERNAL_CHECK_v11.txt
 docs/LICENSES.md
 docs/PATCH_NOTE_v03.md
 docs/PATCH_NOTE_v04.md
@@ -32,6 +35,9 @@ docs/PATCH_NOTE_v06.md
 docs/PATCH_NOTE_v07.md
 docs/PATCH_NOTE_v08.md
 docs/PATCH_NOTE_v09.md
+docs/PATCH_NOTE_v10.md
+docs/PATCH_NOTE_v11.md
+docs/PATCH_NOTE_v12.md
 docs/QA_CHECKLIST.md
 index.html
 src/engine/audioManager.js

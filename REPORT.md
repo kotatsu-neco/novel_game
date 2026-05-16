@@ -210,3 +210,61 @@
 - 人物名
 - 背景画像
 - 『返鈴箱　片桐家』等の文言
+
+## v1.0 追加実施内容
+
+- `src/main.js` のページ分割を、従来の文字数推定から推定折り返し行数ベースに変更。
+- `document` / `voice` / `text` ごとに `charsPerLine` と `maxLines` を設定。
+- `document` は `charsPerLine: 20`, `maxLines: 15` とし、文書が表示枠から溢れないように保守的に分割。
+- `styles/base.css` の本文フォントサイズを `clamp(15px, 4.1vw, 16px)` に調整。
+- 文書表示は明朝体を維持しつつ、`font-size: inherit` として本文と極端なサイズ差が出ないよう調整。
+- 文書表示の行間と字間を詰め、覚書・走り書きの可読性と表示量を改善。
+
+## v1.0 静的確認
+
+- JSON構文OK。
+- JS構文チェックOK。
+- シーン参照OK。
+- CSS参照OK。
+- 実ブラウザ表示は未確認（チャット環境対象外）。
+
+## v1.1 追加実施内容
+
+- `src/main.js` に文字送り機能を追加。
+- `startTypewriter()`, `stopTypewriter()`, `revealCurrentPage()`, `typewriterSpeed()` を追加。
+- 画面タップ時の挙動を、文字送り中は全文即時表示、全文表示済みなら次ページ送りに変更。
+- 文書表示は `12ms` かつ2文字ずつ進めることで、遅すぎない表示にした。
+- `content/manifest.json` に `engineUiPolicy.typewriter` を追加。
+- `SPEC.md`, `DESIGN.md`, `ARCHITECTURE.md`, `README.md` に文字送り仕様を反映。
+
+## v1.1 静的確認
+
+- JSON構文OK。
+- JS構文チェックOK。
+- シーン参照OK。
+- CSS参照OK。
+- 実ブラウザ表示は未確認（チャット環境対象外）。
+
+## v1.2 追加実施内容
+
+- `src/main.js` のページ分割を厳密化。
+- `wrapParagraph()` が20字前後を超える単位を1行扱いしていた問題を修正。
+- `wrapLineStrict()`, `hardSplitByLength()` を追加。
+- `paginationConfig()` を実機寄りに保守化。
+  - document: 18字 / 最大12行
+  - voice: 20字 / 最大7行
+  - text: 20字 / 最大10行
+- `styles/base.css` の `100dvh` を `100svh` へ置換し、iPhone Safari下部UIに本文が隠れにくい方向へ調整。
+- 文書表示の行間・字間を再調整。
+- 保存データに `currentStepLoggedKey` を含め、読込後のバックログ重複を軽減。
+- `logStepOnce()` にバックログ末尾との重複チェックを追加。
+- `manifest` にv1.2のページ分割・viewport・保存仕様を追記。
+
+## v1.2 静的確認
+
+- JSON構文OK。
+- JS構文チェックOK。
+- シーン参照OK。
+- CSS参照OK。
+- 主要ロジックマーカー確認済み。
+- 実ブラウザ表示は未確認（チャット環境対象外）。

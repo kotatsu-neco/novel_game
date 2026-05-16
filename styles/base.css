@@ -19,8 +19,8 @@ html, body { margin: 0; height: 100%; min-height: 100%; background: var(--bg); c
 button { font: inherit; color: inherit; }
 
 .app {
-  height: 100dvh;
-  min-height: 100dvh;
+  height: 100svh;
+  min-height: 100svh;
   display: grid;
   place-items: center;
   background: #050507;
@@ -30,8 +30,8 @@ button { font: inherit; color: inherit; }
 .stage {
   position: relative;
   width: min(100vw, 520px);
-  height: 100dvh;
-  min-height: 100dvh;
+  height: 100svh;
+  min-height: 100svh;
   overflow: hidden;
   background: radial-gradient(circle at center 28%, rgba(80,80,86,0.34), transparent 36%), linear-gradient(180deg, #0b0d11, #050507 74%);
 }
@@ -107,8 +107,8 @@ button { font: inherit; color: inherit; }
   background: linear-gradient(180deg, rgba(8, 8, 10, 0.52) 0%, rgba(8, 8, 10, 0.56) 34%, rgba(8, 8, 10, 0.68) 70%, rgba(8, 8, 10, 0.82) 100%);
   border-radius: 0;
   box-shadow: none;
-  padding: 20px 22px 34px;
-  line-height: 1.82;
+  padding: 18px 18px 28px;
+  line-height: 1.7;
   letter-spacing: 0.02em;
   outline: none;
   backdrop-filter: blur(1.5px);
@@ -119,13 +119,19 @@ button { font: inherit; color: inherit; }
 
 .text {
   white-space: pre-wrap;
-  font-size: 17px;
+  font-size: clamp(15px, 4.1vw, 16px);
+  line-height: 1.68;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.72);
+  line-break: strict;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 
 .document-text {
   font-family: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
-  letter-spacing: 0.04em;
+  font-size: inherit;
+  line-height: 1.56;
+  letter-spacing: 0.01em;
 }
 
 .voice-text {
@@ -232,7 +238,7 @@ button { font: inherit; color: inherit; }
 
 @media (min-width: 760px) {
   .stage {
-    height: min(100dvh, 920px);
+    height: min(100svh, 920px);
     min-height: 720px;
     border-left: 1px solid #111;
     border-right: 1px solid #111;
@@ -356,16 +362,61 @@ body {
 /* v0.8 readability and tap area */
 .stage.has-choices .text-window {
   flex: 0 0 auto;
-  height: calc(100dvh - max(132px, calc(env(safe-area-inset-top) + 96px)) - 220px - max(12px, env(safe-area-inset-bottom)));
-  min-height: calc(100dvh - max(132px, calc(env(safe-area-inset-top) + 96px)) - 220px - max(12px, env(safe-area-inset-bottom)));
-  max-height: calc(100dvh - max(132px, calc(env(safe-area-inset-top) + 96px)) - 220px - max(12px, env(safe-area-inset-bottom)));
+  height: calc(100svh - max(132px, calc(env(safe-area-inset-top) + 96px)) - 220px - max(12px, env(safe-area-inset-bottom)));
+  min-height: calc(100svh - max(132px, calc(env(safe-area-inset-top) + 96px)) - 220px - max(12px, env(safe-area-inset-bottom)));
+  max-height: calc(100svh - max(132px, calc(env(safe-area-inset-top) + 96px)) - 220px - max(12px, env(safe-area-inset-bottom)));
 }
 
 .document-text {
-  line-height: 1.68;
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+  font-size: inherit;
+  line-height: 1.56;
+  letter-spacing: 0.01em;
 }
 
 .document-text br + br {
   display: block;
   content: "";
+}
+
+
+/* v1.0 line-based pagination readability */
+.document-text {
+  margin-top: 0;
+}
+
+.voice-text {
+  line-height: 1.7;
+}
+
+
+/* v1.1 typewriter support */
+.text {
+  min-height: 1.7em;
+}
+
+
+/* v1.2 mobile viewport and strict pagination tuning
+   Use svh to reduce the chance that fixed reading areas extend behind
+   mobile Safari browser controls. */
+:root {
+  --reader-safe-top: max(132px, calc(env(safe-area-inset-top) + 96px));
+  --reader-safe-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+.document-text {
+  line-height: 1.52;
+}
+
+.voice-text {
+  line-height: 1.68;
+}
+
+
+/* v1.2 final document text override */
+.document-text {
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+  font-size: inherit;
+  line-height: 1.52;
+  letter-spacing: 0.005em;
 }

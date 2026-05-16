@@ -63,3 +63,23 @@
 - ARCHITECTURE.md にページ分割・全画面タップ・CSS分離方針を追記。
 - docs/CSS_SPLIT_PLAN.md を追加。
 - manifest に engineUiPolicy を追加。
+
+## v1.0
+
+- ページ分割を推定行数ベースに変更。
+- 文書表示のフォントサイズ・行間・字間を調整。
+- 通常本文の折り返し改善のため、フォントサイズを調整。
+
+## v1.1
+
+- 文字送り機能を追加。
+- タップ1回目で全文表示、全文表示後のタップで次ページへ進む挙動を追加。
+- `manifest` に `engineUiPolicy.typewriter` を追加。
+
+## v1.2
+
+- ページ分割ロジックの過小見積もりを修正。
+- `wrapLineStrict()` と `hardSplitByLength()` を追加。
+- `document / voice / text` のページ分割値を保守化。
+- モバイルSafari対策として `100dvh` を `100svh` へ置換。
+- バックログ重複対策を追加。

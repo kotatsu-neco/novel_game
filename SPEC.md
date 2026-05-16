@@ -236,3 +236,59 @@ styles/theme.css
 - スクリーンショット確認
 - 保存 / 読込の実動作
 - iPhone Safari実機確認
+
+
+## v1.0 line-based pagination note
+
+v1.0では、ページ分割を単純な文字数ではなく、推定折り返し行数ベースで行う。  
+これは、iPhone実機で文書表示が枠内に収まらない問題を受けた修正である。
+
+現行目安:
+
+```text
+document: charsPerLine 20 / maxLines 15
+voice: charsPerLine 22 / maxLines 8
+text: charsPerLine 21 / maxLines 12
+```
+
+この値は将来的にmanifestまたはUI設定へ移す候補である。
+
+## v1.1 typewriter display
+
+v1.1では、ページ内の文章を一括表示ではなく、文字送りで表示する。
+
+### 基本挙動
+
+| 状態 | タップ時の動作 |
+|---|---|
+| 文字送り中 | 現在ページの全文を即時表示 |
+| 全文表示後 | 次ページへ進む |
+| 選択肢表示中 | 選択肢選択まで待機 |
+| ボタン・パネル操作 | ページ送りしない |
+
+### 速度
+
+```text
+text: 35ms / char
+voice: 45ms / char
+document: 12ms / char
+title: instant
+```
+
+文書表示は可読性を優先し、地の文や声より速く表示する。  
+将来的には「標準 / 速い / 瞬時」を設定化する。
+
+## v1.2 strict pagination note
+
+v1.2では、ページ分割の過小見積もりを防ぐため、句点単位のかたまりが1行上限を超える場合でも必ず分割する。  
+また、iPhone Safariで下部UIに本文が隠れるリスクを下げるため、固定画面の高さ指定は `100svh` 寄りに調整する。
+
+現行目安:
+
+```text
+document: charsPerLine 18 / maxLines 12
+voice: charsPerLine 20 / maxLines 7
+text: charsPerLine 20 / maxLines 10
+```
+
+この値は、読めないことを避けるため安全側に倒した暫定値である。

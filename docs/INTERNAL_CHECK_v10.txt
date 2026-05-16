@@ -1,0 +1,15 @@
+INTERNAL CHECK v1.0
+
+No static consistency errors found.
+
+Estimated document lines at charsPerLine=20:
+- 返鈴覚書: 13 lines
+- 祖母の走り書き: 14 lines
+
+Checked:
+- JSON parse
+- manifest/scenario version
+- scene references
+- JS syntax
+- CSS markers
+- pagination markers

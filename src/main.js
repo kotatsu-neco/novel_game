@@ -22,6 +22,11 @@ let backlog = [];
 let soundEnabled = false;
 let pageSegments = [];
 let pageIndex = 0;
+let isTyping = false;
+let typewriterTimer = null;
+let currentFullText = "";
+let currentVisibleText = "";
+let currentStepLoggedKey = "";
 
 const bgClasses = [
   "bg-black_rain",
@@ -48,15 +53,6 @@ async function init() {
   await goToScene(scenario.startScene);
 }
 
-
-function handleAdvanceAreaClick(event) {
-  const target = event.target;
-  if (target.closest("button")) return;
-  if (target.closest("#panel")) return;
-  if (target.closest("#choices") && choicesEl.classList.contains("hidden") === false) return;
-  nextStep();
-}
-
 function bindUi() {
   stageEl.addEventListener("click", handleAdvanceAreaClick);
   textWindow.addEventListener("keydown", (event) => {
@@ -72,13 +68,15 @@ function bindUi() {
     backlogEl.textContent = backlog.join("\n\n---\n\n");
   });
   document.getElementById("btn-restart").addEventListener("click", async () => {
+    stopTypewriter();
     state = structuredClone(scenario.stateDefaults);
     backlog = [];
+    currentStepLoggedKey = "";
     panelEl.classList.add("hidden");
     await goToScene(scenario.startScene);
   });
   document.getElementById("btn-save").addEventListener("click", () => {
-    saveLoad.save({ state, sceneId: scene.id, stepIndex, backlog, pageIndex });
+    saveLoad.save({ state, sceneId: scene.id, stepIndex, backlog, pageIndex, currentStepLoggedKey });
     showToast("保存しました");
   });
   document.getElementById("btn-load").addEventListener("click", async () => {
@@ -87,8 +85,10 @@ function bindUi() {
       showToast("保存データがありません");
       return;
     }
+    stopTypewriter();
     state = data.state;
     backlog = data.backlog || [];
+    currentStepLoggedKey = "";
     await goToScene(data.sceneId, data.stepIndex || 0, data.pageIndex || 0);
     showToast("読み込みました");
   });
@@ -100,13 +100,23 @@ function bindUi() {
   });
 }
 
+function handleAdvanceAreaClick(event) {
+  const target = event.target;
+  if (target.closest("button")) return;
+  if (target.closest("#panel")) return;
+  if (target.closest("#choices") && choicesEl.classList.contains("hidden") === false) return;
+  nextStep();
+}
+
 function renderError(errors) {
+  stopTypewriter();
   textEl.textContent = "シナリオ検証エラー\n\n" + errors.join("\n");
   speakerEl.textContent = "";
   choicesEl.classList.add("hidden");
 }
 
 async function goToScene(sceneId, startStep = 0, startPage = 0) {
+  stopTypewriter();
   scene = scenario.scenes.find((item) => item.id === sceneId);
   if (!scene) {
     renderError([`Scene not found: ${sceneId}`]);
@@ -131,90 +141,101 @@ function applyAmbience() {
 
 function paginateText(text, type) {
   if (!text || type === "title") return [text || ""];
-  const maxUnits = type === "document" ? 180 : type === "voice" ? 88 : 150;
-  const paras = String(text).split("\n\n");
+  const cfg = paginationConfig(type);
+  const paragraphs = String(text).split("\n\n");
   const pages = [];
-  let current = "";
-  let used = 0;
-  for (const para of paras) {
-    const units = estimateUnits(para) + 2;
-    if (!current) {
-      current = para;
-      used = units;
+  let currentLines = [];
+
+  for (const para of paragraphs) {
+    const wrapped = wrapParagraph(para, cfg.charsPerLine);
+    const blankCost = currentLines.length > 0 ? 1 : 0;
+
+    if (currentLines.length > 0 && currentLines.length + blankCost + wrapped.length > cfg.maxLines) {
+      pages.push(currentLines.join("\n").trimEnd());
+      currentLines = [];
+    }
+
+    if (wrapped.length > cfg.maxLines) {
+      if (currentLines.length > 0) {
+        pages.push(currentLines.join("\n").trimEnd());
+        currentLines = [];
+      }
+      for (let i = 0; i < wrapped.length; i += cfg.maxLines) {
+        pages.push(wrapped.slice(i, i + cfg.maxLines).join("\n").trimEnd());
+      }
       continue;
     }
-    if (used + units <= maxUnits) {
-      current += "\n\n" + para;
-      used += units;
-    } else {
-      pages.push(current);
-      current = para;
-      used = units;
-    }
+
+    if (currentLines.length > 0) currentLines.push("");
+    currentLines.push(...wrapped);
   }
-  if (current) pages.push(current);
-  // hard split overly long single page chunks
-  const finalPages = [];
-  for (const page of pages) {
-    if (estimateUnits(page) <= maxUnits) {
-      finalPages.push(page);
-      continue;
-    }
-    finalPages.push(...splitLongPage(page, maxUnits));
-  }
-  return finalPages.length ? finalPages : [text];
+
+  if (currentLines.length > 0) pages.push(currentLines.join("\n").trimEnd());
+  return pages.length ? pages : [text];
 }
 
-function estimateUnits(text) {
-  let units = 0;
-  for (const ch of String(text)) {
-    if (ch === "\n") units += 2;
-    else if (/\s/.test(ch)) units += 0;
-    else units += 1;
-  }
-  return units;
+function paginationConfig(type) {
+  if (type === "document") return { charsPerLine: 18, maxLines: 12 };
+  if (type === "voice") return { charsPerLine: 20, maxLines: 7 };
+  return { charsPerLine: 20, maxLines: 10 };
 }
 
-function splitLongPage(text, maxUnits) {
-  const lines = String(text).split("\n");
-  const out = [];
+function wrapParagraph(paragraph, charsPerLine) {
+  const result = [];
+  const explicitLines = String(paragraph).split("\n");
+  for (const line of explicitLines) {
+    const wrapped = wrapLineStrict(line, charsPerLine);
+    result.push(...wrapped);
+  }
+  return result;
+}
+
+function wrapLineStrict(line, charsPerLine) {
+  if (line.length <= charsPerLine) return [line];
+
+  const chunks = splitForJapaneseLineWrap(line);
+  const result = [];
   let current = "";
-  let used = 0;
-  for (const line of lines) {
-    const parts = splitByPunctuation(line);
-    for (const part of parts) {
-      const chunk = current ? current + (current.endsWith("\n") ? "" : "") + part : part;
-      const u = estimateUnits(part) + 1;
+
+  for (const chunk of chunks) {
+    const pieces = hardSplitByLength(chunk, charsPerLine);
+    for (const piece of pieces) {
       if (!current) {
-        current = part;
-        used = u;
-      } else if (used + u <= maxUnits) {
-        current += part;
-        used += u;
+        current = piece;
+      } else if ((current + piece).length <= charsPerLine) {
+        current += piece;
       } else {
-        out.push(current);
-        current = part;
-        used = u;
+        result.push(current);
+        current = piece;
       }
     }
-    if (current && !current.endsWith("\n")) current += "\n";
   }
-  if (current) out.push(current.trimEnd());
-  return out;
+
+  if (current) result.push(current);
+  return result;
 }
 
-function splitByPunctuation(line) {
-  const parts = [];
-  let buf = "";
+function hardSplitByLength(text, charsPerLine) {
+  const chars = Array.from(String(text));
+  const result = [];
+  for (let i = 0; i < chars.length; i += charsPerLine) {
+    result.push(chars.slice(i, i + charsPerLine).join(""));
+  }
+  return result;
+}
+
+function splitForJapaneseLineWrap(line) {
+  const result = [];
+  let buffer = "";
   for (const ch of String(line)) {
-    buf += ch;
+    buffer += ch;
     if ("。！？』」".includes(ch)) {
-      parts.push(buf);
-      buf = "";
+      result.push(buffer);
+      buffer = "";
     }
   }
-  if (buf) parts.push(buf);
-  return parts.length ? parts : [line];
+  if (buffer.length > 0) result.push(buffer);
+  return result.length ? result : [line];
 }
 
 function prepareCurrentStep(step) {
@@ -228,6 +249,7 @@ function prepareCurrentStep(step) {
 }
 
 function renderCurrentStep() {
+  stopTypewriter();
   choicesEl.innerHTML = "";
   choicesEl.classList.add("hidden");
   stageEl.classList.remove("has-choices");
@@ -242,9 +264,15 @@ function renderCurrentStep() {
     textEl.className = "text";
     if (step.type === "document") textEl.classList.add("document-text");
     if (step.type === "voice") textEl.classList.add("voice-text");
-    const body = pageSegments[pageIndex] || "";
-    if (step.type === "title") textEl.innerHTML = `<div class="ending-title">${escapeHtml(body)}</div>`;
-    else textEl.textContent = body;
+    currentFullText = pageSegments[pageIndex] || "";
+
+    if (step.type === "title") {
+      textEl.innerHTML = `<div class="ending-title">${escapeHtml(currentFullText)}</div>`;
+      isTyping = false;
+    } else {
+      startTypewriter(currentFullText, step.type);
+      logStepOnce(step);
+    }
     return;
   }
 
@@ -252,6 +280,9 @@ function renderCurrentStep() {
     speakerEl.textContent = "";
     textEl.className = "text";
     textEl.textContent = step.prompt || "選択してください。";
+    currentFullText = textEl.textContent;
+    currentVisibleText = currentFullText;
+    isTyping = false;
     choicesEl.classList.remove("hidden");
     stageEl.classList.add("has-choices");
     step.choices.forEach((choice) => {
@@ -286,6 +317,9 @@ function renderCurrentStep() {
     state.ending = step.ending;
     speakerEl.textContent = "";
     textEl.innerHTML = `<div class="ending-title">${escapeHtml(step.title)}</div><div class="ending-subtitle">${escapeHtml(step.subtitle)}</div>`;
+    currentFullText = `${step.title}\n${step.subtitle}`;
+    currentVisibleText = currentFullText;
+    isTyping = false;
     choicesEl.classList.remove("hidden");
     stageEl.classList.add("has-choices");
     const btn = document.createElement("button");
@@ -293,12 +327,79 @@ function renderCurrentStep() {
     btn.className = "choice-button";
     btn.textContent = "最初から";
     btn.addEventListener("click", async () => {
+      stopTypewriter();
       state = structuredClone(scenario.stateDefaults);
       backlog = [];
+      currentStepLoggedKey = "";
       await goToScene(scenario.startScene);
     });
     choicesEl.appendChild(btn);
   }
+}
+
+function logStepOnce(step) {
+  const key = `${scene.id}:${stepIndex}`;
+  if (currentStepLoggedKey === key) return;
+  currentStepLoggedKey = key;
+  if (!step.text) return;
+  if (backlog[backlog.length - 1] === step.text) return;
+  backlog.push(step.text);
+}
+
+function typewriterSpeed(type) {
+  if (type === "document") return 12;
+  if (type === "voice") return 45;
+  if (type === "text") return 35;
+  return 0;
+}
+
+function startTypewriter(text, type) {
+  stopTypewriter();
+  const speed = typewriterSpeed(type);
+  currentVisibleText = "";
+  textEl.textContent = "";
+  if (speed <= 0 || !text) {
+    currentVisibleText = text || "";
+    textEl.textContent = currentVisibleText;
+    isTyping = false;
+    return;
+  }
+
+  const chars = Array.from(text);
+  let index = 0;
+  isTyping = true;
+
+  const tick = () => {
+    if (!isTyping) return;
+    const chunkSize = type === "document" ? 2 : 1;
+    for (let i = 0; i < chunkSize && index < chars.length; i += 1) {
+      currentVisibleText += chars[index];
+      index += 1;
+    }
+    textEl.textContent = currentVisibleText;
+    if (index >= chars.length) {
+      isTyping = false;
+      typewriterTimer = null;
+      return;
+    }
+    typewriterTimer = window.setTimeout(tick, speed);
+  };
+
+  tick();
+}
+
+function stopTypewriter() {
+  if (typewriterTimer) {
+    window.clearTimeout(typewriterTimer);
+    typewriterTimer = null;
+  }
+  isTyping = false;
+}
+
+function revealCurrentPage() {
+  stopTypewriter();
+  currentVisibleText = currentFullText;
+  textEl.textContent = currentFullText;
 }
 
 function decideEnding() {
@@ -312,15 +413,20 @@ function nextStep() {
   if (!scene) return;
   const step = scene.steps[stepIndex];
   if (!step || step.type === "choice" || step.type === "ending") return;
+
+  if (isTyping) {
+    revealCurrentPage();
+    return;
+  }
+
   if (["text", "document", "voice", "title"].includes(step.type)) {
     if (pageIndex < pageSegments.length - 1) {
-      if (pageIndex === 0) backlog.push(step.text);
       pageIndex += 1;
       renderCurrentStep();
       return;
     }
-    if (pageSegments.length) backlog.push(step.text);
   }
+
   stepIndex += 1;
   pageIndex = 0;
   if (stepIndex >= scene.steps.length) return;

@@ -144,3 +144,46 @@ styles/theme.css
 - 暗さ
 - グラデーション
 - 作品固有の雰囲気
+
+
+## v1.0 line-based pagination note
+
+v1.0では、ページ分割を単純な文字数ではなく、推定折り返し行数ベースで行う。  
+これは、iPhone実機で文書表示が枠内に収まらない問題を受けた修正である。
+
+現行目安:
+
+```text
+document: charsPerLine 20 / maxLines 15
+voice: charsPerLine 22 / maxLines 8
+text: charsPerLine 21 / maxLines 12
+```
+
+この値は将来的にmanifestまたはUI設定へ移す候補である。
+
+## v1.1 typewriter design
+
+v1.1では、レトロRPG風の文字送りを導入する。  
+文字送りは没入感を上げるための演出であり、読みにくさを増やしてはいけない。
+
+### 原則
+
+- 文字送り中のタップで全文を即時表示する。
+- 全文表示後のタップで次ページへ進む。
+- 文書表示は遅くしすぎない。
+- 文字送りが苦手な利用者のため、将来的に瞬時表示設定を用意する。
+
+## v1.2 strict pagination note
+
+v1.2では、ページ分割の過小見積もりを防ぐため、句点単位のかたまりが1行上限を超える場合でも必ず分割する。  
+また、iPhone Safariで下部UIに本文が隠れるリスクを下げるため、固定画面の高さ指定は `100svh` 寄りに調整する。
+
+現行目安:
+
+```text
+document: charsPerLine 18 / maxLines 12
+voice: charsPerLine 20 / maxLines 7
+text: charsPerLine 20 / maxLines 10
+```
+
+この値は、読めないことを避けるため安全側に倒した暫定値である。
