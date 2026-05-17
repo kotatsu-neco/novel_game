@@ -2,7 +2,7 @@
 
 ## この文書の役割
 
-これは `maze-loop-v03-opening-depth` の Runtime 同期版シナリオソースです。
+これは `maze-loop-v04-ui-choice-canon` の Runtime 同期版シナリオソースです。
 
 # content-pack
 title: 迷路
@@ -319,7 +319,7 @@ ambience: silent
 [choice]
 prompt: どの道へ進むか。
 
-- label: 頭のない人型が付いた左の通路へ進む
+- label: 左の道を選ぶ
   next: wrong_head_loop1
   score: -1
   increment:
@@ -327,13 +327,13 @@ prompt: どの道へ進むか。
   set:
     lastLoopCause: first_crossroad
 
-- label: 正面の、人影がまっすぐ立っている通路へ進む
+- label: 真ん中の道を選ぶ
   next: safe_first_path
   score: 1
   set:
     lastLoopCause: none
 
-- label: 腕のない人型が付いた右の通路へ進む
+- label: 右の道を選ぶ
   next: wrong_arm_loop1
   score: -1
   increment:
@@ -638,7 +638,7 @@ ambience: silent
 [choice]
 prompt: どの道へ進むか。
 
-- label: 足のない人型の左へ進む
+- label: 左の道を選ぶ
   next: water_wrong_gate
   score: -1
   increment:
@@ -646,11 +646,11 @@ prompt: どの道へ進むか。
   set:
     lastLoopCause: water_sign
 
-- label: 水泳ピクトグラムの正面へ進む
+- label: 真ん中の道を選ぶ
   next: water_corridor_scene
   score: 0
 
-- label: 右の、まっすぐ立つ人影の通路へ進む
+- label: 右の道を選ぶ
   next: safe_second_path
   score: 1
 

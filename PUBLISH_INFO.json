@@ -1,9 +1,9 @@
 {
-  "packageName": "maze_publish_loop_v03",
+  "packageName": "maze_publish_loop_v05",
   "sourcePackage": "maze_scenario_pack_loop_v01.zip",
-  "createdAtUtc": "2026-05-17T12:58:37.506076+00:00",
+  "createdAtUtc": "2026-05-17T13:23:04.599347+00:00",
   "title": "迷路",
-  "compatibleEngine": "sn_engine_v02b_loop",
+  "compatibleEngine": "sn_engine_v02d_speed_slider",
   "containsEngine": true,
   "containsScenarioData": true,
   "openFile": "index.html",
@@ -12,5 +12,7 @@
   "choiceBlockCount": 7,
   "choiceOptionCount": 21,
   "wordingRevision": "v02",
-  "openingRevision": "v03"
+  "openingRevision": "v03",
+  "uiChoiceRevision": "v04",
+  "speedRevision": "v05"
 }

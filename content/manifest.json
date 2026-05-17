@@ -1,10 +1,10 @@
 {
   "title": "迷路",
-  "version": "maze-loop-v03-opening-depth",
+  "version": "maze-loop-v05-speed-slider",
   "entryScenario": "content/scenario/main.json",
-  "engine": "sn_engine_v02b_loop",
+  "engine": "sn_engine_v02d_speed_slider",
   "gameId": "maze",
-  "saveKey": "maze_save_loop_v03",
+  "saveKey": "maze_save_loop_v05",
   "assetPolicy": "Background PNG files from the source package were converted to WebP and resized for lighter private test use. Audio remains unset/silent unless later replaced. Runtime scenario refactored to routeCheck/mazeLoopCount loop control.",
   "requiredFiles": [
     "index.html",
@@ -23,9 +23,22 @@
       "tapWhileTyping": "show_full_page",
       "tapAfterComplete": "advance_page_or_step",
       "defaultPreset": {
-        "text": "normal",
-        "voice": "normal",
-        "document": "normal"
+        "text": 2,
+        "voice": 2,
+        "document": 2
+      },
+      "speedSlider": {
+        "enabled": true,
+        "min": 0,
+        "max": 4,
+        "default": 2,
+        "labels": [
+          "とてもゆっくり",
+          "ゆっくり",
+          "標準",
+          "速い",
+          "瞬時"
+        ]
       }
     },
     "fontSize": {
@@ -74,7 +87,8 @@
     "loopRefactorReport": "content/scenario/LOOP_REFACTOR_REPORT.md",
     "originalScenarioSource": "content/scenario/ORIGINAL_SCENARIO_SOURCE_BEFORE_LOOP_REFACTOR.md",
     "wordingRevisionReport": "content/scenario/WORDING_REVISION_REPORT.md",
-    "openingDepthRevisionReport": "content/scenario/OPENING_DEPTH_REVISION_REPORT.md"
+    "openingDepthRevisionReport": "content/scenario/OPENING_DEPTH_REVISION_REPORT.md",
+    "uiChoiceCanonFixReport": "content/scenario/UI_CHOICE_CANON_FIX_REPORT.md"
   },
   "backgrounds": {
     "station_stairs": {

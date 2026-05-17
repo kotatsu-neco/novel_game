@@ -15,10 +15,15 @@ const toastEl = document.getElementById("toast");
 const backlogEl = document.getElementById("backlog");
 const continueMarkEl = document.getElementById("continue-mark");
 const settingsEl = document.getElementById("settings");
-const speedSelects = {
+const speedControls = {
   text: document.getElementById("setting-speed-text"),
   voice: document.getElementById("setting-speed-voice"),
   document: document.getElementById("setting-speed-document")
+};
+const speedValueLabels = {
+  text: document.getElementById("setting-speed-text-label"),
+  voice: document.getElementById("setting-speed-voice-label"),
+  document: document.getElementById("setting-speed-document-label")
 };
 const fontSelects = {
   text: document.getElementById("setting-font-text"),
@@ -53,6 +58,21 @@ let typewriterController = null;
 let resizeObserver = null;
 let repaginateTimer = null;
 const MAX_ROUTE_STEPS = 500;
+
+const SPEED_LEVELS = [
+  { value: 0, label: "とてもゆっくり", ms: { text: 85, voice: 105, document: 42 } },
+  { value: 1, label: "ゆっくり", ms: { text: 70, voice: 86, document: 34 } },
+  { value: 2, label: "標準", ms: { text: 55, voice: 68, document: 26 } },
+  { value: 3, label: "速い", ms: { text: 35, voice: 45, document: 16 } },
+  { value: 4, label: "瞬時", ms: { text: 0, voice: 0, document: 0 } }
+];
+const SPEED_LEVEL_DEFAULT = 2;
+const SPEED_PRESET_TO_LEVEL = {
+  slow: 2,
+  normal: 3,
+  fast: 3,
+  instant: 4
+};
 
 
 
@@ -470,15 +490,38 @@ function stopChoiceTimer(clearElement = true) {
   }
 }
 
+
+function normalizeSpeedLevel(value) {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return Math.min(4, Math.max(0, Math.round(value)));
+  }
+  if (typeof value === "string") {
+    if (value in SPEED_PRESET_TO_LEVEL) return SPEED_PRESET_TO_LEVEL[value];
+    const parsed = Number(value);
+    if (Number.isFinite(parsed)) return Math.min(4, Math.max(0, Math.round(parsed)));
+  }
+  return SPEED_LEVEL_DEFAULT;
+}
+
+function speedLevelLabel(value) {
+  const level = SPEED_LEVELS.find((item) => item.value === normalizeSpeedLevel(value)) || SPEED_LEVELS[SPEED_LEVEL_DEFAULT];
+  return level.label;
+}
+
+function speedLevelMs(type, value) {
+  const level = SPEED_LEVELS.find((item) => item.value === normalizeSpeedLevel(value)) || SPEED_LEVELS[SPEED_LEVEL_DEFAULT];
+  return Number(level.ms?.[type]) || 0;
+}
+
 function defaultDisplaySettings() {
   const policy = manifest?.engineUiPolicy || {};
   const defaultSpeedPreset = policy?.typewriter?.defaultPreset || {};
   const defaultFontPreset = policy?.fontSize?.defaultPreset || {};
   return {
     speed: {
-      text: defaultSpeedPreset.text || "normal",
-      voice: defaultSpeedPreset.voice || "normal",
-      document: defaultSpeedPreset.document || "normal"
+      text: normalizeSpeedLevel(defaultSpeedPreset.text),
+      voice: normalizeSpeedLevel(defaultSpeedPreset.voice),
+      document: normalizeSpeedLevel(defaultSpeedPreset.document)
     },
     font: {
       text: defaultFontPreset.text || "normal",
@@ -498,8 +541,13 @@ function loadDisplaySettings() {
     const raw = window.localStorage.getItem(displaySettingsStorageKey());
     if (!raw) return defaults;
     const parsed = JSON.parse(raw);
+    const parsedSpeed = parsed.speed || {};
     return {
-      speed: { ...defaults.speed, ...(parsed.speed || {}) },
+      speed: {
+        text: normalizeSpeedLevel(parsedSpeed.text ?? defaults.speed.text),
+        voice: normalizeSpeedLevel(parsedSpeed.voice ?? defaults.speed.voice),
+        document: normalizeSpeedLevel(parsedSpeed.document ?? defaults.speed.document)
+      },
       font: { ...defaults.font, ...(parsed.font || {}) }
     };
   } catch {
@@ -517,13 +565,20 @@ function saveDisplaySettings() {
 
 function bindDisplaySettingControls() {
   userDisplaySettings = userDisplaySettings || loadDisplaySettings();
-  for (const [type, select] of Object.entries(speedSelects)) {
-    if (!select) continue;
-    select.value = userDisplaySettings.speed[type] || "normal";
-    select.addEventListener("change", () => {
-      userDisplaySettings.speed[type] = select.value;
+  for (const [type, control] of Object.entries(speedControls)) {
+    if (!control) continue;
+    control.value = String(normalizeSpeedLevel(userDisplaySettings.speed[type]));
+    updateSpeedControlLabel(type);
+    control.addEventListener("input", () => {
+      userDisplaySettings.speed[type] = normalizeSpeedLevel(control.value);
+      updateSpeedControlLabel(type);
       saveDisplaySettings();
-      showToast("文字送り速度を変更しました");
+    });
+    control.addEventListener("change", () => {
+      userDisplaySettings.speed[type] = normalizeSpeedLevel(control.value);
+      updateSpeedControlLabel(type);
+      saveDisplaySettings();
+      showToast("表示速度を変更しました");
     });
   }
   for (const [type, select] of Object.entries(fontSelects)) {
@@ -537,6 +592,13 @@ function bindDisplaySettingControls() {
       showToast("文字サイズを変更しました");
     });
   }
+}
+
+
+function updateSpeedControlLabel(type) {
+  const label = speedValueLabels?.[type];
+  if (!label) return;
+  label.textContent = speedLevelLabel(userDisplaySettings?.speed?.[type]);
 }
 
 function applyDisplaySettingsToDom() {
@@ -594,13 +656,11 @@ function formatBacklog(items) {
 }
 
 function typewriterSpeed(type) {
+  if (type === "document" || type === "voice" || type === "text") {
+    return speedLevelMs(type, userDisplaySettings?.speed?.[type]);
+  }
   const speedPolicy = manifest?.engineUiPolicy?.typewriter || {};
-  const presetName = userDisplaySettings?.speed?.[type] || speedPolicy?.defaultPreset?.[type] || "normal";
-  const presetSpeeds = speedPolicy?.speedPresetsMsPerChar?.[presetName] || {};
   const legacySpeeds = speedPolicy?.speedsMsPerChar || {};
-  if (type === "document") return Number(presetSpeeds.document ?? legacySpeeds.document) || 12;
-  if (type === "voice") return Number(presetSpeeds.voice ?? legacySpeeds.voice) || 45;
-  if (type === "text") return Number(presetSpeeds.text ?? legacySpeeds.text) || 35;
   return Number(legacySpeeds.title) || 0;
 }
 

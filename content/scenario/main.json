@@ -1,12 +1,12 @@
 {
   "meta": {
     "title": "迷路",
-    "version": "maze-loop-v03-opening-depth",
+    "version": "maze-loop-v05-speed-slider",
     "language": "ja",
     "estimatedMinutes": 22.1,
     "description": "都市伝説動画をきっかけに地下の迷路へ迷い込む短編サウンドノベル。",
     "scenarioPackId": "maze",
-    "compatibleEngine": "sn_engine_v02b_loop",
+    "compatibleEngine": "sn_engine_v02d_speed_slider",
     "compiledFrom": "content/scenario/SCENARIO_SOURCE.md",
     "sourceStatusByScene": {
       "opening": "draft",
@@ -104,6 +104,28 @@
         "less light narrative tone"
       ],
       "createdAtUtc": "2026-05-17T12:58:10.063324+00:00"
+    },
+    "uiChoiceRevision": {
+      "version": "v04",
+      "createdAtUtc": "2026-05-17T13:14:05.467255+00:00",
+      "settingsUiCanon": "2 columns: 表示速度 / 文字サイズ; labels: 本文 / 台詞 / 文書",
+      "pathChoiceCanon": [
+        "左の道を選ぶ",
+        "真ん中の道を選ぶ",
+        "右の道を選ぶ"
+      ],
+      "forbiddenTerms": [
+        "身体性の強い旧表現",
+        "旧ラベルA",
+        "旧ラベルB",
+        "旧ラベルC"
+      ]
+    },
+    "speedRevision": {
+      "version": "v05",
+      "createdAtUtc": "2026-05-17T13:23:04.460661+00:00",
+      "defaultSpeedLevel": 2,
+      "ui": "range slider"
     }
   },
   "startScene": "opening",
@@ -319,7 +341,7 @@
           "prompt": "どの道へ進むか。",
           "choices": [
             {
-              "label": "頭のない人型が付いた左の通路へ進む",
+              "label": "左の道を選ぶ",
               "next": "wrong_head_loop1",
               "score": -1,
               "increment": {
@@ -330,7 +352,7 @@
               }
             },
             {
-              "label": "正面の、人影がまっすぐ立っている通路へ進む",
+              "label": "真ん中の道を選ぶ",
               "next": "safe_first_path",
               "score": 1,
               "set": {
@@ -338,7 +360,7 @@
               }
             },
             {
-              "label": "腕のない人型が付いた右の通路へ進む",
+              "label": "右の道を選ぶ",
               "next": "wrong_arm_loop1",
               "score": -1,
               "increment": {
@@ -580,7 +602,7 @@
           "prompt": "どの道へ進むか。",
           "choices": [
             {
-              "label": "足のない人型の左へ進む",
+              "label": "左の道を選ぶ",
               "next": "water_wrong_gate",
               "score": -1,
               "increment": {
@@ -591,12 +613,12 @@
               }
             },
             {
-              "label": "水泳ピクトグラムの正面へ進む",
+              "label": "真ん中の道を選ぶ",
               "next": "water_corridor_scene",
               "score": 0
             },
             {
-              "label": "右の、まっすぐ立つ人影の通路へ進む",
+              "label": "右の道を選ぶ",
               "next": "safe_second_path",
               "score": 1
             }

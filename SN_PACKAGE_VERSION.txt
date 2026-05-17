@@ -1,4 +1,6 @@
-sn_engine_v02b_loop
-Internal source: sn_engine_v02a + generic loop control
+sn_engine_v02d_speed_slider
+Internal source: sn_engine_v02c_ui_loop + speed slider controls
 Package role: sound novel engine without sample scenario
-Main update: routeCheck step, choice/rule increment/decrement effects, loopCount-friendly route control
+Main update: speed select controls replaced with range sliders; default speed shifted slower
+Loop control: routeCheck + increment/decrement effects retained
+Settings UI: 2 columns retained, speed sliders on the left, font-size selects on the right

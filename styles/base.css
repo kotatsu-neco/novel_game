@@ -449,29 +449,6 @@ body {
   font-size: 14px;
 }
 
-.settings-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.settings-grid label {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 12px;
-  color: rgba(255,255,255,0.82);
-}
-
-.settings-grid select {
-  min-height: 34px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.22);
-  background: rgba(18,14,14,0.92);
-  color: #fff;
-  padding: 4px 8px;
-}
-
 .settings-note {
   margin: 8px 0 0;
   font-size: 11px;
@@ -518,7 +495,31 @@ html[data-font-document="large"] .document-text {
 }
 
 
-/* v22b settings layout: two clear columns */
+/* v02 dynamic Japanese text layout foundation */
+.measurement-text {
+  white-space: pre-wrap;
+  line-break: strict;
+  word-break: normal;
+  overflow-wrap: normal;
+  box-sizing: border-box;
+}
+
+.text,
+.document-text,
+.voice-text {
+  line-break: strict;
+  word-break: normal;
+}
+
+/* Emergency fallback remains available if runtime measurement misses a browser edge case. */
+.text {
+  overflow-wrap: anywhere;
+}
+
+
+
+
+/* Canonical settings layout: two clear columns with speed sliders */
 .settings-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -548,6 +549,12 @@ html[data-font-document="large"] .document-text {
   color: rgba(255,255,255,0.82);
 }
 
+.settings-column select,
+.settings-column input[type="range"] {
+  width: 100%;
+  max-width: 100%;
+}
+
 .settings-column select {
   min-height: 34px;
   border-radius: 8px;
@@ -555,28 +562,25 @@ html[data-font-document="large"] .document-text {
   background: rgba(18,14,14,0.92);
   color: #fff;
   padding: 4px 8px;
-  width: 100%;
-  max-width: 100%;
 }
 
-
-/* v02 dynamic Japanese text layout foundation */
-.measurement-text {
-  white-space: pre-wrap;
-  line-break: strict;
-  word-break: normal;
-  overflow-wrap: normal;
-  box-sizing: border-box;
+.setting-slider-label {
+  gap: 6px;
 }
 
-.text,
-.document-text,
-.voice-text {
-  line-break: strict;
-  word-break: normal;
+.setting-value-label {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 11px;
+  color: rgba(255,245,230,0.82);
 }
 
-/* Emergency fallback remains available if runtime measurement misses a browser edge case. */
-.text {
-  overflow-wrap: anywhere;
+.settings-column input[type="range"] {
+  accent-color: #f4d6a0;
+}
+
+@media (max-width: 360px) {
+  .settings-columns {
+    grid-template-columns: 1fr;
+  }
 }
