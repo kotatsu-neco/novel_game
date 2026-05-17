@@ -21,7 +21,7 @@ export function runValidator(scenario) {
     if (next && !ids.has(next)) errors.push(`${from}: next scene not found: ${next}`);
   };
 
-  const allowedTypes = new Set(["text", "voice", "document", "title", "choice", "jump", "endingCheck", "ending", "pageBreak", "conditionalText"]);
+  const allowedTypes = new Set(["text", "voice", "document", "title", "choice", "jump", "routeCheck", "endingCheck", "ending", "pageBreak", "conditionalText"]);
   const endings = new Set();
 
   for (const scene of scenario.scenes) {
@@ -78,10 +78,24 @@ export function runValidator(scenario) {
           if ("score" in choice && typeof choice.score !== "number") {
             errors.push(`${choiceLabel}: score must be number`);
           }
-          if ("set" in choice && (typeof choice.set !== "object" || Array.isArray(choice.set) || choice.set === null)) {
-            errors.push(`${choiceLabel}: set must be object`);
-          }
+          checkEffectsBlock(errors, choiceLabel, choice);
         }
+      }
+
+      if (step.type === "routeCheck") {
+        if (!Array.isArray(step.rules) || step.rules.length === 0) {
+          errors.push(`${label}: routeCheck must have rules`);
+        }
+        for (const [ruleIndex, rule] of (step.rules || []).entries()) {
+          const ruleLabel = `${label}.rules[${ruleIndex}]`;
+          if (!rule.next) errors.push(`${ruleLabel}: next is required`);
+          checkNext(ruleLabel, rule.next);
+          if (!rule.default) {
+            checkConditionBlock(errors, `${ruleLabel}.if`, rule.if || rule.when || rule.condition);
+          }
+          checkEffectsBlock(errors, ruleLabel, rule);
+        }
+        if (step.fallback) checkNext(`${label}.fallback`, step.fallback);
       }
 
       if (step.type === "endingCheck") {
@@ -95,6 +109,7 @@ export function runValidator(scenario) {
           if (!rule.default) {
             checkConditionBlock(errors, `${ruleLabel}.if`, rule.if || rule.when || rule.condition);
           }
+          checkEffectsBlock(errors, ruleLabel, rule);
         }
         if (step.fallback) checkNext(`${label}.fallback`, step.fallback);
       }
@@ -146,4 +161,26 @@ function checkConditionBlock(errors, label, condition) {
   }
   if ("in" in condition && !Array.isArray(condition.in)) errors.push(`${label}.in: must be array`);
   if ("notIn" in condition && !Array.isArray(condition.notIn)) errors.push(`${label}.notIn: must be array`);
+}
+
+
+function checkEffectsBlock(errors, label, source = {}) {
+  for (const key of ["set", "increment", "inc", "decrement", "dec"]) {
+    if (key in source && (typeof source[key] !== "object" || Array.isArray(source[key]) || source[key] === null)) {
+      errors.push(`${label}: ${key} must be object`);
+    }
+  }
+  for (const key of ["increment", "inc", "decrement", "dec"]) {
+    for (const [stateKey, value] of Object.entries(source[key] || {})) {
+      if (typeof stateKey !== "string" || stateKey.length === 0) {
+        errors.push(`${label}.${key}: state key must be non-empty string`);
+      }
+      if (typeof value !== "number") {
+        errors.push(`${label}.${key}.${stateKey}: value must be number`);
+      }
+    }
+  }
+  if ("score" in source && typeof source.score !== "number") {
+    errors.push(`${label}: score must be number`);
+  }
 }

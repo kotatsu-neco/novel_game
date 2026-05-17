@@ -1,6 +1,4 @@
-sn_engine_v02a
-Internal source: sn_engine_v02 + ellipsis/kisoku hardening
-Package role: no-sample novel game engine
-Contains sample scenario: no
-Contains completed scenario data: no
-Main topic: Japanese text display engine foundation, kinsoku hardening, static logic checks
+sn_engine_v02b_loop
+Internal source: sn_engine_v02a + generic loop control
+Package role: sound novel engine without sample scenario
+Main update: routeCheck step, choice/rule increment/decrement effects, loopCount-friendly route control

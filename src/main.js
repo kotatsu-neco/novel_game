@@ -352,6 +352,18 @@ function renderCurrentStep() {
     return;
   }
 
+  if (step.type === "routeCheck") {
+    const next = decideRoute(step);
+    if (next) {
+      goToScene(next);
+      return;
+    }
+    stepIndex += 1;
+    pageIndex = 0;
+    renderCurrentStep();
+    return;
+  }
+
   if (step.type === "ending") {
     state.ending = step.ending;
     speakerEl.textContent = "";
@@ -409,9 +421,7 @@ function renderChoiceStep(step) {
 
 async function chooseOption(choice, labelOverride = "") {
   if (!choice || !choice.next) return;
-  if (choice.set) setStateValues(choice.set);
-  if (typeof choice.score === "number") state.score += choice.score;
-  if (choice.forceEnding) state.ending = choice.forceEnding;
+  applyStateEffects(choice);
   pushBacklog({ kind: "choice", text: labelOverride || choice.label || "選択", sceneId: scene.id, stepIndex });
   await goToScene(choice.next);
 }
@@ -641,22 +651,52 @@ function revealCurrentPage() {
 
 function setStateValues(data) {
   for (const [key, value] of Object.entries(data || {})) {
-    const parts = String(key).split(".");
-    let current = state;
-    for (const part of parts.slice(0, -1)) {
-      if (!current[part] || typeof current[part] !== "object") current[part] = {};
-      current = current[part];
-    }
-    current[parts[parts.length - 1]] = value;
+    setStateValue(key, value);
   }
+}
+
+function setStateValue(path, value) {
+  const parts = String(path).split(".");
+  let current = state;
+  for (const part of parts.slice(0, -1)) {
+    if (!current[part] || typeof current[part] !== "object") current[part] = {};
+    current = current[part];
+  }
+  current[parts[parts.length - 1]] = value;
+}
+
+function incrementStateValues(data) {
+  for (const [key, amount] of Object.entries(data || {})) {
+    const currentValue = Number(getStateValue(key) || 0);
+    const delta = Number(amount);
+    setStateValue(key, currentValue + (Number.isFinite(delta) ? delta : 0));
+  }
+}
+
+function decrementStateValues(data) {
+  for (const [key, amount] of Object.entries(data || {})) {
+    const currentValue = Number(getStateValue(key) || 0);
+    const delta = Number(amount);
+    setStateValue(key, currentValue - (Number.isFinite(delta) ? delta : 0));
+  }
+}
+
+function applyStateEffects(source = {}) {
+  if (source.set) setStateValues(source.set);
+  if (source.increment) incrementStateValues(source.increment);
+  if (source.inc) incrementStateValues(source.inc);
+  if (source.decrement) decrementStateValues(source.decrement);
+  if (source.dec) decrementStateValues(source.dec);
+  if (typeof source.score === "number") state.score += source.score;
+  if (source.forceEnding) state.ending = source.forceEnding;
+  if (source.ending) state.ending = source.ending;
 }
 
 function decideEnding(step = {}) {
   if (Array.isArray(step.rules) && step.rules.length > 0) {
     for (const rule of step.rules) {
       if (rule.default === true || evaluateCondition(rule.if || rule.when || rule.condition)) {
-        if (rule.set) setStateValues(rule.set);
-        if (rule.ending) state.ending = rule.ending;
+        applyStateEffects(rule);
         if (rule.next) return rule.next;
       }
     }
@@ -668,6 +708,18 @@ function decideEnding(step = {}) {
   if (state.score >= 2) return "ending_true";
   if (state.score >= 0) return "ending_normal";
   return "ending_bad";
+}
+
+function decideRoute(step = {}) {
+  if (Array.isArray(step.rules) && step.rules.length > 0) {
+    for (const rule of step.rules) {
+      if (rule.default === true || evaluateCondition(rule.if || rule.when || rule.condition)) {
+        applyStateEffects(rule);
+        if (rule.next) return rule.next;
+      }
+    }
+  }
+  return step.fallback || null;
 }
 
 function evaluateCondition(condition) {

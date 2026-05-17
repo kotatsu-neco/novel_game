@@ -1,19 +1,10 @@
-# 迷路 WebP搭載版 v01
 
-## 内容
 
-`maze_sound_novel_v04(1).zip` を `sn_engine_v02a` 互換へ搭載した確認用パッケージです。
+## v02 wording revision
 
-## 変更
+本文・選択肢内のピクトグラム説明を修正し、露骨な攻略ヒントになっていた箇所を抑制しました。詳細は `content/scenario/WORDING_REVISION_REPORT.md` を参照してください。
 
-```text
-- SCENARIO_SOURCE.md を main.json へ変換
-- 背景PNG 8枚をWebPへ変換
-- 画像の最大辺を1440pxへ縮小
-- manifest backgrounds を image 指定へ変更
-- 個人名入りREADMEを README_FOR_AUTHOR.md に変更
-```
 
-## 注意
+## v03 opening depth revision
 
-実ブラウザ表示とiPhone Safari実機確認は未実施です。
+冒頭の主人公描写を厚くし、通常なら取る助けを求める行動、スマホ確認、駅員・非常口確認を本文に反映しました。詳細は `content/scenario/OPENING_DEPTH_REVISION_REPORT.md` を参照してください。

@@ -1,11 +1,11 @@
 {
   "title": "迷路",
-  "version": "maze-webp-mount-v01",
+  "version": "maze-loop-v03-opening-depth",
   "entryScenario": "content/scenario/main.json",
-  "engine": "sn_engine_v02a",
+  "engine": "sn_engine_v02b_loop",
   "gameId": "maze",
-  "saveKey": "maze_save_webp_v01",
-  "assetPolicy": "Background PNG files from the source package were converted to WebP and resized for lighter private test use. Audio remains unset/silent unless later replaced.",
+  "saveKey": "maze_save_loop_v03",
+  "assetPolicy": "Background PNG files from the source package were converted to WebP and resized for lighter private test use. Audio remains unset/silent unless later replaced. Runtime scenario refactored to routeCheck/mazeLoopCount loop control.",
   "requiredFiles": [
     "index.html",
     "src/main.js",
@@ -49,6 +49,18 @@
       "autoPagination": true,
       "kinsoku": true,
       "backlogKindEntries": true
+    },
+    "loopControl": {
+      "stateKeys": [
+        "mazeLoopCount",
+        "lastLoopCause"
+      ],
+      "stepType": "routeCheck",
+      "choiceEffects": [
+        "increment",
+        "set",
+        "score"
+      ]
     }
   },
   "contentPack": {
@@ -58,7 +70,11 @@
     "scenarioSource": "content/scenario/SCENARIO_SOURCE.md",
     "backgroundAssignment": "content/scenario/BACKGROUND_ASSIGNMENT.md",
     "assetReport": "content/scenario/ASSET_REPORT.md",
-    "sourceReport": "content/scenario/SOURCE_REPORT.md"
+    "sourceReport": "content/scenario/SOURCE_REPORT.md",
+    "loopRefactorReport": "content/scenario/LOOP_REFACTOR_REPORT.md",
+    "originalScenarioSource": "content/scenario/ORIGINAL_SCENARIO_SOURCE_BEFORE_LOOP_REFACTOR.md",
+    "wordingRevisionReport": "content/scenario/WORDING_REVISION_REPORT.md",
+    "openingDepthRevisionReport": "content/scenario/OPENING_DEPTH_REVISION_REPORT.md"
   },
   "backgrounds": {
     "station_stairs": {

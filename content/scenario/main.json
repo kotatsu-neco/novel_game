@@ -1,12 +1,12 @@
 {
   "meta": {
     "title": "迷路",
-    "version": "maze-v04-webp-mount-v01",
+    "version": "maze-loop-v03-opening-depth",
     "language": "ja",
     "estimatedMinutes": 22.1,
     "description": "都市伝説動画をきっかけに地下の迷路へ迷い込む短編サウンドノベル。",
     "scenarioPackId": "maze",
-    "compatibleEngine": "sn_engine_v02a",
+    "compatibleEngine": "sn_engine_v02b_loop",
     "compiledFrom": "content/scenario/SCENARIO_SOURCE.md",
     "sourceStatusByScene": {
       "opening": "draft",
@@ -84,12 +84,34 @@
       "trueRouteScorePositive": true,
       "badRouteScoreNegative": true,
       "finalChoiceDirectsEnding": true
+    },
+    "loopControl": "routeCheck + mazeLoopCount",
+    "wordingRevision": {
+      "version": "v02",
+      "focus": [
+        "removed repeated insensitive pictogram wording",
+        "reduced overt hint exposition",
+        "revised final-choice wording"
+      ],
+      "createdAtUtc": "2026-05-17T12:48:29.744820+00:00"
+    },
+    "openingRevision": {
+      "version": "v03",
+      "focus": [
+        "thicker protagonist grounding",
+        "ordinary help-seeking behavior",
+        "subtle collapse of everyday station scenery",
+        "less light narrative tone"
+      ],
+      "createdAtUtc": "2026-05-17T12:58:10.063324+00:00"
     }
   },
   "startScene": "opening",
   "stateDefaults": {
     "score": 0,
-    "ending": null
+    "ending": null,
+    "mazeLoopCount": 0,
+    "lastLoopCause": null
   },
   "scenes": [
     {
@@ -97,7 +119,7 @@
       "steps": [
         {
           "type": "text",
-          "text": "白井乃々香は、地下鉄の階段を降りながら動画を見ていた。\n\n大学の帰りだった。講義は四限で終わったが、友人と少し話し、コンビニに寄り、駅に着いたころには空が暗くなりかけていた。\n\nスマホの画面には、保存済みの動画が表示されている。"
+          "text": "白井乃々香は、地下鉄の階段を降りながら、片方のイヤホンで動画を聞いていた。\n\n大学の帰りだった。四限のあと、友人と学食の前で少し話し、コンビニで明日の朝食を買い、駅に着いたころには空が暗くなりかけていた。\n\n改札前の床は、雨の日でもないのに湿っていた。  \n天井の蛍光灯は一本だけ色が違い、白というより青に近い光を落としている。  \nいつもの駅のはずなのに、人の流れが少ない。\n\n乃々香は、そこまで気にしなかった。\n\nスマホの画面には、保存済みの動画が表示されている。"
         },
         {
           "type": "document",
@@ -105,7 +127,7 @@
         },
         {
           "type": "text",
-          "text": "いかにも雑なタイトルだった。サムネイルには赤い太字で「絶対に振り返るな」と書かれている。こういう動画ほど、たいてい何も起きない。\n\nそれでも乃々香はパート21まで見ていた。暇つぶしとしては、ちょうどよかった。\n\n片方のイヤホンから、安っぽい効果音が鳴った。"
+          "text": "いかにも雑なタイトルだった。サムネイルには赤い太字で「絶対に振り返るな」と書かれている。こういう動画ほど、たいてい何も起きない。\n\nそれでも乃々香はパート21まで見ていた。怖いからではない。何かを見ていないと、帰り道の疲れが急に体へ戻ってくるからだった。\n\n階段の手すりは冷たかった。  \n降りるたびに、靴音がひとつ遅れて返ってくる。\n\n乃々香は一度だけ足を止め、後ろを見ようとした。  \nだが、上の階から降りてくる人の気配はなかった。\n\n片方のイヤホンから、安っぽい効果音が鳴った。"
         },
         {
           "type": "voice",
@@ -113,7 +135,7 @@
         },
         {
           "type": "text",
-          "text": "乃々香は画面を見たまま、階段を降りた。"
+          "text": "乃々香は画面を見たまま、最後の踊り場を曲がった。"
         },
         {
           "type": "jump",
@@ -128,7 +150,7 @@
       "steps": [
         {
           "type": "text",
-          "text": "動画の中で、合成音声が急に低くなる。"
+          "text": "動画の中で、合成音声が急に低くなる。\n\n耳の奥に、少しだけ圧がかかった。  \n地下鉄のホームに近づいたときの、あの低い震えとは違っていた。"
         },
         {
           "type": "voice",
@@ -136,7 +158,7 @@
         },
         {
           "type": "text",
-          "text": "同じ言葉が、三度続いた。\n\n乃々香は笑いかけた。怖がらせたいのだろうが、声が機械的すぎた。\n\n画面には、雑なテロップが出ている。"
+          "text": "同じ言葉が、三度続いた。\n\n乃々香は笑いかけた。怖がらせたいのだろうが、声が機械的すぎた。\n\nけれど、階段の下から返ってくるはずの構内音がない。\n\n画面には、雑なテロップが出ている。"
         },
         {
           "type": "document",
@@ -144,7 +166,7 @@
         },
         {
           "type": "text",
-          "text": "そこまで読んだところで、最後の一段を踏んだ。\n\n肩が、誰かに当たった。"
+          "text": "そこまで読んだところで、最後の一段を踏んだ。\n\n肩が、誰かに当たった。\n\n布の感触ではなかった。  \n冷たい壁にぶつかったような硬さでもなかった。\n\n人の肩だ、と体だけが先に判断した。"
         },
         {
           "type": "voice",
@@ -152,7 +174,7 @@
         },
         {
           "type": "text",
-          "text": "言い終える前に、乃々香は振り返っていた。\n\nそこには、誰もいなかった。"
+          "text": "言い終える前に、乃々香は振り返っていた。\n\nそこには、誰もいなかった。\n\n階段も、なかった。"
         },
         {
           "type": "jump",
@@ -167,7 +189,15 @@
       "steps": [
         {
           "type": "text",
-          "text": "人がいない。\n\nそれが最初に分かった異変だった。\n\n改札へ向かうはずの地下通路には、誰もいなかった。会社員も、学生も、ベビーカーも、駅員もいない。\n\n音もない。構内放送も、電車の低い振動も、遠くの足音もない。\n\n乃々香はイヤホンを外した。\n\n動画は止まっている。画面にはまだ、同じテロップが残っていた。"
+          "text": "人がいない。\n\nそれが最初に分かった異変だった。\n\n改札へ向かうはずの地下通路には、誰もいなかった。会社員も、学生も、ベビーカーも、駅員もいない。\n\n音もない。構内放送も、電車の低い振動も、遠くの足音もない。\n\n乃々香はイヤホンを外した。\n\n「すみません」\n\n声は、思ったより小さく出た。\n\n乃々香は息を吸い直す。"
+        },
+        {
+          "type": "voice",
+          "text": "「誰かいませんか」"
+        },
+        {
+          "type": "text",
+          "text": "返事はなかった。\n\nもう一度、今度は少し大きく呼んだ。  \n白いタイルの壁が、声の端だけを薄く返した。\n\n動画は止まっている。画面にはまだ、同じテロップが残っていた。"
         },
         {
           "type": "document",
@@ -175,7 +205,7 @@
         },
         {
           "type": "text",
-          "text": "乃々香は、階段を見た。\n\nさっき降りてきたはずの階段は、なかった。\n\nその代わりに、同じ幅の地下通路が、左右と正面へ伸びていた。"
+          "text": "乃々香は、階段のあったはずの方を見た。\n\nさっき降りてきたはずの階段は、なかった。\n\nその代わりに、同じ幅の地下通路が、左右と正面へ伸びていた。\n\n通路の天井には、駅で見慣れた非常口灯のようなものがある。  \nけれど矢印の向きだけが、見るたびに少し違っている気がした。\n\n乃々香はスマホを握り直した。  \n手のひらが汗で湿っている。"
         },
         {
           "type": "jump",
@@ -190,20 +220,20 @@
       "steps": [
         {
           "type": "choice",
-          "prompt": "まず何を確認するか。",
+          "prompt": "まず、何を確かめるか。",
           "choices": [
             {
-              "label": "降りてきた階段を探す",
+              "label": "階段と駅員を探す",
               "next": "check_missing_stairs",
               "score": 0
             },
             {
-              "label": "スマホの動画を確認する",
+              "label": "スマホで連絡を試す",
               "next": "check_saved_video",
               "score": 1
             },
             {
-              "label": "通路の案内板を見る",
+              "label": "案内板と非常口表示を見る",
               "next": "check_sign_shape",
               "score": 1
             }
@@ -218,7 +248,7 @@
       "steps": [
         {
           "type": "text",
-          "text": "乃々香は、さっき降りてきた階段を探した。\n\n階段はない。\n\n壁があるわけでも、扉で塞がれているわけでもない。最初からそこには通路しかなかった、という形で消えている。\n\n床のタイルは、階段があった場所まで同じ模様で続いていた。\n\n戻る場所が消えたのではない。\n\n戻る場所が、最初からなかったことにされている。"
+          "text": "乃々香は、さっき降りてきた階段を探した。\n\n最初は歩いた。  \n次に少し早足になった。  \n最後には、白い壁に沿って手を這わせながら戻った。\n\n階段はない。\n\n壁で塞がれているのではない。シャッターが下りているのでもない。最初からそこには通路しかなかった、という形で消えている。\n\n床のタイルは、階段があった場所まで同じ模様で続いていた。\n\n「駅員さん」\n\n声を出すと、すぐに恥ずかしさが来た。  \nそれでも乃々香はもう一度呼んだ。\n\n「誰か」\n\n返事はない。\n\n駅員室の窓も、改札機の光も、非常ボタンも見当たらなかった。  \nただ、駅に似たものだけが続いている。\n\n戻る場所が消えたのではない。\n\n戻る場所が、最初からなかったことにされている。"
         },
         {
           "type": "jump",
@@ -233,7 +263,7 @@
       "steps": [
         {
           "type": "text",
-          "text": "乃々香はスマホを見た。\n\n通信はない。アンテナ表示は空白で、時刻だけが同じ場所に残っている。\n\nそれでも、保存済みの動画は開けた。"
+          "text": "乃々香はスマホを開いた。\n\nまず母へ電話をかけようとした。  \n発信音は鳴らなかった。\n\n画面は、通話中にも、圏外にもならない。ただ、押したはずの発信ボタンが何事もなかったように戻っている。\n\nメッセージアプリを開く。  \n最後に友人から来ていたスタンプは表示される。けれど、新しい文字を打っても、送信の矢印だけが薄いままだった。\n\n緊急通報の番号を押すことも考えた。  \n指はそこまで動いた。  \nだが、画面の上にはアンテナの表示がなかった。時刻だけが同じ場所に残っている。\n\nそれでも、保存済みの動画だけは開けた。"
         },
         {
           "type": "document",
@@ -241,7 +271,7 @@
         },
         {
           "type": "text",
-          "text": "動画のサムネイルは、さっきより暗く見えた。\n\n赤い文字の「絶対に振り返るな」だけが、やけにはっきりしている。"
+          "text": "動画のサムネイルは、さっきより暗く見えた。\n\n赤い文字の「絶対に振り返るな」だけが、やけにはっきりしている。\n\n助けを呼ぶ画面は黙っていた。  \nこの動画だけが、まだこちらを見ている。"
         },
         {
           "type": "jump",
@@ -256,7 +286,7 @@
       "steps": [
         {
           "type": "text",
-          "text": "乃々香は通路の先の案内板を見た。\n\n形は駅のものだった。緑の矢印。白い板。黒い文字。ピクトグラム。\n\nしかし、配置だけが駅で、意味が駅ではない。\n\n文字は読めない。  \nけれど、案内しようとしていることだけは分かる。\n\nそれがいちばん嫌だった。"
+          "text": "乃々香は通路の先の案内板を見た。\n\n形は駅のものだった。緑の矢印。白い板。黒い文字。ピクトグラム。非常口灯のような小さな箱も、天井近くに付いている。\n\nしかし、配置だけが駅で、意味が駅ではない。\n\n文字は読めない。  \n矢印は、正しい方向を示しているようで、少しずつ角度がずれている。  \n非常口の人影は走っているのに、出口の形が描かれていない。\n\n案内しようとしている。  \nそのことだけは分かる。\n\nそれがいちばん嫌だった。"
         },
         {
           "type": "jump",
@@ -271,7 +301,7 @@
       "steps": [
         {
           "type": "text",
-          "text": "十字路の正面に、案内板があった。\n\n緑の矢印。白い板。黒い文字。駅の案内表示に見える。\n\nけれど文字だけが読めなかった。\n\n漢字の角張った骨組みに、ひらがなの丸みと、カタカナの直線が混じっている。日本語に見える。でも、どの線も知っている字になる直前で曲がっていた。\n\nただ、ピクトグラムだけは分かる。\n\n左の案内板には、人型があった。頭がない。  \n右の案内板にも、人型がある。腕がない。  \n正面の案内板の人型だけは、何をしているのか分からないが、頭も、腕も、足もあった。"
+          "text": "十字路の正面に、案内板があった。\n\n緑の矢印。白い板。黒い文字。駅の案内表示に見える。\n\nけれど文字だけが読めなかった。\n\n漢字の角張った骨組みに、ひらがなの丸みと、カタカナの直線が混じっている。日本語に見える。でも、どの線も知っている字になる直前で曲がっていた。\n\n乃々香は、文字を読むのをやめた。\n\nただ、ピクトグラムだけは分かる。\n\n左の案内板には、人型があった。頭の部分が白く抜けている。  \n右の案内板にも、人型がある。片腕の線が途切れている。  \n正面の案内板の人型だけは、何をしているのか分からないが、輪郭が最後までつながっていた。\n\n正解に見えたわけではない。\n\nそれでも、他の二つよりは、まだ人の形に近かった。"
         },
         {
           "type": "jump",
@@ -291,17 +321,32 @@
             {
               "label": "頭のない人型が付いた左の通路へ進む",
               "next": "wrong_head_loop1",
-              "score": -1
+              "score": -1,
+              "increment": {
+                "mazeLoopCount": 1
+              },
+              "set": {
+                "lastLoopCause": "first_crossroad"
+              }
             },
             {
-              "label": "五体満足の人型が付いた正面の通路へ進む",
+              "label": "正面の、人影がまっすぐ立っている通路へ進む",
               "next": "safe_first_path",
-              "score": 1
+              "score": 1,
+              "set": {
+                "lastLoopCause": "none"
+              }
             },
             {
               "label": "腕のない人型が付いた右の通路へ進む",
               "next": "wrong_arm_loop1",
-              "score": -1
+              "score": -1,
+              "increment": {
+                "mazeLoopCount": 1
+              },
+              "set": {
+                "lastLoopCause": "first_crossroad"
+              }
             }
           ]
         }
@@ -359,7 +404,7 @@
       "steps": [
         {
           "type": "text",
-          "text": "乃々香は正面へ進んだ。\n\n人型は何を示しているのか分からなかった。歩いているようにも、立っているようにも見える。\n\nけれど、欠けてはいなかった。\n\n通路の奥に、閉鎖されたキオスクがあった。シャッターは下りている。なのに内側の灯りだけが点いている。\n\n雑誌の表紙に、読めない文字が並んでいた。その横に、小さな人型のピクトグラムが印刷されている。\n\nどれも、頭と腕と足があった。\n\n乃々香は、少しだけ息を吐いた。"
+          "text": "乃々香は正面へ進んだ。\n\n案内板の人型が何を示しているのかは分からなかった。歩いているようにも、ただ立っているようにも見える。\n\n輪郭は途中で途切れていない。\n\n通路の奥に、閉鎖されたキオスクがあった。シャッターは下りている。なのに内側の灯りだけが点いている。\n\n雑誌の表紙に、読めない文字が並んでいた。その横に、小さな人型のピクトグラムが印刷されている。\n\nどれも、同じように人の形を保っていた。\n\n乃々香は、少しだけ息を吐いた。"
         },
         {
           "type": "jump",
@@ -374,11 +419,11 @@
       "steps": [
         {
           "type": "text",
-          "text": "保存していた動画は再生できた。\n\n動画の続きには、軽い字幕が流れる。"
+          "text": "乃々香は、画面を見つめた。\n\nふざけた字幕だった。けれど、さっきの案内板と、完全に無関係とは思えない。\n\n足りない絵の先で画面が飛ぶ。\n\n「飛ぶ」という言い方が、いやに軽い。\n\n乃々香はスマホを下ろした。通路の白い壁が、画面の光よりも冷たく見えた。"
         },
         {
           "type": "document",
-          "text": "『その22：地下階段の変な案内板  \n・文字は読めないらしいｗ  \n・絵だけ見ろって話  \n・欠けてる人の方に行くと戻される  \n・水泳マークはマジで水  \n・最後は絶対振り返るな』"
+          "text": "『その22：地下階段の変な案内板  \n・文字は読めないらしいｗ  \n・絵だけは毎回同じ  \n・足りない絵の先で画面が飛ぶ  \n・泳いでるやつの先、音が変  \n・上り階段では後ろを見るな』"
         },
         {
           "type": "text",
@@ -386,7 +431,7 @@
         },
         {
           "type": "jump",
-          "next": "choice_video_response_0"
+          "next": "choice_video_response"
         }
       ],
       "background": "maze_corridor",
@@ -397,11 +442,11 @@
       "steps": [
         {
           "type": "text",
-          "text": "保存していた動画は再生できた。\n\n動画の続きには、軽い字幕が流れる。"
+          "text": "乃々香は、画面を見つめた。\n\n足りない絵の先で画面が飛ぶ。\n\nさっき飛んだのは、画面ではなかった。\n\n自分の立っている場所だった。\n\n一度目。\n\nその言葉を、乃々香は声に出さずに飲み込んだ。"
         },
         {
           "type": "document",
-          "text": "『その22：地下階段の変な案内板  \n・文字は読めないらしいｗ  \n・絵だけ見ろって話  \n・欠けてる人の方に行くと戻される  \n・水泳マークはマジで水  \n・最後は絶対振り返るな』"
+          "text": "『その22：地下階段の変な案内板  \n・文字は読めないらしいｗ  \n・絵だけは毎回同じ  \n・足りない絵の先で画面が飛ぶ  \n・泳いでるやつの先、音が変  \n・上り階段では後ろを見るな』"
         },
         {
           "type": "text",
@@ -409,14 +454,14 @@
         },
         {
           "type": "jump",
-          "next": "choice_video_response_1"
+          "next": "choice_video_response"
         }
       ],
       "background": "maze_corridor",
       "ambience": "silent"
     },
     {
-      "id": "choice_video_response_0",
+      "id": "choice_video_response",
       "steps": [
         {
           "type": "choice",
@@ -424,17 +469,17 @@
           "choices": [
             {
               "label": "動画を最後まで見直す",
-              "next": "watch_video_more_0",
+              "next": "watch_video_more",
               "score": 1
             },
             {
               "label": "怖くなって動画を閉じる",
-              "next": "close_video_0",
+              "next": "close_video",
               "score": 0
             },
             {
               "label": "コメント欄を開こうとする",
-              "next": "no_connection_comments_0",
+              "next": "no_connection_comments",
               "score": 0
             }
           ]
@@ -444,7 +489,7 @@
       "ambience": "silent"
     },
     {
-      "id": "watch_video_more_0",
+      "id": "watch_video_more",
       "steps": [
         {
           "type": "text",
@@ -468,14 +513,14 @@
         },
         {
           "type": "jump",
-          "next": "water_sign_0"
+          "next": "water_sign"
         }
       ],
       "background": "maze_corridor",
       "ambience": "silent"
     },
     {
-      "id": "close_video_0",
+      "id": "close_video",
       "steps": [
         {
           "type": "text",
@@ -491,14 +536,14 @@
         },
         {
           "type": "jump",
-          "next": "water_sign_0"
+          "next": "water_sign"
         }
       ],
       "background": "maze_corridor",
       "ambience": "silent"
     },
     {
-      "id": "no_connection_comments_0",
+      "id": "no_connection_comments",
       "steps": [
         {
           "type": "text",
@@ -506,141 +551,29 @@
         },
         {
           "type": "jump",
-          "next": "water_sign_0"
+          "next": "water_sign"
         }
       ],
       "background": "maze_corridor",
       "ambience": "silent"
     },
     {
-      "id": "choice_video_response_1",
-      "steps": [
-        {
-          "type": "choice",
-          "prompt": "動画をどう扱うか。",
-          "choices": [
-            {
-              "label": "動画を最後まで見直す",
-              "next": "watch_video_more_1",
-              "score": 1
-            },
-            {
-              "label": "怖くなって動画を閉じる",
-              "next": "close_video_1",
-              "score": 0
-            },
-            {
-              "label": "コメント欄を開こうとする",
-              "next": "no_connection_comments_1",
-              "score": 0
-            }
-          ]
-        }
-      ],
-      "background": "maze_corridor",
-      "ambience": "silent"
-    },
-    {
-      "id": "watch_video_more_1",
+      "id": "water_sign",
       "steps": [
         {
           "type": "text",
-          "text": "乃々香は動画を少し巻き戻した。\n\n合成音声は、相変わらず薄い調子で都市伝説を並べている。"
-        },
-        {
-          "type": "voice",
-          "text": "「この迷路では、案内板の文字を読もうとしてはいけません。読めるのは絵だけです」"
-        },
-        {
-          "type": "text",
-          "text": "画面の端に、小さな注意書きが出る。"
-        },
-        {
-          "type": "document",
-          "text": "『※三回戻されたらアウト、らしい』"
-        },
-        {
-          "type": "text",
-          "text": "雑な編集だった。けれど、いまの乃々香には冗談に見えなかった。"
+          "text": "次の分岐には、三つの案内板があった。\n\n左のピクトグラムは、足元の線が白く抜けている。  \n正面のピクトグラムは、横向きの人影だった。腕を伸ばしているのか、泳いでいるのか、壁の汚れで判然としない。  \n右のピクトグラムは、まっすぐ立つ人影だった。\n\n正面の通路の奥から、湿った匂いがした。\n\n乃々香は、案内板から目を離せなかった。"
         },
         {
           "type": "jump",
-          "next": "water_sign_1"
-        }
-      ],
-      "background": "maze_corridor",
-      "ambience": "silent"
-    },
-    {
-      "id": "close_video_1",
-      "steps": [
-        {
-          "type": "text",
-          "text": "乃々香は動画を閉じた。\n\n画面はホームに戻らない。通信がないから、読み込みの輪だけが回り続けている。\n\n結局、保存済み動画のサムネイルだけが残った。"
-        },
-        {
-          "type": "document",
-          "text": "『都市伝説を集めてみた　パート22』"
-        },
-        {
-          "type": "text",
-          "text": "乃々香はもう一度、それを開いた。\n\n認めたくないが、今はこれ以外に手がかりがない。"
-        },
-        {
-          "type": "jump",
-          "next": "water_sign_1"
-        }
-      ],
-      "background": "maze_corridor",
-      "ambience": "silent"
-    },
-    {
-      "id": "no_connection_comments_1",
-      "steps": [
-        {
-          "type": "text",
-          "text": "コメント欄を開こうとした。\n\n画面は白くなり、読み込みの輪だけが回る。\n\n通信がない。けれど、動画本体は再生できる。\n\nオフライン保存しておいてよかった、と乃々香は思った。  \nそれが自分をここへ入れた理由の一つでもあるのに。"
-        },
-        {
-          "type": "jump",
-          "next": "water_sign_1"
-        }
-      ],
-      "background": "maze_corridor",
-      "ambience": "silent"
-    },
-    {
-      "id": "water_sign_0",
-      "steps": [
-        {
-          "type": "text",
-          "text": "次の分岐には、三つの案内板があった。\n\n左のピクトグラムは、足のない人型。  \n正面のピクトグラムは、水泳のような図像だった。オリンピックの競技マークで見たことがあるような、横向きの人影。  \n右のピクトグラムは、五体満足の人型。\n\n水泳マークの先は、水。\n\n動画の雑な字幕が頭に残っている。\n\n通路の奥から、水の匂いがした。"
-        },
-        {
-          "type": "jump",
-          "next": "choice_water_sign_0"
+          "next": "choice_water_sign"
         }
       ],
       "background": "crossroad",
       "ambience": "silent"
     },
     {
-      "id": "water_sign_1",
-      "steps": [
-        {
-          "type": "text",
-          "text": "次の分岐には、三つの案内板があった。\n\n左のピクトグラムは、足のない人型。  \n正面のピクトグラムは、水泳のような図像だった。オリンピックの競技マークで見たことがあるような、横向きの人影。  \n右のピクトグラムは、五体満足の人型。\n\n水泳マークの先は、水。\n\n動画の雑な字幕が頭に残っている。\n\n通路の奥から、水の匂いがした。"
-        },
-        {
-          "type": "jump",
-          "next": "choice_water_sign_1"
-        }
-      ],
-      "background": "crossroad",
-      "ambience": "silent"
-    },
-    {
-      "id": "choice_water_sign_0",
+      "id": "choice_water_sign",
       "steps": [
         {
           "type": "choice",
@@ -648,17 +581,23 @@
           "choices": [
             {
               "label": "足のない人型の左へ進む",
-              "next": "wrong_feet_loop1_from_water",
-              "score": -1
+              "next": "water_wrong_gate",
+              "score": -1,
+              "increment": {
+                "mazeLoopCount": 1
+              },
+              "set": {
+                "lastLoopCause": "water_sign"
+              }
             },
             {
               "label": "水泳ピクトグラムの正面へ進む",
-              "next": "water_corridor_scene_0",
+              "next": "water_corridor_scene",
               "score": 0
             },
             {
-              "label": "五体満足の人型の右へ進む",
-              "next": "safe_second_path_0",
+              "label": "右の、まっすぐ立つ人影の通路へ進む",
+              "next": "safe_second_path",
               "score": 1
             }
           ]
@@ -668,32 +607,35 @@
       "ambience": "silent"
     },
     {
-      "id": "choice_water_sign_1",
+      "id": "water_wrong_gate",
+      "background": "crossroad",
+      "ambience": "silent",
       "steps": [
         {
-          "type": "choice",
-          "prompt": "どの道へ進むか。",
-          "choices": [
+          "type": "routeCheck",
+          "rules": [
             {
-              "label": "足のない人型の左へ進む",
-              "next": "wrong_feet_loop2_from_water",
-              "score": -1
+              "if": {
+                "state": "mazeLoopCount",
+                "gte": 3
+              },
+              "next": "loop_three_bad",
+              "ending": "bad"
             },
             {
-              "label": "水泳ピクトグラムの正面へ進む",
-              "next": "water_corridor_scene_1",
-              "score": 0
+              "if": {
+                "state": "mazeLoopCount",
+                "equals": 2
+              },
+              "next": "wrong_feet_loop2_from_water"
             },
             {
-              "label": "五体満足の人型の右へ進む",
-              "next": "safe_second_path_1",
-              "score": 1
+              "default": true,
+              "next": "wrong_feet_loop1_from_water"
             }
           ]
         }
-      ],
-      "background": "crossroad",
-      "ambience": "silent"
+      ]
     },
     {
       "id": "wrong_feet_loop1_from_water",
@@ -715,11 +657,11 @@
       "steps": [
         {
           "type": "text",
-          "text": "十字路は、さっきよりわずかに平らに見えた。\n\n左も、右も、正面も、通路の幅が似ている。  \nまだ違いはある。  \nけれど、違いを探さなければ見つからない。\n\n戻される。\n\n動画の字幕は、そう言っていた。\n\n乃々香は、今度こそ欠けていない人型を選んだ。"
+          "text": "十字路は、さっきよりわずかに平らに見えた。\n\n左も、右も、正面も、通路の幅が似ている。  \nまだ違いはある。  \nけれど、違いを探さなければ見つからない。\n\n床の継ぎ目に、さっきはなかった濡れた跡がある。\n\n乃々香は案内板を見た。  \n文字は追わない。\n\n線が最後までつながっている人影の方へ、今度は足を向けた。"
         },
         {
           "type": "jump",
-          "next": "kiosk_area_1"
+          "next": "kiosk_area"
         }
       ],
       "background": "crossroad",
@@ -738,14 +680,14 @@
         },
         {
           "type": "jump",
-          "next": "kiosk_area_2"
+          "next": "kiosk_area"
         }
       ],
       "background": "maze_corridor",
       "ambience": "silent"
     },
     {
-      "id": "water_corridor_scene_0",
+      "id": "water_corridor_scene",
       "steps": [
         {
           "type": "text",
@@ -753,59 +695,29 @@
         },
         {
           "type": "jump",
-          "next": "safe_second_path_0"
+          "next": "safe_second_path"
         }
       ],
       "background": "water_corridor",
       "ambience": "silent"
     },
     {
-      "id": "safe_second_path_0",
+      "id": "safe_second_path",
       "steps": [
         {
           "type": "text",
-          "text": "右へ進むと、通路は乾いていた。\n\n壁には相変わらず読めない文字がある。けれど案内板の人型は欠けていない。\n\n乃々香は、進む前にピクトグラムを見るようになっていた。\n\n文字は読まない。絵だけを見る。\n\nそう決めると、少しだけ通路の形が分かる気がした。"
+          "text": "右へ進むと、通路は乾いていた。\n\n壁には相変わらず読めない文字がある。案内板の人影は、輪郭が最後までつながっている。\n\n乃々香は、進む前にピクトグラムを見るようになっていた。\n\n文字は読まない。絵だけを見る。\n\nそう決めると、少しだけ通路の形が分かる気がした。"
         },
         {
           "type": "jump",
-          "next": "kiosk_area_0"
+          "next": "kiosk_area"
         }
       ],
       "background": "maze_corridor",
       "ambience": "silent"
     },
     {
-      "id": "water_corridor_scene_1",
-      "steps": [
-        {
-          "type": "text",
-          "text": "正面へ進むと、床に水が溜まっていた。\n\n浅い。靴底が濡れる程度だ。だが、通路の奥へ行くほど水位は少しずつ上がっている。\n\n天井から雫が落ちる。規則正しく、同じ間隔で。\n\n遠くで、水をかく音がした。\n\n人はいない。\n\n乃々香は引き返した。水泳ピクトグラムは、道ではなく警告だった。"
-        },
-        {
-          "type": "jump",
-          "next": "safe_second_path_1"
-        }
-      ],
-      "background": "water_corridor",
-      "ambience": "silent"
-    },
-    {
-      "id": "safe_second_path_1",
-      "steps": [
-        {
-          "type": "text",
-          "text": "右へ進むと、通路は乾いていた。\n\n壁には相変わらず読めない文字がある。けれど案内板の人型は欠けていない。\n\n乃々香は、進む前にピクトグラムを見るようになっていた。\n\n文字は読まない。絵だけを見る。\n\nそう決めると、少しだけ通路の形が分かる気がした。"
-        },
-        {
-          "type": "jump",
-          "next": "kiosk_area_1"
-        }
-      ],
-      "background": "maze_corridor",
-      "ambience": "silent"
-    },
-    {
-      "id": "kiosk_area_0",
+      "id": "kiosk_area",
       "steps": [
         {
           "type": "text",
@@ -813,14 +725,14 @@
         },
         {
           "type": "jump",
-          "next": "choice_kiosk_0"
+          "next": "choice_kiosk"
         }
       ],
       "background": "kiosk",
       "ambience": "silent"
     },
     {
-      "id": "choice_kiosk_0",
+      "id": "choice_kiosk",
       "steps": [
         {
           "type": "choice",
@@ -828,18 +740,24 @@
           "choices": [
             {
               "label": "何も取らず、先を急ぐ",
-              "next": "rush_past_kiosk_0",
+              "next": "rush_past_kiosk",
               "score": 0
             },
             {
               "label": "使わないが、水を一本買うつもりで小銭を置く",
-              "next": "keep_culture_hint_0",
+              "next": "keep_culture_hint",
               "score": 1
             },
             {
               "label": "棚の商品を勝手に持っていく",
-              "next": "kiosk_loop_warning_1",
-              "score": -1
+              "next": "kiosk_wrong_gate",
+              "score": -1,
+              "increment": {
+                "mazeLoopCount": 1
+              },
+              "set": {
+                "lastLoopCause": "kiosk"
+              }
             }
           ]
         }
@@ -848,7 +766,7 @@
       "ambience": "silent"
     },
     {
-      "id": "rush_past_kiosk_0",
+      "id": "rush_past_kiosk",
       "steps": [
         {
           "type": "text",
@@ -856,172 +774,57 @@
         },
         {
           "type": "jump",
-          "next": "cafe_choice_0"
+          "next": "cafe_choice"
         }
       ],
       "background": "maze_corridor",
       "ambience": "silent"
     },
     {
-      "id": "keep_culture_hint_0",
+      "id": "keep_culture_hint",
       "steps": [
         {
           "type": "text",
-          "text": "乃々香は財布から小銭を出し、レジ横の皿に置いた。\n\n水は飲まないかもしれない。そもそも喉は渇いていない。\n\nそれでも、買うという形を残したかった。\n\n勝手に取る生活を始めたら、戻れなくなる気がした。\n\nレジの奥で、読み取れない文字のレシートが一枚出た。\n\nその端にだけ、小さな五体満足の人型が印刷されている。"
+          "text": "乃々香は財布から小銭を出し、レジ横の皿に置いた。\n\n水は飲まないかもしれない。そもそも喉は渇いていない。\n\nそれでも、買うという形を残したかった。\n\n勝手に取る生活を始めたら、戻れなくなる気がした。\n\nレジの奥で、読み取れない文字のレシートが一枚出た。\n\nその端にだけ、小さな人影のピクトグラムが印刷されている。"
         },
         {
           "type": "jump",
-          "next": "cafe_choice_0"
+          "next": "cafe_choice"
         }
       ],
       "background": "kiosk",
       "ambience": "silent"
     },
     {
-      "id": "kiosk_area_1",
-      "steps": [
-        {
-          "type": "text",
-          "text": "通路の先に、キオスクがあった。\n\n今度はシャッターが半分だけ開いている。店員はいない。客もいない。\n\n棚には新聞のようなもの、雑誌のようなもの、菓子のような袋が並んでいる。文字はどれも読めない。\n\n乃々香は、急に気づいた。\n\nお腹が空いていない。  \n喉も渇いていない。\n\nどれだけ歩いたか分からないのに、足も痛くない。\n\nそれが、少しも安心にならなかった。"
-        },
-        {
-          "type": "jump",
-          "next": "choice_kiosk_1"
-        }
-      ],
+      "id": "kiosk_wrong_gate",
       "background": "kiosk",
-      "ambience": "silent"
-    },
-    {
-      "id": "choice_kiosk_1",
+      "ambience": "silent",
       "steps": [
         {
-          "type": "choice",
-          "prompt": "キオスクでどうするか。",
-          "choices": [
+          "type": "routeCheck",
+          "rules": [
             {
-              "label": "何も取らず、先を急ぐ",
-              "next": "rush_past_kiosk_1",
-              "score": 0
-            },
-            {
-              "label": "使わないが、水を一本買うつもりで小銭を置く",
-              "next": "keep_culture_hint_1",
-              "score": 1
-            },
-            {
-              "label": "棚の商品を勝手に持っていく",
-              "next": "kiosk_loop_warning_2",
-              "score": -1
-            }
-          ]
-        }
-      ],
-      "background": "kiosk",
-      "ambience": "silent"
-    },
-    {
-      "id": "rush_past_kiosk_1",
-      "steps": [
-        {
-          "type": "text",
-          "text": "乃々香はキオスクを通り過ぎた。\n\n必要なものはない。喉は渇かない。腹も減らない。\n\nだが、必要がないから捨てていい、という考えが一瞬浮かんだことが怖かった。\n\n食べること。払うこと。店の前で立ち止まること。  \nそういう形がなくなると、自分も少しずつ迷路に近づく。"
-        },
-        {
-          "type": "jump",
-          "next": "cafe_choice_1"
-        }
-      ],
-      "background": "maze_corridor",
-      "ambience": "silent"
-    },
-    {
-      "id": "keep_culture_hint_1",
-      "steps": [
-        {
-          "type": "text",
-          "text": "乃々香は財布から小銭を出し、レジ横の皿に置いた。\n\n水は飲まないかもしれない。そもそも喉は渇いていない。\n\nそれでも、買うという形を残したかった。\n\n勝手に取る生活を始めたら、戻れなくなる気がした。\n\nレジの奥で、読み取れない文字のレシートが一枚出た。\n\nその端にだけ、小さな五体満足の人型が印刷されている。"
-        },
-        {
-          "type": "jump",
-          "next": "cafe_choice_1"
-        }
-      ],
-      "background": "kiosk",
-      "ambience": "silent"
-    },
-    {
-      "id": "kiosk_area_2",
-      "steps": [
-        {
-          "type": "text",
-          "text": "通路の先に、キオスクがあった。\n\n今度はシャッターが半分だけ開いている。店員はいない。客もいない。\n\n棚には新聞のようなもの、雑誌のようなもの、菓子のような袋が並んでいる。文字はどれも読めない。\n\n乃々香は、急に気づいた。\n\nお腹が空いていない。  \n喉も渇いていない。\n\nどれだけ歩いたか分からないのに、足も痛くない。\n\nそれが、少しも安心にならなかった。"
-        },
-        {
-          "type": "jump",
-          "next": "choice_kiosk_2"
-        }
-      ],
-      "background": "kiosk",
-      "ambience": "silent"
-    },
-    {
-      "id": "choice_kiosk_2",
-      "steps": [
-        {
-          "type": "choice",
-          "prompt": "キオスクでどうするか。",
-          "choices": [
-            {
-              "label": "何も取らず、先を急ぐ",
-              "next": "rush_past_kiosk_2",
-              "score": 0
-            },
-            {
-              "label": "使わないが、水を一本買うつもりで小銭を置く",
-              "next": "keep_culture_hint_2",
-              "score": 1
-            },
-            {
-              "label": "棚の商品を勝手に持っていく",
+              "if": {
+                "state": "mazeLoopCount",
+                "gte": 3
+              },
               "next": "loop_three_bad",
-              "score": -1
+              "ending": "bad"
+            },
+            {
+              "if": {
+                "state": "mazeLoopCount",
+                "equals": 2
+              },
+              "next": "kiosk_loop_warning_2"
+            },
+            {
+              "default": true,
+              "next": "kiosk_loop_warning_1"
             }
           ]
         }
-      ],
-      "background": "kiosk",
-      "ambience": "silent"
-    },
-    {
-      "id": "rush_past_kiosk_2",
-      "steps": [
-        {
-          "type": "text",
-          "text": "乃々香はキオスクを通り過ぎた。\n\n必要なものはない。喉は渇かない。腹も減らない。\n\nだが、必要がないから捨てていい、という考えが一瞬浮かんだことが怖かった。\n\n食べること。払うこと。店の前で立ち止まること。  \nそういう形がなくなると、自分も少しずつ迷路に近づく。"
-        },
-        {
-          "type": "jump",
-          "next": "cafe_choice_2"
-        }
-      ],
-      "background": "maze_corridor",
-      "ambience": "silent"
-    },
-    {
-      "id": "keep_culture_hint_2",
-      "steps": [
-        {
-          "type": "text",
-          "text": "乃々香は財布から小銭を出し、レジ横の皿に置いた。\n\n水は飲まないかもしれない。そもそも喉は渇いていない。\n\nそれでも、買うという形を残したかった。\n\n勝手に取る生活を始めたら、戻れなくなる気がした。\n\nレジの奥で、読み取れない文字のレシートが一枚出た。\n\nその端にだけ、小さな五体満足の人型が印刷されている。"
-        },
-        {
-          "type": "jump",
-          "next": "cafe_choice_2"
-        }
-      ],
-      "background": "kiosk",
-      "ambience": "silent"
+      ]
     },
     {
       "id": "kiosk_loop_warning_1",
@@ -1032,7 +835,7 @@
         },
         {
           "type": "jump",
-          "next": "cafe_choice_1"
+          "next": "cafe_choice"
         }
       ],
       "background": "kiosk",
@@ -1047,14 +850,14 @@
         },
         {
           "type": "jump",
-          "next": "cafe_choice_2"
+          "next": "cafe_choice"
         }
       ],
       "background": "kiosk",
       "ambience": "silent"
     },
     {
-      "id": "cafe_choice_0",
+      "id": "cafe_choice",
       "steps": [
         {
           "type": "text",
@@ -1062,14 +865,14 @@
         },
         {
           "type": "jump",
-          "next": "choice_cafe_0"
+          "next": "choice_cafe"
         }
       ],
       "background": "cafe",
       "ambience": "silent"
     },
     {
-      "id": "choice_cafe_0",
+      "id": "choice_cafe",
       "steps": [
         {
           "type": "choice",
@@ -1087,8 +890,14 @@
             },
             {
               "label": "もう一度適当に通路を選ぶ",
-              "next": "loop_one_from_cafe",
-              "score": -2
+              "next": "cafe_wrong_gate",
+              "score": -2,
+              "increment": {
+                "mazeLoopCount": 1
+              },
+              "set": {
+                "lastLoopCause": "cafe"
+              }
             }
           ]
         }
@@ -1097,90 +906,35 @@
       "ambience": "silent"
     },
     {
-      "id": "cafe_choice_1",
-      "steps": [
-        {
-          "type": "text",
-          "text": "カフェは、地下二階の連絡通路のような場所にあった。\n\n営業しているはずがない。客はいない。店員もいない。\n\nそれでも照明は点き、カウンターには紙カップが積まれている。\n\nコーヒーマシンのボタンを押せば、たぶん湯気が出る。\n\n乃々香は、ここで暮らせるのではないかと思ってしまった。"
-        },
-        {
-          "type": "jump",
-          "next": "choice_cafe_1"
-        }
-      ],
+      "id": "cafe_wrong_gate",
       "background": "cafe",
-      "ambience": "silent"
-    },
-    {
-      "id": "choice_cafe_1",
+      "ambience": "silent",
       "steps": [
         {
-          "type": "choice",
-          "prompt": "カフェでどうするか。",
-          "choices": [
+          "type": "routeCheck",
+          "rules": [
             {
-              "label": "座って休み、迷路内で待つ方法を考える",
-              "next": "normal_waiting_path",
-              "score": 0
-            },
-            {
-              "label": "動画を見直し、脱出条件を探す",
-              "next": "true_video_review",
-              "score": 1
-            },
-            {
-              "label": "もう一度適当に通路を選ぶ",
-              "next": "loop_two_from_cafe",
-              "score": -2
-            }
-          ]
-        }
-      ],
-      "background": "cafe",
-      "ambience": "silent"
-    },
-    {
-      "id": "cafe_choice_2",
-      "steps": [
-        {
-          "type": "text",
-          "text": "カフェは、地下二階の連絡通路のような場所にあった。\n\n営業しているはずがない。客はいない。店員もいない。\n\nそれでも照明は点き、カウンターには紙カップが積まれている。\n\nコーヒーマシンのボタンを押せば、たぶん湯気が出る。\n\n乃々香は、ここで暮らせるのではないかと思ってしまった。"
-        },
-        {
-          "type": "jump",
-          "next": "choice_cafe_2"
-        }
-      ],
-      "background": "cafe",
-      "ambience": "silent"
-    },
-    {
-      "id": "choice_cafe_2",
-      "steps": [
-        {
-          "type": "choice",
-          "prompt": "カフェでどうするか。",
-          "choices": [
-            {
-              "label": "座って休み、迷路内で待つ方法を考える",
-              "next": "normal_waiting_path",
-              "score": 0
-            },
-            {
-              "label": "動画を見直し、脱出条件を探す",
-              "next": "true_video_review",
-              "score": 1
-            },
-            {
-              "label": "もう一度適当に通路を選ぶ",
+              "if": {
+                "state": "mazeLoopCount",
+                "gte": 3
+              },
               "next": "loop_three_bad",
-              "score": -2
+              "ending": "bad"
+            },
+            {
+              "if": {
+                "state": "mazeLoopCount",
+                "equals": 2
+              },
+              "next": "loop_two_from_cafe"
+            },
+            {
+              "default": true,
+              "next": "loop_one_from_cafe"
             }
           ]
         }
-      ],
-      "background": "cafe",
-      "ambience": "silent"
+      ]
     },
     {
       "id": "loop_one_from_cafe",
@@ -1191,7 +945,7 @@
         },
         {
           "type": "jump",
-          "next": "cafe_choice_1"
+          "next": "cafe_choice"
         }
       ],
       "background": "crossroad",
@@ -1206,7 +960,7 @@
         },
         {
           "type": "jump",
-          "next": "cafe_choice_2"
+          "next": "cafe_choice"
         }
       ],
       "background": "crossroad",
@@ -1236,7 +990,7 @@
         },
         {
           "type": "document",
-          "text": "『文字は読もうとするな』  \n『絵だけ見ろ』  \n『欠けた人型の方へ行くな』  \n『水泳マークは水』  \n『最後は絶対振り返るな』"
+          "text": "『文字を追うな』  \n『絵の形だけ残せ』  \n『足りない絵の先で映像が途切れる』  \n『泳ぐ形の先は濡れている』  \n『階段では後ろを見るな』"
         },
         {
           "type": "text",
@@ -1255,7 +1009,7 @@
       "steps": [
         {
           "type": "text",
-          "text": "適当に進めば、どこかに出る。\n\nそう思って選んだ通路は、すぐに同じ十字路へ戻った。\n\n三度目だった。\n\n左の人型には、頭がなかった。  \n右の人型には、足がなかった。  \n正面の人型には、胴がなかった。\n\n五体満足の絵は、どこにもない。\n\nそのことを理解したあとも、通路は何も変わらなかった。\n\nただ、少しずつ、違いが消えていった。"
+          "text": "適当に進めば、どこかに出る。\n\nそう思って選んだ通路は、すぐに同じ十字路へ戻った。\n\n三度目だった。\n\n左の人型には、頭がなかった。  \n右の人型には、足がなかった。  \n正面の人型には、胴がなかった。\n\nどの絵も、人の形を最後まで保っていない。\n\nそのことを理解したあとも、通路は何も変わらなかった。\n\nただ、少しずつ、違いが消えていった。"
         },
         {
           "type": "jump",
@@ -1270,7 +1024,7 @@
       "steps": [
         {
           "type": "text",
-          "text": "上り階段は、唐突に現れた。\n\n古い地下通路の奥。低い天井の先。読めない案内板の下。\n\nピクトグラムは一つだけだった。\n\n人型は五体満足。  \n階段を上がっている。\n\nただし、横の文字は読めない。\n\n乃々香はスマホをポケットに入れた。\n\n画面を見ない。  \n足元だけを見ない。  \n顔を上げる。\n\n一段目を上がる。\n\n背後で声がした。"
+          "text": "上り階段は、唐突に現れた。\n\n古い地下通路の奥。低い天井の先。読めない案内板の下。\n\nピクトグラムは一つだけだった。\n\n人影は、階段を上がっている。  \n輪郭は途中で途切れていない。\n\nただし、横の文字は読めない。\n\n乃々香はスマホをポケットに入れた。\n\n画面を見ない。  \n足元を数えない。  \n階段の先だけを視界に置く。\n\n一段目を上がる。\n\n背後で声がした。"
         },
         {
           "type": "voice",
@@ -1297,12 +1051,12 @@
               "score": -2
             },
             {
-              "label": "俯いて足元だけを見て上がる",
+              "label": "足元だけを見て急いで上がる",
               "next": "ending_normal_almost",
               "score": 0
             },
             {
-              "label": "顔を上げたまま、振り返らずに上がる",
+              "label": "階段の先だけを見て上がる",
               "next": "ending_true",
               "score": 2
             }
@@ -1317,7 +1071,7 @@
       "steps": [
         {
           "type": "text",
-          "text": "乃々香は振り返った。\n\n背後には誰もいなかった。\n\nけれど、階段もなかった。\n\nあるのは、同じ高さの天井、同じ白いタイル、同じ間隔の蛍光灯だった。\n\n最初にここへ入ったときと同じだった。  \nただ、もう一度目ではない。\n\n案内板の人型は、どれも欠けている。\n\n出口を見つけたと思った場所で振り返ったから、迷路はもう一度、乃々香を選ばせなくした。"
+          "text": "乃々香は振り返った。\n\n背後には誰もいなかった。\n\nけれど、階段もなかった。\n\nあるのは、同じ高さの天井、同じ白いタイル、同じ間隔の蛍光灯だった。\n\n最初にここへ入ったときと同じだった。  \nただ、もう一度目ではない。\n\n案内板の人型は、どれも途中で途切れている。\n\n出口を見つけたと思った場所で振り返ったから、迷路はもう一度、乃々香を選ばせなくした。"
         },
         {
           "type": "jump",
@@ -1391,7 +1145,7 @@
       "steps": [
         {
           "type": "text",
-          "text": "乃々香は、顔を上げたまま階段を上がった。\n\n背後で声がした。"
+          "text": "乃々香は、階段の先だけを見て上がった。\n\n背後で声がした。"
         },
         {
           "type": "voice",
@@ -1415,7 +1169,7 @@
         },
         {
           "type": "text",
-          "text": "サムネイルには、見覚えのないピクトグラムが映っている。\n\n五体満足の人型だった。"
+          "text": "サムネイルには、見覚えのないピクトグラムが映っている。\n\n輪郭の途切れていない、人の形だった。"
         },
         {
           "type": "ending",

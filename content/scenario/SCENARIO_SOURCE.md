@@ -1,62 +1,31 @@
-# content-pack
-title: 迷路
-gameId: maze
-saveKey: maze_save_v04
-startScene: opening
-
-# backgrounds
-- id: station_stairs
-  kind: image
-  src: assets/bg/maze_station_stairs.png
-- id: maze_corridor
-  kind: image
-  src: assets/bg/maze_corridor.png
-- id: crossroad
-  kind: image
-  src: assets/bg/maze_crossroad.png
-- id: water_corridor
-  kind: image
-  src: assets/bg/maze_water_corridor.png
-- id: kiosk
-  kind: image
-  src: assets/bg/maze_kiosk.png
-- id: cafe
-  kind: image
-  src: assets/bg/maze_cafe.png
-- id: stairs_up
-  kind: image
-  src: assets/bg/maze_stairs_up.png
-- id: bad_end_corridor
-  kind: image
-  src: assets/bg/maze_bad_end_corridor.png
-- id: black_plain
-  kind: cssClass
-  className: bg-black_plain
-
-# audio
-ambiences:
-se:
-
----
-
 # SCENARIO_SOURCE.md
 
 ## この文書の役割
 
-これは、サウンドノベル『迷路』のシナリオ原稿 v01 である。  
-Runtime EngineはこのMarkdownを直接読まない。ゲーム化するときはcompilerで `main.json` に変換する。
+これは `maze-loop-v03-opening-depth` の Runtime 同期版シナリオソースです。
+
+# content-pack
+title: 迷路
+gameId: maze
+startScene: opening
 
 ---
 
 # scene: opening
-status: draft
+status: runtime_synced
 background: black_plain
 ambience: silent
 
 [text]
-白井乃々香は、地下鉄の階段を降りながら動画を見ていた。
+白井乃々香は、地下鉄の階段を降りながら、片方のイヤホンで動画を聞いていた。
 
-大学の帰りだった。講義は四限で終わったが、友人と少し話し、コンビニに寄り、駅に着いたころには空が暗くなりかけていた。
+大学の帰りだった。四限のあと、友人と学食の前で少し話し、コンビニで明日の朝食を買い、駅に着いたころには空が暗くなりかけていた。
+
+改札前の床は、雨の日でもないのに湿っていた。  
+天井の蛍光灯は一本だけ色が違い、白というより青に近い光を落としている。  
+いつもの駅のはずなのに、人の流れが少ない。
+
+乃々香は、そこまで気にしなかった。
 
 スマホの画面には、保存済みの動画が表示されている。
 
@@ -66,7 +35,13 @@ ambience: silent
 [text]
 いかにも雑なタイトルだった。サムネイルには赤い太字で「絶対に振り返るな」と書かれている。こういう動画ほど、たいてい何も起きない。
 
-それでも乃々香はパート21まで見ていた。暇つぶしとしては、ちょうどよかった。
+それでも乃々香はパート21まで見ていた。怖いからではない。何かを見ていないと、帰り道の疲れが急に体へ戻ってくるからだった。
+
+階段の手すりは冷たかった。  
+降りるたびに、靴音がひとつ遅れて返ってくる。
+
+乃々香は一度だけ足を止め、後ろを見ようとした。  
+だが、上の階から降りてくる人の気配はなかった。
 
 片方のイヤホンから、安っぽい効果音が鳴った。
 
@@ -74,19 +49,22 @@ ambience: silent
 「次は、地下階段にまつわる都市伝説です」
 
 [text]
-乃々香は画面を見たまま、階段を降りた。
+乃々香は画面を見たまま、最後の踊り場を曲がった。
 
 [next: video_phrase]
 
 ---
 
 # scene: video_phrase
-status: draft
+status: runtime_synced
 background: station_stairs
 ambience: silent
 
 [text]
 動画の中で、合成音声が急に低くなる。
+
+耳の奥に、少しだけ圧がかかった。  
+地下鉄のホームに近づいたときの、あの低い震えとは違っていた。
 
 [voice]
 「ごめんなさい、ごめんなさい、ごめんなさい」
@@ -95,6 +73,8 @@ ambience: silent
 同じ言葉が、三度続いた。
 
 乃々香は笑いかけた。怖がらせたいのだろうが、声が機械的すぎた。
+
+けれど、階段の下から返ってくるはずの構内音がない。
 
 画面には、雑なテロップが出ている。
 
@@ -107,6 +87,11 @@ ambience: silent
 
 肩が、誰かに当たった。
 
+布の感触ではなかった。  
+冷たい壁にぶつかったような硬さでもなかった。
+
+人の肩だ、と体だけが先に判断した。
+
 [voice]
 「あ、すみま——」
 
@@ -115,12 +100,14 @@ ambience: silent
 
 そこには、誰もいなかった。
 
+階段も、なかった。
+
 [next: no_one_there]
 
 ---
 
 # scene: no_one_there
-status: draft
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
@@ -135,57 +122,94 @@ ambience: silent
 
 乃々香はイヤホンを外した。
 
+「すみません」
+
+声は、思ったより小さく出た。
+
+乃々香は息を吸い直す。
+
+[voice]
+「誰かいませんか」
+
+[text]
+返事はなかった。
+
+もう一度、今度は少し大きく呼んだ。  
+白いタイルの壁が、声の端だけを薄く返した。
+
 動画は止まっている。画面にはまだ、同じテロップが残っていた。
 
 [document]
 『振り返るな』
 
 [text]
-乃々香は、階段を見た。
+乃々香は、階段のあったはずの方を見た。
 
 さっき降りてきたはずの階段は、なかった。
 
 その代わりに、同じ幅の地下通路が、左右と正面へ伸びていた。
+
+通路の天井には、駅で見慣れた非常口灯のようなものがある。  
+けれど矢印の向きだけが、見るたびに少し違っている気がした。
+
+乃々香はスマホを握り直した。  
+手のひらが汗で湿っている。
 
 [next: choice_initial_check]
 
 ---
 
 # scene: choice_initial_check
-status: draft
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
 [choice]
-prompt: まず何を確認するか。
+prompt: まず、何を確かめるか。
 
-- label: 降りてきた階段を探す
+- label: 階段と駅員を探す
   next: check_missing_stairs
-  score: +0
+  score: 0
 
-- label: スマホの動画を確認する
+- label: スマホで連絡を試す
   next: check_saved_video
-  score: +1
+  score: 1
 
-- label: 通路の案内板を見る
+- label: 案内板と非常口表示を見る
   next: check_sign_shape
-  score: +1
+  score: 1
 
 ---
 
 # scene: check_missing_stairs
-status: draft
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
 [text]
 乃々香は、さっき降りてきた階段を探した。
 
+最初は歩いた。  
+次に少し早足になった。  
+最後には、白い壁に沿って手を這わせながら戻った。
+
 階段はない。
 
-壁があるわけでも、扉で塞がれているわけでもない。最初からそこには通路しかなかった、という形で消えている。
+壁で塞がれているのではない。シャッターが下りているのでもない。最初からそこには通路しかなかった、という形で消えている。
 
 床のタイルは、階段があった場所まで同じ模様で続いていた。
+
+「駅員さん」
+
+声を出すと、すぐに恥ずかしさが来た。  
+それでも乃々香はもう一度呼んだ。
+
+「誰か」
+
+返事はない。
+
+駅員室の窓も、改札機の光も、非常ボタンも見当たらなかった。  
+ただ、駅に似たものだけが続いている。
 
 戻る場所が消えたのではない。
 
@@ -196,16 +220,26 @@ ambience: silent
 ---
 
 # scene: check_saved_video
-status: draft
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
 [text]
-乃々香はスマホを見た。
+乃々香はスマホを開いた。
 
-通信はない。アンテナ表示は空白で、時刻だけが同じ場所に残っている。
+まず母へ電話をかけようとした。  
+発信音は鳴らなかった。
 
-それでも、保存済みの動画は開けた。
+画面は、通話中にも、圏外にもならない。ただ、押したはずの発信ボタンが何事もなかったように戻っている。
+
+メッセージアプリを開く。  
+最後に友人から来ていたスタンプは表示される。けれど、新しい文字を打っても、送信の矢印だけが薄いままだった。
+
+緊急通報の番号を押すことも考えた。  
+指はそこまで動いた。  
+だが、画面の上にはアンテナの表示がなかった。時刻だけが同じ場所に残っている。
+
+それでも、保存済みの動画だけは開けた。
 
 [document]
 『都市伝説を集めてみた　パート22』
@@ -215,24 +249,31 @@ ambience: silent
 
 赤い文字の「絶対に振り返るな」だけが、やけにはっきりしている。
 
+助けを呼ぶ画面は黙っていた。  
+この動画だけが、まだこちらを見ている。
+
 [next: first_sign]
 
 ---
 
 # scene: check_sign_shape
-status: draft
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
 [text]
 乃々香は通路の先の案内板を見た。
 
-形は駅のものだった。緑の矢印。白い板。黒い文字。ピクトグラム。
+形は駅のものだった。緑の矢印。白い板。黒い文字。ピクトグラム。非常口灯のような小さな箱も、天井近くに付いている。
 
 しかし、配置だけが駅で、意味が駅ではない。
 
 文字は読めない。  
-けれど、案内しようとしていることだけは分かる。
+矢印は、正しい方向を示しているようで、少しずつ角度がずれている。  
+非常口の人影は走っているのに、出口の形が描かれていない。
+
+案内しようとしている。  
+そのことだけは分かる。
 
 それがいちばん嫌だった。
 
@@ -241,7 +282,7 @@ ambience: silent
 ---
 
 # scene: first_sign
-status: draft
+status: runtime_synced
 background: crossroad
 ambience: silent
 
@@ -254,18 +295,24 @@ ambience: silent
 
 漢字の角張った骨組みに、ひらがなの丸みと、カタカナの直線が混じっている。日本語に見える。でも、どの線も知っている字になる直前で曲がっていた。
 
+乃々香は、文字を読むのをやめた。
+
 ただ、ピクトグラムだけは分かる。
 
-左の案内板には、人型があった。頭がない。  
-右の案内板にも、人型がある。腕がない。  
-正面の案内板の人型だけは、何をしているのか分からないが、頭も、腕も、足もあった。
+左の案内板には、人型があった。頭の部分が白く抜けている。  
+右の案内板にも、人型がある。片腕の線が途切れている。  
+正面の案内板の人型だけは、何をしているのか分からないが、輪郭が最後までつながっていた。
+
+正解に見えたわけではない。
+
+それでも、他の二つよりは、まだ人の形に近かった。
 
 [next: choice_first_crossroad]
 
 ---
 
 # scene: choice_first_crossroad
-status: draft
+status: runtime_synced
 background: crossroad
 ambience: silent
 
@@ -275,19 +322,29 @@ prompt: どの道へ進むか。
 - label: 頭のない人型が付いた左の通路へ進む
   next: wrong_head_loop1
   score: -1
+  increment:
+    mazeLoopCount: 1
+  set:
+    lastLoopCause: first_crossroad
 
-- label: 五体満足の人型が付いた正面の通路へ進む
+- label: 正面の、人影がまっすぐ立っている通路へ進む
   next: safe_first_path
-  score: +1
+  score: 1
+  set:
+    lastLoopCause: none
 
 - label: 腕のない人型が付いた右の通路へ進む
   next: wrong_arm_loop1
   score: -1
+  increment:
+    mazeLoopCount: 1
+  set:
+    lastLoopCause: first_crossroad
 
 ---
 
 # scene: wrong_head_loop1
-status: draft
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
@@ -311,7 +368,7 @@ ambience: silent
 ---
 
 # scene: wrong_arm_loop1
-status: draft
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
@@ -335,7 +392,7 @@ ambience: silent
 ---
 
 # scene: loop_one_notice_from_first
-status: draft
+status: runtime_synced
 background: crossroad
 ambience: silent
 
@@ -356,23 +413,25 @@ ambience: silent
 
 [next: video_hint_after_loop1]
 
+---
+
 # scene: safe_first_path
-status: draft
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
 [text]
 乃々香は正面へ進んだ。
 
-人型は何を示しているのか分からなかった。歩いているようにも、立っているようにも見える。
+案内板の人型が何を示しているのかは分からなかった。歩いているようにも、ただ立っているようにも見える。
 
-けれど、欠けてはいなかった。
+輪郭は途中で途切れていない。
 
 通路の奥に、閉鎖されたキオスクがあった。シャッターは下りている。なのに内側の灯りだけが点いている。
 
 雑誌の表紙に、読めない文字が並んでいた。その横に、小さな人型のピクトグラムが印刷されている。
 
-どれも、頭と腕と足があった。
+どれも、同じように人の形を保っていた。
 
 乃々香は、少しだけ息を吐いた。
 
@@ -381,22 +440,28 @@ ambience: silent
 ---
 
 # scene: video_hint_no_loop
-status: draft
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
 [text]
-保存していた動画は再生できた。
+乃々香は、画面を見つめた。
 
-動画の続きには、軽い字幕が流れる。
+ふざけた字幕だった。けれど、さっきの案内板と、完全に無関係とは思えない。
+
+足りない絵の先で画面が飛ぶ。
+
+「飛ぶ」という言い方が、いやに軽い。
+
+乃々香はスマホを下ろした。通路の白い壁が、画面の光よりも冷たく見えた。
 
 [document]
 『その22：地下階段の変な案内板  
 ・文字は読めないらしいｗ  
-・絵だけ見ろって話  
-・欠けてる人の方に行くと戻される  
-・水泳マークはマジで水  
-・最後は絶対振り返るな』
+・絵だけは毎回同じ  
+・足りない絵の先で画面が飛ぶ  
+・泳いでるやつの先、音が変  
+・上り階段では後ろを見るな』
 
 [text]
 乃々香は、画面を見つめた。
@@ -408,25 +473,35 @@ ambience: silent
 まだ戻されてはいない。  
 だからこそ、ここから間違えてはいけない。
 
-[next: choice_video_response_0]
+[next: choice_video_response]
+
+---
 
 # scene: video_hint_after_loop1
-status: draft
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
 [text]
-保存していた動画は再生できた。
+乃々香は、画面を見つめた。
 
-動画の続きには、軽い字幕が流れる。
+足りない絵の先で画面が飛ぶ。
+
+さっき飛んだのは、画面ではなかった。
+
+自分の立っている場所だった。
+
+一度目。
+
+その言葉を、乃々香は声に出さずに飲み込んだ。
 
 [document]
 『その22：地下階段の変な案内板  
 ・文字は読めないらしいｗ  
-・絵だけ見ろって話  
-・欠けてる人の方に行くと戻される  
-・水泳マークはマジで水  
-・最後は絶対振り返るな』
+・絵だけは毎回同じ  
+・足りない絵の先で画面が飛ぶ  
+・泳いでるやつの先、音が変  
+・上り階段では後ろを見るな』
 
 [text]
 乃々香は、画面を見つめた。
@@ -440,10 +515,12 @@ ambience: silent
 
 その言葉を、乃々香は声に出さずに飲み込んだ。
 
-[next: choice_video_response_1]
+[next: choice_video_response]
 
-# scene: choice_video_response_0
-status: draft
+---
+
+# scene: choice_video_response
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
@@ -451,21 +528,21 @@ ambience: silent
 prompt: 動画をどう扱うか。
 
 - label: 動画を最後まで見直す
-  next: watch_video_more_0
-  score: +1
+  next: watch_video_more
+  score: 1
 
 - label: 怖くなって動画を閉じる
-  next: close_video_0
-  score: +0
+  next: close_video
+  score: 0
 
 - label: コメント欄を開こうとする
-  next: no_connection_comments_0
-  score: +0
+  next: no_connection_comments
+  score: 0
 
 ---
 
-# scene: watch_video_more_0
-status: draft
+# scene: watch_video_more
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
@@ -486,12 +563,12 @@ ambience: silent
 [text]
 雑な編集だった。けれど、いまの乃々香には冗談に見えなかった。
 
-[next: water_sign_0]
+[next: water_sign]
 
 ---
 
-# scene: close_video_0
-status: draft
+# scene: close_video
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
@@ -510,12 +587,12 @@ ambience: silent
 
 認めたくないが、今はこれ以外に手がかりがない。
 
-[next: water_sign_0]
+[next: water_sign]
 
 ---
 
-# scene: no_connection_comments_0
-status: draft
+# scene: no_connection_comments
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
@@ -529,147 +606,32 @@ ambience: silent
 オフライン保存しておいてよかった、と乃々香は思った。  
 それが自分をここへ入れた理由の一つでもあるのに。
 
-[next: water_sign_0]
+[next: water_sign]
 
 ---
 
-# scene: choice_video_response_1
-status: draft
-background: maze_corridor
-ambience: silent
-
-[choice]
-prompt: 動画をどう扱うか。
-
-- label: 動画を最後まで見直す
-  next: watch_video_more_1
-  score: +1
-
-- label: 怖くなって動画を閉じる
-  next: close_video_1
-  score: +0
-
-- label: コメント欄を開こうとする
-  next: no_connection_comments_1
-  score: +0
-
----
-
-# scene: watch_video_more_1
-status: draft
-background: maze_corridor
-ambience: silent
-
-[text]
-乃々香は動画を少し巻き戻した。
-
-合成音声は、相変わらず薄い調子で都市伝説を並べている。
-
-[voice]
-「この迷路では、案内板の文字を読もうとしてはいけません。読めるのは絵だけです」
-
-[text]
-画面の端に、小さな注意書きが出る。
-
-[document]
-『※三回戻されたらアウト、らしい』
-
-[text]
-雑な編集だった。けれど、いまの乃々香には冗談に見えなかった。
-
-[next: water_sign_1]
-
----
-
-# scene: close_video_1
-status: draft
-background: maze_corridor
-ambience: silent
-
-[text]
-乃々香は動画を閉じた。
-
-画面はホームに戻らない。通信がないから、読み込みの輪だけが回り続けている。
-
-結局、保存済み動画のサムネイルだけが残った。
-
-[document]
-『都市伝説を集めてみた　パート22』
-
-[text]
-乃々香はもう一度、それを開いた。
-
-認めたくないが、今はこれ以外に手がかりがない。
-
-[next: water_sign_1]
-
----
-
-# scene: no_connection_comments_1
-status: draft
-background: maze_corridor
-ambience: silent
-
-[text]
-コメント欄を開こうとした。
-
-画面は白くなり、読み込みの輪だけが回る。
-
-通信がない。けれど、動画本体は再生できる。
-
-オフライン保存しておいてよかった、と乃々香は思った。  
-それが自分をここへ入れた理由の一つでもあるのに。
-
-[next: water_sign_1]
-
----
-
-# scene: water_sign_0
-status: draft
+# scene: water_sign
+status: runtime_synced
 background: crossroad
 ambience: silent
 
 [text]
 次の分岐には、三つの案内板があった。
 
-左のピクトグラムは、足のない人型。  
-正面のピクトグラムは、水泳のような図像だった。オリンピックの競技マークで見たことがあるような、横向きの人影。  
-右のピクトグラムは、五体満足の人型。
+左のピクトグラムは、足元の線が白く抜けている。  
+正面のピクトグラムは、横向きの人影だった。腕を伸ばしているのか、泳いでいるのか、壁の汚れで判然としない。  
+右のピクトグラムは、まっすぐ立つ人影だった。
 
-水泳マークの先は、水。
+正面の通路の奥から、湿った匂いがした。
 
-動画の雑な字幕が頭に残っている。
+乃々香は、案内板から目を離せなかった。
 
-通路の奥から、水の匂いがした。
-
-[next: choice_water_sign_0]
+[next: choice_water_sign]
 
 ---
 
-# scene: water_sign_1
-status: draft
-background: crossroad
-ambience: silent
-
-[text]
-次の分岐には、三つの案内板があった。
-
-左のピクトグラムは、足のない人型。  
-正面のピクトグラムは、水泳のような図像だった。オリンピックの競技マークで見たことがあるような、横向きの人影。  
-右のピクトグラムは、五体満足の人型。
-
-水泳マークの先は、水。
-
-動画の雑な字幕が頭に残っている。
-
-通路の奥から、水の匂いがした。
-
-[next: choice_water_sign_1]
-
----
-
-# scene: choice_water_sign_0
-status: draft
+# scene: choice_water_sign
+status: runtime_synced
 background: crossroad
 ambience: silent
 
@@ -677,39 +639,37 @@ ambience: silent
 prompt: どの道へ進むか。
 
 - label: 足のない人型の左へ進む
-  next: wrong_feet_loop1_from_water
+  next: water_wrong_gate
   score: -1
+  increment:
+    mazeLoopCount: 1
+  set:
+    lastLoopCause: water_sign
 
 - label: 水泳ピクトグラムの正面へ進む
-  next: water_corridor_scene_0
-  score: +0
+  next: water_corridor_scene
+  score: 0
 
-- label: 五体満足の人型の右へ進む
-  next: safe_second_path_0
-  score: +1
+- label: 右の、まっすぐ立つ人影の通路へ進む
+  next: safe_second_path
+  score: 1
 
-# scene: choice_water_sign_1
-status: draft
+---
+
+# scene: water_wrong_gate
+status: runtime_synced
 background: crossroad
 ambience: silent
 
-[choice]
-prompt: どの道へ進むか。
+[routeCheck]
+{"if": {"state": "mazeLoopCount", "gte": 3}, "next": "loop_three_bad", "ending": "bad"}
+{"if": {"state": "mazeLoopCount", "equals": 2}, "next": "wrong_feet_loop2_from_water"}
+{"default": true, "next": "wrong_feet_loop1_from_water"}
 
-- label: 足のない人型の左へ進む
-  next: wrong_feet_loop2_from_water
-  score: -1
-
-- label: 水泳ピクトグラムの正面へ進む
-  next: water_corridor_scene_1
-  score: +0
-
-- label: 五体満足の人型の右へ進む
-  next: safe_second_path_1
-  score: +1
+---
 
 # scene: wrong_feet_loop1_from_water
-status: draft
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
@@ -732,8 +692,10 @@ ambience: silent
 
 [next: loop_one_after_water]
 
+---
+
 # scene: loop_one_after_water
-status: draft
+status: runtime_synced
 background: crossroad
 ambience: silent
 
@@ -744,16 +706,19 @@ ambience: silent
 まだ違いはある。  
 けれど、違いを探さなければ見つからない。
 
-戻される。
+床の継ぎ目に、さっきはなかった濡れた跡がある。
 
-動画の字幕は、そう言っていた。
+乃々香は案内板を見た。  
+文字は追わない。
 
-乃々香は、今度こそ欠けていない人型を選んだ。
+線が最後までつながっている人影の方へ、今度は足を向けた。
 
-[next: kiosk_area_1]
+[next: kiosk_area]
+
+---
 
 # scene: wrong_feet_loop2_from_water
-status: draft
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
@@ -776,10 +741,12 @@ ambience: silent
 [document]
 『※三回戻されたらアウト、らしい』
 
-[next: kiosk_area_2]
+[next: kiosk_area]
 
-# scene: water_corridor_scene_0
-status: draft
+---
+
+# scene: water_corridor_scene
+status: runtime_synced
 background: water_corridor
 ambience: silent
 
@@ -796,19 +763,19 @@ ambience: silent
 
 乃々香は引き返した。水泳ピクトグラムは、道ではなく警告だった。
 
-[next: safe_second_path_0]
+[next: safe_second_path]
 
 ---
 
-# scene: safe_second_path_0
-status: draft
+# scene: safe_second_path
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
 [text]
 右へ進むと、通路は乾いていた。
 
-壁には相変わらず読めない文字がある。けれど案内板の人型は欠けていない。
+壁には相変わらず読めない文字がある。案内板の人影は、輪郭が最後までつながっている。
 
 乃々香は、進む前にピクトグラムを見るようになっていた。
 
@@ -816,54 +783,12 @@ ambience: silent
 
 そう決めると、少しだけ通路の形が分かる気がした。
 
-[next: kiosk_area_0]
+[next: kiosk_area]
 
 ---
 
-# scene: water_corridor_scene_1
-status: draft
-background: water_corridor
-ambience: silent
-
-[text]
-正面へ進むと、床に水が溜まっていた。
-
-浅い。靴底が濡れる程度だ。だが、通路の奥へ行くほど水位は少しずつ上がっている。
-
-天井から雫が落ちる。規則正しく、同じ間隔で。
-
-遠くで、水をかく音がした。
-
-人はいない。
-
-乃々香は引き返した。水泳ピクトグラムは、道ではなく警告だった。
-
-[next: safe_second_path_1]
-
----
-
-# scene: safe_second_path_1
-status: draft
-background: maze_corridor
-ambience: silent
-
-[text]
-右へ進むと、通路は乾いていた。
-
-壁には相変わらず読めない文字がある。けれど案内板の人型は欠けていない。
-
-乃々香は、進む前にピクトグラムを見るようになっていた。
-
-文字は読まない。絵だけを見る。
-
-そう決めると、少しだけ通路の形が分かる気がした。
-
-[next: kiosk_area_1]
-
----
-
-# scene: kiosk_area_0
-status: draft
+# scene: kiosk_area
+status: runtime_synced
 background: kiosk
 ambience: silent
 
@@ -883,12 +808,12 @@ ambience: silent
 
 それが、少しも安心にならなかった。
 
-[next: choice_kiosk_0]
+[next: choice_kiosk]
 
 ---
 
-# scene: choice_kiosk_0
-status: draft
+# scene: choice_kiosk
+status: runtime_synced
 background: kiosk
 ambience: silent
 
@@ -896,19 +821,25 @@ ambience: silent
 prompt: キオスクでどうするか。
 
 - label: 何も取らず、先を急ぐ
-  next: rush_past_kiosk_0
-  score: +0
+  next: rush_past_kiosk
+  score: 0
 
 - label: 使わないが、水を一本買うつもりで小銭を置く
-  next: keep_culture_hint_0
-  score: +1
+  next: keep_culture_hint
+  score: 1
 
 - label: 棚の商品を勝手に持っていく
-  next: kiosk_loop_warning_1
+  next: kiosk_wrong_gate
   score: -1
+  increment:
+    mazeLoopCount: 1
+  set:
+    lastLoopCause: kiosk
 
-# scene: rush_past_kiosk_0
-status: draft
+---
+
+# scene: rush_past_kiosk
+status: runtime_synced
 background: maze_corridor
 ambience: silent
 
@@ -922,12 +853,12 @@ ambience: silent
 食べること。払うこと。店の前で立ち止まること。  
 そういう形がなくなると、自分も少しずつ迷路に近づく。
 
-[next: cafe_choice_0]
+[next: cafe_choice]
 
 ---
 
-# scene: keep_culture_hint_0
-status: draft
+# scene: keep_culture_hint
+status: runtime_synced
 background: kiosk
 ambience: silent
 
@@ -942,186 +873,26 @@ ambience: silent
 
 レジの奥で、読み取れない文字のレシートが一枚出た。
 
-その端にだけ、小さな五体満足の人型が印刷されている。
+その端にだけ、小さな人影のピクトグラムが印刷されている。
 
-[next: cafe_choice_0]
-
----
-
-# scene: kiosk_area_1
-status: draft
-background: kiosk
-ambience: silent
-
-[text]
-通路の先に、キオスクがあった。
-
-今度はシャッターが半分だけ開いている。店員はいない。客もいない。
-
-棚には新聞のようなもの、雑誌のようなもの、菓子のような袋が並んでいる。文字はどれも読めない。
-
-乃々香は、急に気づいた。
-
-お腹が空いていない。  
-喉も渇いていない。
-
-どれだけ歩いたか分からないのに、足も痛くない。
-
-それが、少しも安心にならなかった。
-
-[next: choice_kiosk_1]
+[next: cafe_choice]
 
 ---
 
-# scene: choice_kiosk_1
-status: draft
+# scene: kiosk_wrong_gate
+status: runtime_synced
 background: kiosk
 ambience: silent
 
-[choice]
-prompt: キオスクでどうするか。
-
-- label: 何も取らず、先を急ぐ
-  next: rush_past_kiosk_1
-  score: +0
-
-- label: 使わないが、水を一本買うつもりで小銭を置く
-  next: keep_culture_hint_1
-  score: +1
-
-- label: 棚の商品を勝手に持っていく
-  next: kiosk_loop_warning_2
-  score: -1
-
-# scene: rush_past_kiosk_1
-status: draft
-background: maze_corridor
-ambience: silent
-
-[text]
-乃々香はキオスクを通り過ぎた。
-
-必要なものはない。喉は渇かない。腹も減らない。
-
-だが、必要がないから捨てていい、という考えが一瞬浮かんだことが怖かった。
-
-食べること。払うこと。店の前で立ち止まること。  
-そういう形がなくなると、自分も少しずつ迷路に近づく。
-
-[next: cafe_choice_1]
-
----
-
-# scene: keep_culture_hint_1
-status: draft
-background: kiosk
-ambience: silent
-
-[text]
-乃々香は財布から小銭を出し、レジ横の皿に置いた。
-
-水は飲まないかもしれない。そもそも喉は渇いていない。
-
-それでも、買うという形を残したかった。
-
-勝手に取る生活を始めたら、戻れなくなる気がした。
-
-レジの奥で、読み取れない文字のレシートが一枚出た。
-
-その端にだけ、小さな五体満足の人型が印刷されている。
-
-[next: cafe_choice_1]
-
----
-
-# scene: kiosk_area_2
-status: draft
-background: kiosk
-ambience: silent
-
-[text]
-通路の先に、キオスクがあった。
-
-今度はシャッターが半分だけ開いている。店員はいない。客もいない。
-
-棚には新聞のようなもの、雑誌のようなもの、菓子のような袋が並んでいる。文字はどれも読めない。
-
-乃々香は、急に気づいた。
-
-お腹が空いていない。  
-喉も渇いていない。
-
-どれだけ歩いたか分からないのに、足も痛くない。
-
-それが、少しも安心にならなかった。
-
-[next: choice_kiosk_2]
-
----
-
-# scene: choice_kiosk_2
-status: draft
-background: kiosk
-ambience: silent
-
-[choice]
-prompt: キオスクでどうするか。
-
-- label: 何も取らず、先を急ぐ
-  next: rush_past_kiosk_2
-  score: +0
-
-- label: 使わないが、水を一本買うつもりで小銭を置く
-  next: keep_culture_hint_2
-  score: +1
-
-- label: 棚の商品を勝手に持っていく
-  next: loop_three_bad
-  score: -1
-
-# scene: rush_past_kiosk_2
-status: draft
-background: maze_corridor
-ambience: silent
-
-[text]
-乃々香はキオスクを通り過ぎた。
-
-必要なものはない。喉は渇かない。腹も減らない。
-
-だが、必要がないから捨てていい、という考えが一瞬浮かんだことが怖かった。
-
-食べること。払うこと。店の前で立ち止まること。  
-そういう形がなくなると、自分も少しずつ迷路に近づく。
-
-[next: cafe_choice_2]
-
----
-
-# scene: keep_culture_hint_2
-status: draft
-background: kiosk
-ambience: silent
-
-[text]
-乃々香は財布から小銭を出し、レジ横の皿に置いた。
-
-水は飲まないかもしれない。そもそも喉は渇いていない。
-
-それでも、買うという形を残したかった。
-
-勝手に取る生活を始めたら、戻れなくなる気がした。
-
-レジの奥で、読み取れない文字のレシートが一枚出た。
-
-その端にだけ、小さな五体満足の人型が印刷されている。
-
-[next: cafe_choice_2]
+[routeCheck]
+{"if": {"state": "mazeLoopCount", "gte": 3}, "next": "loop_three_bad", "ending": "bad"}
+{"if": {"state": "mazeLoopCount", "equals": 2}, "next": "kiosk_loop_warning_2"}
+{"default": true, "next": "kiosk_loop_warning_1"}
 
 ---
 
 # scene: kiosk_loop_warning_1
-status: draft
+status: runtime_synced
 background: kiosk
 ambience: silent
 
@@ -1146,10 +917,12 @@ ambience: silent
 
 乃々香は袋を棚へ戻した。
 
-[next: cafe_choice_1]
+[next: cafe_choice]
+
+---
 
 # scene: kiosk_loop_warning_2
-status: draft
+status: runtime_synced
 background: kiosk
 ambience: silent
 
@@ -1171,10 +944,12 @@ ambience: silent
 
 乃々香は袋を棚へ戻した。
 
-[next: cafe_choice_2]
+[next: cafe_choice]
 
-# scene: cafe_choice_0
-status: draft
+---
+
+# scene: cafe_choice
+status: runtime_synced
 background: cafe
 ambience: silent
 
@@ -1189,12 +964,12 @@ ambience: silent
 
 乃々香は、ここで暮らせるのではないかと思ってしまった。
 
-[next: choice_cafe_0]
+[next: choice_cafe]
 
 ---
 
-# scene: choice_cafe_0
-status: draft
+# scene: choice_cafe
+status: runtime_synced
 background: cafe
 ambience: silent
 
@@ -1203,98 +978,36 @@ prompt: カフェでどうするか。
 
 - label: 座って休み、迷路内で待つ方法を考える
   next: normal_waiting_path
-  score: +0
+  score: 0
 
 - label: 動画を見直し、脱出条件を探す
   next: true_video_review
-  score: +1
+  score: 1
 
 - label: もう一度適当に通路を選ぶ
-  next: loop_one_from_cafe
+  next: cafe_wrong_gate
   score: -2
-
-# scene: cafe_choice_1
-status: draft
-background: cafe
-ambience: silent
-
-[text]
-カフェは、地下二階の連絡通路のような場所にあった。
-
-営業しているはずがない。客はいない。店員もいない。
-
-それでも照明は点き、カウンターには紙カップが積まれている。
-
-コーヒーマシンのボタンを押せば、たぶん湯気が出る。
-
-乃々香は、ここで暮らせるのではないかと思ってしまった。
-
-[next: choice_cafe_1]
+  increment:
+    mazeLoopCount: 1
+  set:
+    lastLoopCause: cafe
 
 ---
 
-# scene: choice_cafe_1
-status: draft
+# scene: cafe_wrong_gate
+status: runtime_synced
 background: cafe
 ambience: silent
 
-[choice]
-prompt: カフェでどうするか。
-
-- label: 座って休み、迷路内で待つ方法を考える
-  next: normal_waiting_path
-  score: +0
-
-- label: 動画を見直し、脱出条件を探す
-  next: true_video_review
-  score: +1
-
-- label: もう一度適当に通路を選ぶ
-  next: loop_two_from_cafe
-  score: -2
-
-# scene: cafe_choice_2
-status: draft
-background: cafe
-ambience: silent
-
-[text]
-カフェは、地下二階の連絡通路のような場所にあった。
-
-営業しているはずがない。客はいない。店員もいない。
-
-それでも照明は点き、カウンターには紙カップが積まれている。
-
-コーヒーマシンのボタンを押せば、たぶん湯気が出る。
-
-乃々香は、ここで暮らせるのではないかと思ってしまった。
-
-[next: choice_cafe_2]
+[routeCheck]
+{"if": {"state": "mazeLoopCount", "gte": 3}, "next": "loop_three_bad", "ending": "bad"}
+{"if": {"state": "mazeLoopCount", "equals": 2}, "next": "loop_two_from_cafe"}
+{"default": true, "next": "loop_one_from_cafe"}
 
 ---
-
-# scene: choice_cafe_2
-status: draft
-background: cafe
-ambience: silent
-
-[choice]
-prompt: カフェでどうするか。
-
-- label: 座って休み、迷路内で待つ方法を考える
-  next: normal_waiting_path
-  score: +0
-
-- label: 動画を見直し、脱出条件を探す
-  next: true_video_review
-  score: +1
-
-- label: もう一度適当に通路を選ぶ
-  next: loop_three_bad
-  score: -2
 
 # scene: loop_one_from_cafe
-status: draft
+status: runtime_synced
 background: crossroad
 ambience: silent
 
@@ -1310,10 +1023,12 @@ ambience: silent
 
 乃々香は、もう適当には歩けないと理解した。
 
-[next: cafe_choice_1]
+[next: cafe_choice]
+
+---
 
 # scene: loop_two_from_cafe
-status: draft
+status: runtime_synced
 background: crossroad
 ambience: silent
 
@@ -1327,10 +1042,12 @@ ambience: silent
 
 あと一度戻されたら終わりだと、動画は言っていた。
 
-[next: cafe_choice_2]
+[next: cafe_choice]
+
+---
 
 # scene: normal_waiting_path
-status: draft
+status: runtime_synced
 background: cafe
 ambience: silent
 
@@ -1355,7 +1072,7 @@ ambience: silent
 ---
 
 # scene: true_video_review
-status: draft
+status: runtime_synced
 background: cafe
 ambience: silent
 
@@ -1366,11 +1083,11 @@ ambience: silent
 けれど、その中に必要なことはほとんど書いてあった。
 
 [document]
-『文字は読もうとするな』  
-『絵だけ見ろ』  
-『欠けた人型の方へ行くな』  
-『水泳マークは水』  
-『最後は絶対振り返るな』
+『文字を追うな』  
+『絵の形だけ残せ』  
+『足りない絵の先で映像が途切れる』  
+『泳ぐ形の先は濡れている』  
+『階段では後ろを見るな』
 
 [text]
 最後。
@@ -1389,7 +1106,7 @@ ambience: silent
 ---
 
 # scene: loop_three_bad
-status: draft
+status: runtime_synced
 background: crossroad
 ambience: silent
 
@@ -1404,7 +1121,7 @@ ambience: silent
 右の人型には、足がなかった。  
 正面の人型には、胴がなかった。
 
-五体満足の絵は、どこにもない。
+どの絵も、人の形を最後まで保っていない。
 
 そのことを理解したあとも、通路は何も変わらなかった。
 
@@ -1415,7 +1132,7 @@ ambience: silent
 ---
 
 # scene: final_stairs
-status: draft
+status: runtime_synced
 background: stairs_up
 ambience: silent
 
@@ -1426,16 +1143,16 @@ ambience: silent
 
 ピクトグラムは一つだけだった。
 
-人型は五体満足。  
-階段を上がっている。
+人影は、階段を上がっている。  
+輪郭は途中で途切れていない。
 
 ただし、横の文字は読めない。
 
 乃々香はスマホをポケットに入れた。
 
 画面を見ない。  
-足元だけを見ない。  
-顔を上げる。
+足元を数えない。  
+階段の先だけを視界に置く。
 
 一段目を上がる。
 
@@ -1449,7 +1166,7 @@ ambience: silent
 ---
 
 # scene: choice_final_stairs
-status: draft
+status: runtime_synced
 background: stairs_up
 ambience: silent
 
@@ -1460,16 +1177,18 @@ prompt: 背後から声がする。
   next: ending_bad_lookback
   score: -2
 
-- label: 俯いて足元だけを見て上がる
+- label: 足元だけを見て急いで上がる
   next: ending_normal_almost
-  score: +0
+  score: 0
 
-- label: 顔を上げたまま、振り返らずに上がる
+- label: 階段の先だけを見て上がる
   next: ending_true
-  score: +2
+  score: 2
+
+---
 
 # scene: ending_bad_lookback
-status: draft
+status: runtime_synced
 background: bad_end_corridor
 ambience: silent
 
@@ -1485,14 +1204,16 @@ ambience: silent
 最初にここへ入ったときと同じだった。  
 ただ、もう一度目ではない。
 
-案内板の人型は、どれも欠けている。
+案内板の人型は、どれも途中で途切れている。
 
 出口を見つけたと思った場所で振り返ったから、迷路はもう一度、乃々香を選ばせなくした。
 
 [next: ending_bad]
 
+---
+
 # scene: ending_bad
-status: draft
+status: runtime_synced
 background: bad_end_corridor
 ambience: silent
 
@@ -1542,7 +1263,7 @@ subtitle: まだ歩いている
 ---
 
 # scene: ending_normal
-status: draft
+status: runtime_synced
 background: cafe
 ambience: silent
 
@@ -1588,7 +1309,7 @@ subtitle: 待合
 ---
 
 # scene: ending_normal_almost
-status: draft
+status: runtime_synced
 background: cafe
 ambience: silent
 
@@ -1623,12 +1344,12 @@ subtitle: 待合
 ---
 
 # scene: ending_true
-status: draft
+status: runtime_synced
 background: station_stairs
 ambience: silent
 
 [text]
-乃々香は、顔を上げたまま階段を上がった。
+乃々香は、階段の先だけを見て上がった。
 
 背後で声がした。
 
@@ -1669,9 +1390,11 @@ ambience: silent
 [text]
 サムネイルには、見覚えのないピクトグラムが映っている。
 
-五体満足の人型だった。
+輪郭の途切れていない、人の形だった。
 
 [ending]
 ending: true
 title: TRUE END
 subtitle: 上り階段
+
+---
