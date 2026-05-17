@@ -1,0 +1,6 @@
+sn_engine_v02a
+Internal source: sn_engine_v02 + ellipsis/kisoku hardening
+Package role: no-sample novel game engine
+Contains sample scenario: no
+Contains completed scenario data: no
+Main topic: Japanese text display engine foundation, kinsoku hardening, static logic checks

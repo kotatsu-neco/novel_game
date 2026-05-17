@@ -1,0 +1,464 @@
+{
+  "ok": true,
+  "errors": [],
+  "warnings": [
+    "Choice count 39 exceeds recommended maximum 25 for a <=30 minute kit."
+  ],
+  "stats": {
+    "sceneCount": 66,
+    "choiceCount": 39,
+    "textChars": 9958,
+    "estimatedMinutes": 22.1,
+    "endingSceneCount": 4
+  },
+  "startScene": "opening",
+  "reachableScenes": [
+    "cafe_choice_0",
+    "cafe_choice_1",
+    "cafe_choice_2",
+    "check_missing_stairs",
+    "check_saved_video",
+    "check_sign_shape",
+    "choice_cafe_0",
+    "choice_cafe_1",
+    "choice_cafe_2",
+    "choice_final_stairs",
+    "choice_first_crossroad",
+    "choice_initial_check",
+    "choice_kiosk_0",
+    "choice_kiosk_1",
+    "choice_kiosk_2",
+    "choice_video_response_0",
+    "choice_video_response_1",
+    "choice_water_sign_0",
+    "choice_water_sign_1",
+    "close_video_0",
+    "close_video_1",
+    "ending_bad",
+    "ending_bad_lookback",
+    "ending_normal",
+    "ending_normal_almost",
+    "ending_true",
+    "final_stairs",
+    "first_sign",
+    "keep_culture_hint_0",
+    "keep_culture_hint_1",
+    "keep_culture_hint_2",
+    "kiosk_area_0",
+    "kiosk_area_1",
+    "kiosk_area_2",
+    "kiosk_loop_warning_1",
+    "kiosk_loop_warning_2",
+    "loop_one_after_water",
+    "loop_one_from_cafe",
+    "loop_one_notice_from_first",
+    "loop_three_bad",
+    "loop_two_from_cafe",
+    "no_connection_comments_0",
+    "no_connection_comments_1",
+    "no_one_there",
+    "normal_waiting_path",
+    "opening",
+    "rush_past_kiosk_0",
+    "rush_past_kiosk_1",
+    "rush_past_kiosk_2",
+    "safe_first_path",
+    "safe_second_path_0",
+    "safe_second_path_1",
+    "true_video_review",
+    "video_hint_after_loop1",
+    "video_hint_no_loop",
+    "video_phrase",
+    "watch_video_more_0",
+    "watch_video_more_1",
+    "water_corridor_scene_0",
+    "water_corridor_scene_1",
+    "water_sign_0",
+    "water_sign_1",
+    "wrong_arm_loop1",
+    "wrong_feet_loop1_from_water",
+    "wrong_feet_loop2_from_water",
+    "wrong_head_loop1"
+  ],
+  "unreachableScenes": [],
+  "mergePoints": {
+    "cafe_choice_0": {
+      "incomingSources": [
+        "keep_culture_hint_0",
+        "rush_past_kiosk_0"
+      ],
+      "incomingEdgeCounts": {
+        "rush_past_kiosk_0": 1,
+        "keep_culture_hint_0": 1
+      }
+    },
+    "cafe_choice_1": {
+      "incomingSources": [
+        "keep_culture_hint_1",
+        "kiosk_loop_warning_1",
+        "loop_one_from_cafe",
+        "rush_past_kiosk_1"
+      ],
+      "incomingEdgeCounts": {
+        "rush_past_kiosk_1": 1,
+        "keep_culture_hint_1": 1,
+        "kiosk_loop_warning_1": 1,
+        "loop_one_from_cafe": 1
+      }
+    },
+    "cafe_choice_2": {
+      "incomingSources": [
+        "keep_culture_hint_2",
+        "kiosk_loop_warning_2",
+        "loop_two_from_cafe",
+        "rush_past_kiosk_2"
+      ],
+      "incomingEdgeCounts": {
+        "rush_past_kiosk_2": 1,
+        "keep_culture_hint_2": 1,
+        "kiosk_loop_warning_2": 1,
+        "loop_two_from_cafe": 1
+      }
+    },
+    "ending_bad": {
+      "incomingSources": [
+        "ending_bad_lookback",
+        "loop_three_bad"
+      ],
+      "incomingEdgeCounts": {
+        "loop_three_bad": 1,
+        "ending_bad_lookback": 1
+      }
+    },
+    "first_sign": {
+      "incomingSources": [
+        "check_missing_stairs",
+        "check_saved_video",
+        "check_sign_shape"
+      ],
+      "incomingEdgeCounts": {
+        "check_missing_stairs": 1,
+        "check_saved_video": 1,
+        "check_sign_shape": 1
+      }
+    },
+    "kiosk_area_1": {
+      "incomingSources": [
+        "loop_one_after_water",
+        "safe_second_path_1"
+      ],
+      "incomingEdgeCounts": {
+        "loop_one_after_water": 1,
+        "safe_second_path_1": 1
+      }
+    },
+    "loop_one_notice_from_first": {
+      "incomingSources": [
+        "wrong_arm_loop1",
+        "wrong_head_loop1"
+      ],
+      "incomingEdgeCounts": {
+        "wrong_head_loop1": 1,
+        "wrong_arm_loop1": 1
+      }
+    },
+    "loop_three_bad": {
+      "incomingSources": [
+        "choice_cafe_2",
+        "choice_kiosk_2"
+      ],
+      "incomingEdgeCounts": {
+        "choice_kiosk_2": 1,
+        "choice_cafe_2": 1
+      }
+    },
+    "normal_waiting_path": {
+      "incomingSources": [
+        "choice_cafe_0",
+        "choice_cafe_1",
+        "choice_cafe_2"
+      ],
+      "incomingEdgeCounts": {
+        "choice_cafe_0": 1,
+        "choice_cafe_1": 1,
+        "choice_cafe_2": 1
+      }
+    },
+    "safe_second_path_0": {
+      "incomingSources": [
+        "choice_water_sign_0",
+        "water_corridor_scene_0"
+      ],
+      "incomingEdgeCounts": {
+        "choice_water_sign_0": 1,
+        "water_corridor_scene_0": 1
+      }
+    },
+    "safe_second_path_1": {
+      "incomingSources": [
+        "choice_water_sign_1",
+        "water_corridor_scene_1"
+      ],
+      "incomingEdgeCounts": {
+        "choice_water_sign_1": 1,
+        "water_corridor_scene_1": 1
+      }
+    },
+    "true_video_review": {
+      "incomingSources": [
+        "choice_cafe_0",
+        "choice_cafe_1",
+        "choice_cafe_2"
+      ],
+      "incomingEdgeCounts": {
+        "choice_cafe_0": 1,
+        "choice_cafe_1": 1,
+        "choice_cafe_2": 1
+      }
+    },
+    "water_sign_0": {
+      "incomingSources": [
+        "close_video_0",
+        "no_connection_comments_0",
+        "watch_video_more_0"
+      ],
+      "incomingEdgeCounts": {
+        "watch_video_more_0": 1,
+        "close_video_0": 1,
+        "no_connection_comments_0": 1
+      }
+    },
+    "water_sign_1": {
+      "incomingSources": [
+        "close_video_1",
+        "no_connection_comments_1",
+        "watch_video_more_1"
+      ],
+      "incomingEdgeCounts": {
+        "watch_video_more_1": 1,
+        "close_video_1": 1,
+        "no_connection_comments_1": 1
+      }
+    }
+  },
+  "cycles": [],
+  "deadRoutes": [],
+  "graph": {
+    "opening": [
+      "video_phrase"
+    ],
+    "video_phrase": [
+      "no_one_there"
+    ],
+    "no_one_there": [
+      "choice_initial_check"
+    ],
+    "choice_initial_check": [
+      "check_missing_stairs",
+      "check_saved_video",
+      "check_sign_shape"
+    ],
+    "check_missing_stairs": [
+      "first_sign"
+    ],
+    "check_saved_video": [
+      "first_sign"
+    ],
+    "check_sign_shape": [
+      "first_sign"
+    ],
+    "first_sign": [
+      "choice_first_crossroad"
+    ],
+    "choice_first_crossroad": [
+      "safe_first_path",
+      "wrong_arm_loop1",
+      "wrong_head_loop1"
+    ],
+    "wrong_head_loop1": [
+      "loop_one_notice_from_first"
+    ],
+    "wrong_arm_loop1": [
+      "loop_one_notice_from_first"
+    ],
+    "loop_one_notice_from_first": [
+      "video_hint_after_loop1"
+    ],
+    "safe_first_path": [
+      "video_hint_no_loop"
+    ],
+    "video_hint_no_loop": [
+      "choice_video_response_0"
+    ],
+    "video_hint_after_loop1": [
+      "choice_video_response_1"
+    ],
+    "choice_video_response_0": [
+      "close_video_0",
+      "no_connection_comments_0",
+      "watch_video_more_0"
+    ],
+    "watch_video_more_0": [
+      "water_sign_0"
+    ],
+    "close_video_0": [
+      "water_sign_0"
+    ],
+    "no_connection_comments_0": [
+      "water_sign_0"
+    ],
+    "choice_video_response_1": [
+      "close_video_1",
+      "no_connection_comments_1",
+      "watch_video_more_1"
+    ],
+    "watch_video_more_1": [
+      "water_sign_1"
+    ],
+    "close_video_1": [
+      "water_sign_1"
+    ],
+    "no_connection_comments_1": [
+      "water_sign_1"
+    ],
+    "water_sign_0": [
+      "choice_water_sign_0"
+    ],
+    "water_sign_1": [
+      "choice_water_sign_1"
+    ],
+    "choice_water_sign_0": [
+      "safe_second_path_0",
+      "water_corridor_scene_0",
+      "wrong_feet_loop1_from_water"
+    ],
+    "choice_water_sign_1": [
+      "safe_second_path_1",
+      "water_corridor_scene_1",
+      "wrong_feet_loop2_from_water"
+    ],
+    "wrong_feet_loop1_from_water": [
+      "loop_one_after_water"
+    ],
+    "loop_one_after_water": [
+      "kiosk_area_1"
+    ],
+    "wrong_feet_loop2_from_water": [
+      "kiosk_area_2"
+    ],
+    "water_corridor_scene_0": [
+      "safe_second_path_0"
+    ],
+    "safe_second_path_0": [
+      "kiosk_area_0"
+    ],
+    "water_corridor_scene_1": [
+      "safe_second_path_1"
+    ],
+    "safe_second_path_1": [
+      "kiosk_area_1"
+    ],
+    "kiosk_area_0": [
+      "choice_kiosk_0"
+    ],
+    "choice_kiosk_0": [
+      "keep_culture_hint_0",
+      "kiosk_loop_warning_1",
+      "rush_past_kiosk_0"
+    ],
+    "rush_past_kiosk_0": [
+      "cafe_choice_0"
+    ],
+    "keep_culture_hint_0": [
+      "cafe_choice_0"
+    ],
+    "kiosk_area_1": [
+      "choice_kiosk_1"
+    ],
+    "choice_kiosk_1": [
+      "keep_culture_hint_1",
+      "kiosk_loop_warning_2",
+      "rush_past_kiosk_1"
+    ],
+    "rush_past_kiosk_1": [
+      "cafe_choice_1"
+    ],
+    "keep_culture_hint_1": [
+      "cafe_choice_1"
+    ],
+    "kiosk_area_2": [
+      "choice_kiosk_2"
+    ],
+    "choice_kiosk_2": [
+      "keep_culture_hint_2",
+      "loop_three_bad",
+      "rush_past_kiosk_2"
+    ],
+    "rush_past_kiosk_2": [
+      "cafe_choice_2"
+    ],
+    "keep_culture_hint_2": [
+      "cafe_choice_2"
+    ],
+    "kiosk_loop_warning_1": [
+      "cafe_choice_1"
+    ],
+    "kiosk_loop_warning_2": [
+      "cafe_choice_2"
+    ],
+    "cafe_choice_0": [
+      "choice_cafe_0"
+    ],
+    "choice_cafe_0": [
+      "loop_one_from_cafe",
+      "normal_waiting_path",
+      "true_video_review"
+    ],
+    "cafe_choice_1": [
+      "choice_cafe_1"
+    ],
+    "choice_cafe_1": [
+      "loop_two_from_cafe",
+      "normal_waiting_path",
+      "true_video_review"
+    ],
+    "cafe_choice_2": [
+      "choice_cafe_2"
+    ],
+    "choice_cafe_2": [
+      "loop_three_bad",
+      "normal_waiting_path",
+      "true_video_review"
+    ],
+    "loop_one_from_cafe": [
+      "cafe_choice_1"
+    ],
+    "loop_two_from_cafe": [
+      "cafe_choice_2"
+    ],
+    "normal_waiting_path": [
+      "ending_normal"
+    ],
+    "true_video_review": [
+      "final_stairs"
+    ],
+    "loop_three_bad": [
+      "ending_bad"
+    ],
+    "final_stairs": [
+      "choice_final_stairs"
+    ],
+    "choice_final_stairs": [
+      "ending_bad_lookback",
+      "ending_normal_almost",
+      "ending_true"
+    ],
+    "ending_bad_lookback": [
+      "ending_bad"
+    ],
+    "ending_bad": [],
+    "ending_normal": [],
+    "ending_normal_almost": [],
+    "ending_true": []
+  }
+}

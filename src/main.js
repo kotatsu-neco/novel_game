@@ -1,6 +1,9 @@
 import { runValidator } from "./engine/validator.js";
 import { createAudioEngine } from "./engine/audioManager.js";
 import { SaveLoad } from "./engine/saveLoad.js";
+import { createTextMeasurer } from "./engine/textMeasure.js";
+import { paginateStepText } from "./engine/textPaginator.js";
+import { createTypewriterController } from "./engine/typewriterController.js";
 
 const textEl = document.getElementById("text");
 const speakerEl = document.getElementById("speaker");
@@ -10,6 +13,7 @@ const stageEl = document.getElementById("stage");
 const panelEl = document.getElementById("panel");
 const toastEl = document.getElementById("toast");
 const backlogEl = document.getElementById("backlog");
+const continueMarkEl = document.getElementById("continue-mark");
 const settingsEl = document.getElementById("settings");
 const speedSelects = {
   text: document.getElementById("setting-speed-text"),
@@ -44,6 +48,10 @@ let routeStepCounter = 0;
 let choiceTimer = null;
 let choiceDeadline = 0;
 let userDisplaySettings = null;
+let textMeasurer = null;
+let typewriterController = null;
+let resizeObserver = null;
+let repaginateTimer = null;
 const MAX_ROUTE_STEPS = 500;
 
 
@@ -62,7 +70,10 @@ async function init() {
   routeStepCounter = 0;
   userDisplaySettings = loadDisplaySettings();
   applyDisplaySettingsToDom();
+  textMeasurer = createTextMeasurer({ textEl, textWindow, speakerEl, continueMarkEl });
+  typewriterController = createTypewriterController({ textEl, getSpeed: typewriterSpeed });
   bindUi();
+  installResizeReflow();
   await goToScene(scenario.startScene);
 }
 
@@ -110,6 +121,7 @@ function bindUi() {
   });
   document.getElementById("btn-restart").addEventListener("click", async () => {
     stopTypewriter();
+    textMeasurer?.invalidate();
     state = structuredClone(scenario.stateDefaults);
     routeStepCounter = 0;
     backlog = [];
@@ -128,6 +140,7 @@ function bindUi() {
       return;
     }
     stopTypewriter();
+    textMeasurer?.invalidate();
     state = data.state;
     routeStepCounter = 0;
     backlog = normalizeBacklog(data.backlog || []);
@@ -231,63 +244,10 @@ function applyAmbience() {
 }
 
 function preparePagesForStep(step) {
-  if (Array.isArray(step.pages) && step.pages.length > 0) {
-    return step.pages.map((page) => normalizeInlineCommands(String(page)));
-  }
-
-  const rawText = String(step.text || "");
-  const manualChunks = splitByManualPageBreak(rawText);
-  const pages = [];
-  for (const chunk of manualChunks) {
-    const normalized = normalizeInlineCommands(chunk);
-    pages.push(...paginateText(normalized, step.type));
-  }
-  return pages.length ? pages : [normalizeInlineCommands(rawText)];
-}
-
-function splitByManualPageBreak(text) {
-  return String(text).split("[p]");
-}
-
-function normalizeInlineCommands(text) {
-  return String(text)
-    .replaceAll("[r]", "\n")
-    .replaceAll("[p]", "\n");
-}
-
-function paginateText(text, type) {
-  if (!text || type === "title") return [text || ""];
-  const cfg = paginationConfig(type);
-  const paragraphs = String(text).split("\n\n");
-  const pages = [];
-  let currentLines = [];
-
-  for (const para of paragraphs) {
-    const wrapped = wrapParagraph(para, cfg.charsPerLine);
-    const blankCost = currentLines.length > 0 ? 1 : 0;
-
-    if (currentLines.length > 0 && currentLines.length + blankCost + wrapped.length > cfg.maxLines) {
-      pages.push(currentLines.join("\n").trimEnd());
-      currentLines = [];
-    }
-
-    if (wrapped.length > cfg.maxLines) {
-      if (currentLines.length > 0) {
-        pages.push(currentLines.join("\n").trimEnd());
-        currentLines = [];
-      }
-      for (let i = 0; i < wrapped.length; i += cfg.maxLines) {
-        pages.push(wrapped.slice(i, i + cfg.maxLines).join("\n").trimEnd());
-      }
-      continue;
-    }
-
-    if (currentLines.length > 0) currentLines.push("");
-    currentLines.push(...wrapped);
-  }
-
-  if (currentLines.length > 0) pages.push(currentLines.join("\n").trimEnd());
-  return pages.length ? pages : [text];
+  return paginateStepText(step, step.type, {
+    measurer: textMeasurer,
+    fallbackConfig: paginationConfig
+  });
 }
 
 function paginationConfig(type) {
@@ -303,69 +263,6 @@ function withPaginationDefaults(value, fallback) {
     charsPerLine: Number(value.charsPerLine) || fallback.charsPerLine,
     maxLines: Number(value.maxLines) || fallback.maxLines
   };
-}
-
-function wrapParagraph(paragraph, charsPerLine) {
-  const result = [];
-  const explicitLines = String(paragraph).split("\n");
-  for (const line of explicitLines) {
-    const wrapped = wrapLineKinsoku(line, charsPerLine);
-    result.push(...wrapped);
-  }
-  return result;
-}
-
-function wrapLineKinsoku(line, charsPerLine) {
-  const chars = Array.from(String(line));
-  if (chars.length <= charsPerLine) return [line];
-
-  const lines = [];
-  let current = "";
-
-  for (const ch of chars) {
-    if (current.length === 0) {
-      current = ch;
-      continue;
-    }
-
-    if ((current + ch).length <= charsPerLine) {
-      current += ch;
-      continue;
-    }
-
-    if (isNoLineStartChar(ch)) {
-      current += ch;
-      lines.push(current);
-      current = "";
-      continue;
-    }
-
-    lines.push(current);
-    current = ch;
-  }
-
-  if (current.length > 0) lines.push(current);
-  return mergePunctuationOnlyLines(lines);
-}
-
-function isNoLineStartChar(ch) {
-  return "、。，．,.！？!?」』）】〕〉》".includes(ch);
-}
-
-function mergePunctuationOnlyLines(lines) {
-  const result = [];
-  for (const line of lines) {
-    if (isPunctuationOnly(line) && result.length > 0) {
-      result[result.length - 1] += line;
-    } else {
-      result.push(line);
-    }
-  }
-  return result;
-}
-
-function isPunctuationOnly(text) {
-  return Array.from(String(text)).every((ch) => isNoLineStartChar(ch));
 }
 
 function prepareCurrentStep(step) {
@@ -626,6 +523,7 @@ function bindDisplaySettingControls() {
       userDisplaySettings.font[type] = select.value;
       saveDisplaySettings();
       applyDisplaySettingsToDom();
+      scheduleRepagination("font-size");
       showToast("文字サイズを変更しました");
     });
   }
@@ -698,40 +596,32 @@ function typewriterSpeed(type) {
 
 function startTypewriter(text, type) {
   stopTypewriter();
-  const speed = typewriterSpeed(type);
+  currentFullText = String(text || "");
   currentVisibleText = "";
   textEl.textContent = "";
-  if (speed <= 0 || !text) {
-    currentVisibleText = text || "";
-    textEl.textContent = currentVisibleText;
+  if (!typewriterController) {
+    currentVisibleText = currentFullText;
+    textEl.textContent = currentFullText;
     isTyping = false;
     return;
   }
-
-  const chars = Array.from(text);
-  let index = 0;
-  isTyping = true;
-
-  const tick = () => {
-    if (!isTyping) return;
-    const chunkSize = type === "document" ? 2 : 1;
-    for (let i = 0; i < chunkSize && index < chars.length; i += 1) {
-      currentVisibleText += chars[index];
-      index += 1;
-    }
-    textEl.textContent = currentVisibleText;
-    if (index >= chars.length) {
+  typewriterController.start(currentFullText, type, {
+    onUpdate: (visible) => {
+      currentVisibleText = visible;
+      isTyping = typewriterController?.isRunning() || false;
+    },
+    onDone: () => {
+      currentVisibleText = currentFullText;
       isTyping = false;
-      typewriterTimer = null;
-      return;
     }
-    typewriterTimer = window.setTimeout(tick, speed);
-  };
-
-  tick();
+  });
+  isTyping = typewriterController.isRunning();
 }
 
 function stopTypewriter() {
+  if (typewriterController) {
+    typewriterController.stop();
+  }
   if (typewriterTimer) {
     window.clearTimeout(typewriterTimer);
     typewriterTimer = null;
@@ -740,9 +630,13 @@ function stopTypewriter() {
 }
 
 function revealCurrentPage() {
-  stopTypewriter();
+  if (typewriterController) {
+    typewriterController.reveal();
+  } else {
+    textEl.textContent = currentFullText;
+  }
   currentVisibleText = currentFullText;
-  textEl.textContent = currentFullText;
+  isTyping = false;
 }
 
 function setStateValues(data) {
@@ -807,6 +701,33 @@ function getStateValue(path) {
   }, state);
 }
 
+
+function installResizeReflow() {
+  if (resizeObserver || typeof ResizeObserver === "undefined") {
+    window.addEventListener("resize", () => scheduleRepagination("window-resize"));
+    window.addEventListener("orientationchange", () => scheduleRepagination("orientationchange"));
+    return;
+  }
+  resizeObserver = new ResizeObserver(() => scheduleRepagination("resize-observer"));
+  resizeObserver.observe(textWindow);
+  resizeObserver.observe(stageEl);
+  window.addEventListener("orientationchange", () => scheduleRepagination("orientationchange"));
+}
+
+function scheduleRepagination(reason = "") {
+  if (!scene) return;
+  window.clearTimeout(repaginateTimer);
+  repaginateTimer = window.setTimeout(() => {
+    const step = scene?.steps?.[stepIndex];
+    if (!step || !["text", "document", "voice", "title", "conditionalText"].includes(step.type)) return;
+    textMeasurer?.invalidate();
+    stopTypewriter();
+    const oldPageIndex = pageIndex;
+    prepareCurrentStep(step);
+    pageIndex = Math.min(oldPageIndex, Math.max(0, pageSegments.length - 1));
+    renderCurrentStep();
+  }, 120);
+}
 
 function nextStep() {
   if (!scene) return;

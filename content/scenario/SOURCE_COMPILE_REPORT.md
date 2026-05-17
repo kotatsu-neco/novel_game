@@ -7,28 +7,28 @@
 ## 2. 変換元
 
 ```text
-content/scenario/SCENARIO_SOURCE.md
+/mnt/data/maze_sound_novel_v04/SCENARIO_SOURCE.md
 ```
 
 ## 3. 変換先
 
 ```text
-content/scenario/main.json
+/mnt/data/maze_sound_novel_v04/main_compiled_check.json
 content/manifest.json
 ```
 
 ## 4. 生成結果
 
-- title: 面会札
-- gameId: menkai_fuda
-- saveKey: menkai_fuda_save_v01
+- title: 迷路
+- gameId: maze
+- saveKey: maze_save_v04
 - startScene: opening
-- scene数: 39
-- background数: 4
+- scene数: 66
+- background数: 9
 - ambience audio数: 0
 - se audio数: 0
 - validation errors: 0
-- existing main.json semantic match except meta: True
+- existing main.json semantic match except meta: False
 
 ## 5. エラー
 

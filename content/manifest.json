@@ -1,119 +1,32 @@
 {
-  "title": "面会札",
-  "version": "v22a-menkai-v05",
+  "title": "迷路",
+  "version": "maze-webp-mount-v01",
   "entryScenario": "content/scenario/main.json",
-  "engine": "html-js-minimal",
-  "assetPolicy": "Scene backgrounds are included as local PNG files. Audio remains Web Audio placeholder tones in v0.2.",
+  "engine": "sn_engine_v02a",
+  "gameId": "maze",
+  "saveKey": "maze_save_webp_v01",
+  "assetPolicy": "Background PNG files from the source package were converted to WebP and resized for lighter private test use. Audio remains unset/silent unless later replaced.",
   "requiredFiles": [
     "index.html",
     "src/main.js",
     "styles/base.css",
     "content/scenario/main.json",
-    "assets/bg/"
+    "content/assets/bg/"
   ],
   "engineUiPolicy": {
     "screenScroll": "disabled",
     "textWindowScroll": "disabled",
     "advanceTapArea": "whole_stage_except_buttons_choices_panel",
     "pagination": "strict_wrapped_lines_with_japanese_kinsoku",
-    "cssSplitFuturePlan": "styles/base.css will be split into engine.css and theme.css in a later version",
-    "paginationProfile": {
-      "document": {
-        "charsPerLine": 17,
-        "maxLines": 12
-      },
-      "voice": {
-        "charsPerLine": 17,
-        "maxLines": 8
-      },
-      "text": {
-        "charsPerLine": 19,
-        "maxLines": 10
-      }
-    },
     "typewriter": {
       "enabled": true,
       "tapWhileTyping": "show_full_page",
       "tapAfterComplete": "advance_page_or_step",
-      "speedsMsPerChar": {
-        "text": 45,
-        "voice": 55,
-        "document": 18,
-        "title": 0
-      },
-      "futureSettingCandidates": [
-        "standard",
-        "fast",
-        "instant"
-      ],
       "defaultPreset": {
         "text": "normal",
         "voice": "normal",
         "document": "normal"
-      },
-      "speedPresetsMsPerChar": {
-        "slow": {
-          "text": 60,
-          "voice": 70,
-          "document": 28
-        },
-        "normal": {
-          "text": 45,
-          "voice": 55,
-          "document": 18
-        },
-        "fast": {
-          "text": 22,
-          "voice": 28,
-          "document": 8
-        },
-        "instant": {
-          "text": 0,
-          "voice": 0,
-          "document": 0
-        }
       }
-    },
-    "viewportHeightPolicy": "prefer_100svh_for_mobile_safari",
-    "saveLoad": {
-      "storesCurrentStepLoggedKey": true,
-      "doesNotStoreTypewriterCharacterIndex": true
-    },
-    "kinsoku": {
-      "avoidLineStart": [
-        "、",
-        "。",
-        "，",
-        "．",
-        ",",
-        ".",
-        "！",
-        "？",
-        "!",
-        "?",
-        "」",
-        "』",
-        "）",
-        "】",
-        "〕",
-        "〉",
-        "》",
-        "」"
-      ],
-      "avoidPunctuationOnlyLine": true
-    },
-    "textLayoutEngine": {
-      "manualPages": true,
-      "inlineCommands": {
-        "[r]": "lineBreak",
-        "[p]": "pageBreak"
-      },
-      "reservedCommands": {
-        "[l]": "clickWaitWithoutClear_future"
-      },
-      "autoPagination": true,
-      "kinsoku": true,
-      "backlogKindEntries": true
     },
     "fontSize": {
       "defaultPreset": {
@@ -126,72 +39,77 @@
         "normal",
         "large"
       ]
+    },
+    "textLayoutEngine": {
+      "manualPages": true,
+      "inlineCommands": {
+        "[r]": "lineBreak",
+        "[p]": "pageBreak"
+      },
+      "autoPagination": true,
+      "kinsoku": true,
+      "backlogKindEntries": true
     }
   },
-  "authoringSystem": {
-    "enabled": true,
-    "runtimeReads": [
-      "content/manifest.json",
-      "content/scenario/main.json"
-    ],
-    "runtimeDoesNotRead": [
-      "content/scenario/STORY_BIBLE.md",
-      "content/scenario/SCENARIO_SOURCE.md",
-      "docs/AI_SCENARIO_RULES.md",
-      "docs/HUMAN_MANUAL.md"
-    ],
-    "sourceAuthorityOrder": [
-      "content/scenario/STORY_BIBLE.md",
-      "content/scenario/SCENARIO_SOURCE.md locked/human_final",
-      "SPEC.md",
-      "DESIGN.md",
-      "docs/TEXT_GUIDE.md",
-      "current task request",
-      "AI suggestions"
-    ],
-    "statusFlow": [
-      "draft",
-      "ai_revise",
-      "human_review",
-      "human_final",
-      "locked"
-    ],
-    "futureCompiler": "SCENARIO_SOURCE.md to main.json compiler is not implemented in v1.6",
-    "contentPackReady": true,
-    "lastSyncedRuntimeVersion": "v1.6-docfix",
-    "compilerImplemented": true,
-    "compilerPath": "tools/compile_scenario.py",
-    "compileReport": "content/scenario/COMPILE_REPORT.md",
-    "sourceMetadataEnabled": true
-  },
-  "gameId": "menkai_fuda",
-  "saveKey": "menkai_fuda_save_v01",
   "contentPack": {
     "formatVersion": "1.0",
     "runtimeScenario": "content/scenario/main.json",
     "storyBible": "content/scenario/STORY_BIBLE.md",
     "scenarioSource": "content/scenario/SCENARIO_SOURCE.md",
-    "compileReport": "content/scenario/COMPILE_REPORT.md",
-    "themeCss": "styles/theme.css",
-    "engineCss": "styles/engine.css",
-    "docfix": "v1.6-docfix",
-    "compiler": "tools/compile_scenario.py",
-    "sourceMetadata": "content/scenario/SCENARIO_SOURCE.md"
+    "backgroundAssignment": "content/scenario/BACKGROUND_ASSIGNMENT.md",
+    "assetReport": "content/scenario/ASSET_REPORT.md",
+    "sourceReport": "content/scenario/SOURCE_REPORT.md"
   },
   "backgrounds": {
+    "station_stairs": {
+      "kind": "image",
+      "src": "content/assets/bg/station_stairs.webp",
+      "position": "center center",
+      "overlay": "dark_vignette"
+    },
+    "maze_corridor": {
+      "kind": "image",
+      "src": "content/assets/bg/maze_corridor.webp",
+      "position": "center center",
+      "overlay": "dark_vignette"
+    },
+    "crossroad": {
+      "kind": "image",
+      "src": "content/assets/bg/crossroad.webp",
+      "position": "center center",
+      "overlay": "dark_vignette"
+    },
+    "water_corridor": {
+      "kind": "image",
+      "src": "content/assets/bg/water_corridor.webp",
+      "position": "center center",
+      "overlay": "dark_vignette"
+    },
+    "kiosk": {
+      "kind": "image",
+      "src": "content/assets/bg/kiosk.webp",
+      "position": "center center",
+      "overlay": "dark_vignette"
+    },
+    "cafe": {
+      "kind": "image",
+      "src": "content/assets/bg/cafe.webp",
+      "position": "center center",
+      "overlay": "dark_vignette"
+    },
+    "stairs_up": {
+      "kind": "image",
+      "src": "content/assets/bg/stairs_up.webp",
+      "position": "center center",
+      "overlay": "dark_vignette"
+    },
+    "bad_end_corridor": {
+      "kind": "image",
+      "src": "content/assets/bg/bad_end_corridor.webp",
+      "position": "center center",
+      "overlay": "dark_vignette"
+    },
     "black_plain": {
-      "kind": "cssClass",
-      "className": "bg-black_plain"
-    },
-    "black_rain": {
-      "kind": "cssClass",
-      "className": "bg-black_rain"
-    },
-    "hospital_night": {
-      "kind": "cssClass",
-      "className": "bg-black_plain"
-    },
-    "home_night": {
       "kind": "cssClass",
       "className": "bg-black_plain"
     }

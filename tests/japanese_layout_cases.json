@@ -1,0 +1,65 @@
+{
+  "description": "Japanese kinsoku and text display cases for sn_engine_v02a",
+  "cases": [
+    {
+      "id": "punctuation",
+      "type": "text",
+      "text": "これはテストです。次の文です。"
+    },
+    {
+      "id": "closing_quote",
+      "type": "voice",
+      "text": "「これは台詞です。」"
+    },
+    {
+      "id": "opening_quote",
+      "type": "voice",
+      "text": "「まだ続きます"
+    },
+    {
+      "id": "small_kana",
+      "type": "text",
+      "text": "ちょっと、きゃりー、ふゅーちゃー。"
+    },
+    {
+      "id": "long_vowel",
+      "type": "text",
+      "text": "コーヒー、ゲーム、サウンドノベル。"
+    },
+    {
+      "id": "ellipsis",
+      "type": "text",
+      "text": "……それでも、進むしかなかった。"
+    },
+    {
+      "id": "question_exclamation",
+      "type": "voice",
+      "text": "「本当に？　いま、聞こえた！」"
+    },
+    {
+      "id": "manual_break",
+      "type": "document",
+      "text": "最初の文書です。[r]改行します。[p]次のページです。"
+    },
+    {
+      "id": "ellipsis_pair",
+      "type": "text",
+      "text": "……それでも、進むしかなかった。"
+    },
+    {
+      "id": "ellipsis_mid_sentence",
+      "type": "voice",
+      "text": "「……いま、聞こえた？」"
+    },
+    {
+      "id": "manual_page_after_sentence",
+      "type": "document",
+      "text": "最初のページです。[p]次のページです。"
+    },
+    {
+      "id": "manual_line_after_sentence",
+      "type": "text",
+      "text": "一行目です。[r]二行目です。"
+    }
+  ]
+}

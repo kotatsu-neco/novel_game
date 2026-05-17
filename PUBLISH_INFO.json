@@ -1,0 +1,18 @@
+{
+  "packageName": "maze_publish_webp_v01",
+  "sourceUpload": "maze_sound_novel_v04(1).zip",
+  "createdAtUtc": "2026-05-17T12:19:55.340206+00:00",
+  "title": "迷路",
+  "gameId": "maze",
+  "compatibleEngine": "sn_engine_v02a",
+  "containsEngine": true,
+  "containsScenarioData": true,
+  "backgroundFormat": "webp",
+  "pngBytes": 15138474,
+  "webpBytes": 410768,
+  "sceneCount": 66,
+  "choiceBlockCount": 13,
+  "choiceOptionCount": 39,
+  "endingCount": 4,
+  "openFile": "index.html"
+}

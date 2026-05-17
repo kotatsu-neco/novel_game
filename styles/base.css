@@ -516,3 +516,67 @@ html[data-font-document="normal"] .document-text {
 html[data-font-document="large"] .document-text {
   font-size: clamp(17px, 4.6vw, 19px);
 }
+
+
+/* v22b settings layout: two clear columns */
+.settings-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.settings-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-column h4 {
+  margin: 0 0 2px;
+  font-size: 13px;
+  line-height: 1.35;
+  color: rgba(255,255,255,0.92);
+  font-weight: 700;
+}
+
+.settings-column label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.82);
+}
+
+.settings-column select {
+  min-height: 34px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(18,14,14,0.92);
+  color: #fff;
+  padding: 4px 8px;
+  width: 100%;
+  max-width: 100%;
+}
+
+
+/* v02 dynamic Japanese text layout foundation */
+.measurement-text {
+  white-space: pre-wrap;
+  line-break: strict;
+  word-break: normal;
+  overflow-wrap: normal;
+  box-sizing: border-box;
+}
+
+.text,
+.document-text,
+.voice-text {
+  line-break: strict;
+  word-break: normal;
+}
+
+/* Emergency fallback remains available if runtime measurement misses a browser edge case. */
+.text {
+  overflow-wrap: anywhere;
+}
